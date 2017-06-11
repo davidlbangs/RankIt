@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RankitCoreModule, RankitRootRoutingModule } from '@rankit/core';
+import { RankitCoreModule, RankitRootRoutingModule } from '@rankit/widget';
 import { BrowserRootComponent } from './browser-root.component';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 @NgModule({
   imports: [
@@ -12,5 +12,7 @@ import { environment } from '../environments/environment';
   ],
   declarations: [ BrowserRootComponent ],
   bootstrap: [ BrowserRootComponent ]
+
+
 })
 export class BrowserWidgetModule {}

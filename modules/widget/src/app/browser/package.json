@@ -1,5 +1,5 @@
 {
-  "name": "@rankit/core",
+  "name": "@rankit/widget-browser",
   "version": "1.0.0-beta.0",
   "license": "MIT",
   "main": "./core.umd.js",
@@ -15,16 +15,7 @@
     "e2e": "ng e2e"
   },
   "private": true,
-  "peerDependencies": {
-    "@angular/animations": "~4.2.0",
-    "@angular/common": "~4.2.0",
-    "@angular/core": "~4.2.0",
-    "@angular/router": "~4.2.0",
-    "core-js": "^2.4.1",
-    "rxjs": "^5.4.0",
-    "zone.js": "^0.8.11"
-  },
-  "devDependencies": {
+  "dependencies": {
     "@angular/animations": "~4.2.0",
     "@angular/common": "~4.2.0",
     "@angular/compiler": "~4.2.0",
@@ -33,10 +24,14 @@
     "@angular/http": "~4.2.0",
     "@angular/platform-browser": "~4.2.0",
     "@angular/platform-browser-dynamic": "~4.2.0",
+    "@angular/platform-server": "~4.2.0",
     "@angular/router": "~4.2.0",
+    "@rankit/widget": "1.0.0-beta.0",
     "core-js": "^2.4.1",
     "rxjs": "^5.4.0",
-    "zone.js": "^0.8.11",
+    "zone.js": "^0.8.4"
+  },
+  "devDependencies": {
     "@angular/cli": "1.2.0-beta.1",
     "@angular/compiler-cli": "~4.2.0",
     "@angular/language-service": "~4.2.0",

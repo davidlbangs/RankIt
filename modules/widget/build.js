@@ -99,7 +99,7 @@ const build = async function () {
 
   await _relativeCopy('package.json', rootFolder, distFolder);
 
-  console.log('Package files copy succeeded.')
+  console.log('Package files copy succeeded.');
 
   await del(compilationFolder);
 

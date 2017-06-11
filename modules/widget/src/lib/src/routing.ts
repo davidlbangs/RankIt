@@ -1,7 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { BallotViewComponent } from './ballot/ballot-view/ballot-view.component';
 
-export const RANKIT_ROUTES = [];
+export const RANKIT_ROUTES = [
+  {
+    path: ':pollId',
+    component: BallotViewComponent
+  }
+];
 
 
 @NgModule({

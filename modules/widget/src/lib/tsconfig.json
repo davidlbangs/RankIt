@@ -1,9 +1,10 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
-    "outDir": "../../out-tsc/lib-es5/",
-    "baseUrl": "",
+    "outDir": "../../out-tsc/lib-es2015/",
+    "target": "es2015",
+    "rootDir": "./",
+    "baseUrl": "tsconfig",
     "types": []
   },
   "files": [
@@ -14,8 +15,8 @@
     "annotateForClosureCompiler": true,
     "strictMetadataEmit": true,
     "skipTemplateCodegen": true,
-    "flatModuleOutFile": "core.js",
-    "flatModuleId": "@rankit/core",
+    "flatModuleOutFile": "widget.js",
+    "flatModuleId": "@rankit/widget",
     "genDir": "../../out-tsc/lib-gen-dir/"
   }
 }
