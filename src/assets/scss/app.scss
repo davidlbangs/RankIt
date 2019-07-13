@@ -1,0 +1,28 @@
+// @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+// https://material.angular.io/guide/getting-started
+// https://material.angular.io/guide/theming
+// https://material.angular.io/components/checkbox/overview
+@import "reset";
+@import "variables";
+@import "mat-theme";
+@import "type";
+
+body {
+  background: $color-light-blue;
+
+  font-family: 'Roboto', helvetica, arial, sans-serif;
+}
+
+.wrapper {
+  max-width: 700px;
+  background: white;
+  box-shadow: 0 0 25px 10px rgba(0,0,0,0.05);
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
