@@ -16,10 +16,21 @@ import { Store } from 'store';
 
     <h1>My Polls</h1>
 
-  <mat-card *ngFor="let poll of polls$ | async">
+<div *ngIf="polls$ | async as polls; else loading;">
+
+    <mat-card *ngFor="let poll of polls">
     <mat-card-title>{{poll.title}}</mat-card-title>
     <mat-card-subtitle>Open – 50 votes</mat-card-subtitle>
   </mat-card>
+    
+</div>
+
+  <ng-template #loading>
+      <div class="message">
+        <img src="/assets/images/loading.svg" alt="" />
+        Fetching polls...
+      </div>
+    </ng-template>
 
   `
 })
