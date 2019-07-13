@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-const routes: Routes = [];
+
+export const routes:Routes = [
+  { path: 'polls', loadChildren: './polls/polls.module#PollsModule' }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

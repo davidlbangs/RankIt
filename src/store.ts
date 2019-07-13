@@ -5,6 +5,7 @@ import { Observable ,  BehaviorSubject } from 'rxjs';
 import "rxjs/add/operator/pluck";
 
 // models
+import { Poll } from './app/shared/models/poll.interface';
 // import { Post } from './app/shared/models/post.interface';
 // import { Topic, ChatThread } from './app/shared/models/chat.interface';
 // import { Tenet } from './app/shared/models/tenet.interface';
@@ -14,6 +15,8 @@ import "rxjs/add/operator/pluck";
 
 export interface State {
   isOpen: boolean,
+  poll:Poll,
+  polls: Poll[]
   // activeThread: ChatThread,
   // chatThreads: ChatThread[],
   // post:Post,
@@ -31,6 +34,8 @@ export interface State {
 
 const state: State = {
   isOpen: undefined,
+  poll: undefined,
+  polls: undefined
   // chatThreads: undefined,
   // activeThread: undefined,
   // post:undefined,

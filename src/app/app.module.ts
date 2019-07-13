@@ -9,9 +9,11 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 
+import { SharedModule } from './shared/shared.module';
+import { Store } from 'store';
 // Material
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatButtonModule, MatCheckboxModule, MatListModule, MatRadioModule } from '@angular/material';
+
 
 @NgModule({
   declarations: [
@@ -24,12 +26,9 @@ import {MatButtonModule, MatCheckboxModule, MatListModule, MatRadioModule } from
     AngularFirestoreModule,
     AngularFireAuthModule,
     BrowserAnimationsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatListModule,
-    MatRadioModule
+    SharedModule
   ],
-  providers: [],
+  providers: [Store],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

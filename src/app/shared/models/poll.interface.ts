@@ -2,7 +2,7 @@
 
 export interface Poll {
   id?: string;
-  uid: string;
+  owner_uid: string;
 
   title: string;
   choices: Choice[];
@@ -22,8 +22,14 @@ export interface Poll {
   label: string;
 
   // call to action
-  cta_label: string;
-  cta_link: string;
+
+  cta: {
+    label: string;
+    url: string;
+  }
+
+  // hidden option
+  is_public: boolean;
 }
 
 export interface Choice {

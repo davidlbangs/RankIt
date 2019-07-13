@@ -1,0 +1,13 @@
+
+
+header {
+  display: flex;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  > div {
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+
+}
