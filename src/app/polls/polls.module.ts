@@ -10,11 +10,14 @@ import { SharedModule } from '../shared/shared.module';
 import { DetailComponent } from './pages/detail/detail.component';
 import { PollFormComponent, DialogOverviewExampleDialog } from './components/poll-form/poll-form.component';
 
+// guards
+import { AuthGuard } from '../../auth/shared/guards/auth.guard';
+
 export const routes:Routes = [
-  { path: '', component: ViewComponent },
-  { path: 'create', component: EditComponent },
-  { path: ':id', component: DetailComponent },
-  { path: ':id/edit', component: EditComponent }
+  { path: '', canActivate: [AuthGuard], component: ViewComponent },
+  { path: 'create', canActivate: [AuthGuard], component: EditComponent },
+  { path: ':id', canActivate: [AuthGuard], component: DetailComponent },
+  { path: ':id/edit', canActivate: [AuthGuard], component: EditComponent }
 ];
 
 

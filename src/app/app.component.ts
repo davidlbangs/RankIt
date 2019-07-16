@@ -3,6 +3,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Store } from 'store';
+import { Router } from '@angular/router';
+import { AuthService, User } from '../auth/shared/services/auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -24,22 +27,33 @@ import { Store } from 'store';
 export class AppComponent implements OnInit {
   SILLY_OVERLAY = (environment.production == false) ? true : false;
   title = 'rankit';
-
+  user$: Observable<User>;
+  subscription: Subscription;
   
 
   
   items: Observable<any[]>;
   constructor(
-              private db: AngularFirestore, 
+              private db: AngularFirestore,
+              private router:Router,
+              private authService:AuthService,
               private store: Store) {
     this.items = db.collection('items').valueChanges();
   }
 
   ngOnInit() {
-  
+     this.subscription = this.authService.auth$.subscribe();
+     this.user$ = this.store.select('user');
   }
 
   checkState() {
     console.log(this.store.value);
+  }
+
+  async onLogout() {
+      await this.authService.signOut();
+
+      //redirect to login
+      this.router.navigate(['/auth/login']);
   }
 }

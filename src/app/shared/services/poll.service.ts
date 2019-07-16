@@ -20,7 +20,7 @@ export class PollService {
     private store:Store,
     private db: AngularFirestore) { }
 
-  polls$: Observable<Poll[]> = this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', AppSettings.owner_uid)).valueChanges()
+  polls$: Observable<Poll[]> = this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', this.uid)).valueChanges()
     .pipe(
           tap({
             next: val => this.store.set('polls', val)
@@ -39,6 +39,10 @@ export class PollService {
           );
   }
 
+  get uid() {
+    return this.store.value.user.uid;
+  }
+
   initializePoll() {
     let initialPoll = AppSettings.defaultPoll;
     return of(initialPoll);
@@ -46,7 +50,7 @@ export class PollService {
 
   addPoll(poll:Poll) {
     // TODO: pull real owner_uid
-    poll.owner_uid = AppSettings.owner_uid;
+    poll.owner_uid = this.uid;
 
     poll.id = this.db.createId(); // create the ID first, then use it to set.
     return this.db.doc(`polls/${poll.id}`).set(poll);

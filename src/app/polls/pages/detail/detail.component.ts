@@ -15,7 +15,7 @@ import { Store } from 'store';
 
     <div class="detail" *ngIf="poll$ | async as poll">
       <header class="poll-header">
-        <h1 class="p-3">{{ poll.title }}</h1>  
+        <h1 class="">{{ poll.title }}</h1>  
       </header>
       <main class="mb-3">
         <div class="card promo-votes mt-2 mb-2">
@@ -28,7 +28,8 @@ import { Store } from 'store';
         </mat-card>
 
         <a mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon"><i class="fa fa-eye"></i>View Results</a>
-        <a mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon"><i class="fa fa-pencil"></i>Vote on this Poll</a>
+        <a [routerLink]="['/vote', poll.id]"
+        mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon"><i class="fa fa-pencil"></i>Vote on this Poll</a>
       </main>
 
       <hr class="mb-3" />

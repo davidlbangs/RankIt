@@ -9,6 +9,10 @@ export class AppSettings {
     public static lengths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
     // public static validScores = [15, 5, 3, 1, 0];
 
+    public static defaultText = {
+      "votingSubtitle": "Vote for your top choices by tapping on each in order of your preference. You can reorder them before submitting your vote."
+    }
+
     public static defaultPoll:Poll = {
       "id": "",
       "owner_uid": "",

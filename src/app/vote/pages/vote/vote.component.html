@@ -1,0 +1,26 @@
+<div *ngIf="poll$ | async as poll; else loading;">
+  <header class="poll-header">
+    <h1 class="mb-0 pb-1">{{poll.title}}</h1>
+    <p class="subtitle">{{defaultText.votingSubtitle}}</p>    
+  </header>
+  <main>
+    
+    <div class="selected">
+      
+    </div>
+
+    {{poll | json }}
+
+
+    https://material.angular.io/cdk/drag-drop/overview
+    
+  </main>
+
+</div>
+
+<ng-template #loading>
+      <div class="message">
+        <img src="/assets/images/loading.svg" alt="" />
+        Fetching poll...
+      </div>
+</ng-template>

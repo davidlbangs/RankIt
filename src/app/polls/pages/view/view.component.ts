@@ -19,12 +19,18 @@ import { Store } from 'store';
 
    <h1 class="mb-2 mt-2">My Polls</h1>
       <hr class="mb-2" />
-
     <div *ngIf="polls$ | async as polls; else loading;">
 
         <mat-card *ngFor="let poll of polls" [routerLink]="[poll.id]" class="mb-1 linked-card">
         <mat-card-title>{{poll.title}}</mat-card-title>
         <mat-card-subtitle>Open – 50 votes</mat-card-subtitle>
+
+        {{polls.length | json}}
+     
+
+        <mat-card *ngIf="polls.length == 0">
+          <mat-card-title>No polls yet!</mat-card-title>
+        </mat-card>
       </mat-card>
         
     </div>
@@ -35,6 +41,9 @@ import { Store } from 'store';
         Fetching polls...
       </div>
     </ng-template>
+
+    <hr class="mb-2 mt-5" />
+    <a routerLink="/account">Account</a>
     </main>
 
   `

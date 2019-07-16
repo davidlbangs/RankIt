@@ -10,6 +10,7 @@ import { Poll } from './app/shared/models/poll.interface';
 // import { Topic, ChatThread } from './app/shared/models/chat.interface';
 // import { Tenet } from './app/shared/models/tenet.interface';
 // import { UserMeta, FirebaseUser } from './app/shared/models/person.interface';
+import { User } from './auth/shared/services/auth/auth.service';
 
 // import { Cookie } from './models/cookie.interface';
 
@@ -25,7 +26,7 @@ export interface State {
   // date: Date,
   // selected: any,
   // list: any,
-  // user: FirebaseUser,
+  user: User,
   // userMeta: any,
   // tenet:string,
   // tenetMeta: Tenet,
@@ -37,14 +38,14 @@ const state: State = {
   isOpen: undefined,
   poll: undefined,
   polls: undefined,
-  backButton: undefined
+  backButton: undefined,
+  user: undefined,
   // chatThreads: undefined,
   // activeThread: undefined,
   // post:undefined,
   // posts:undefined,
   // date: undefined,
   // selected: undefined,
-  // user: undefined,
   // list: undefined,
   // userMeta: undefined,
   // tenet: undefined,
@@ -68,6 +69,10 @@ export class Store {
 
   set(name: string, state: any) {
     this.subject.next({ ...this.value, [name]: state });
+  }
+
+  unset() {
+    this.subject.next(state);
   }
 
 }

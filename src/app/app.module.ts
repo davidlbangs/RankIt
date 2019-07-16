@@ -10,6 +10,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 
 import { SharedModule } from './shared/shared.module';
+import { AuthModule } from '../auth/auth.module';
 import { Store } from 'store';
 // Material
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -26,6 +27,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     AngularFirestoreModule,
     AngularFireAuthModule,
     BrowserAnimationsModule,
+    AuthModule,
     SharedModule
   ],
   providers: [Store],
