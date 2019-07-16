@@ -8,17 +8,19 @@ import { ViewComponent } from './pages/view/view.component';
 // shared
 import { SharedModule } from '../shared/shared.module';
 import { DetailComponent } from './pages/detail/detail.component';
+import { PollFormComponent, DialogOverviewExampleDialog } from './components/poll-form/poll-form.component';
 
 export const routes:Routes = [
   { path: '', component: ViewComponent },
-  { path: 'new', component: EditComponent },
+  { path: 'create', component: EditComponent },
   { path: ':id', component: DetailComponent },
   { path: ':id/edit', component: EditComponent }
 ];
 
 
 @NgModule({
-  declarations: [EditComponent, ViewComponent, DetailComponent],
+  declarations: [EditComponent, ViewComponent, DetailComponent, PollFormComponent, DialogOverviewExampleDialog],
+  entryComponents: [DialogOverviewExampleDialog],
   imports: [
     CommonModule,
     CommonModule,

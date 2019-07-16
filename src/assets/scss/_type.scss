@@ -2,10 +2,55 @@
 
 body {
   font-size: 16px;
+  color: $color-grey-medium;
 }
 
 h1 {
   font-size: 1.75rem;
   font-weight: 300;
   color: $color-dark;
+}
+
+h2 {
+  font-size: 1.33rem;
+  font-weight: 600;
+  color: $color-dark;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: $color-dark;
+}
+strong {
+  font-weight: 600;
+}
+
+.has-icon {
+  .fa {
+    margin-right: 0.5rem;
+  }
+}
+
+.dark-icon {
+  .fa {
+    color: rgba(0,0,0,0.7);
+  }
+}
+
+.button-large {
+  font-size: 20px;
+  padding: 0.5rem 1rem!important;
+}
+
+@media (min-width: 600px) {
+
+  body {
+    font-size: 20px;
+  }
+
+  .button-large {
+    padding: 1rem 2rem!important;
+  }
+
 }

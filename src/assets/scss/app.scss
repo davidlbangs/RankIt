@@ -5,6 +5,7 @@
 // https://material.angular.io/components/checkbox/overview
 @import "reset";
 @import "variables";
+@import "utility";
 @import "mat-theme";
 @import "type";
 
@@ -22,7 +23,31 @@ body {
   min-height: 100vh;
 }
 
+main {
+  padding: 0 1rem;
+}
+
+hr {
+  border: 0;
+  border-top: 3px solid $color-light-blue;
+}
+
+.linked-card {
+  background: white;
+  transition: 0.25s background;
+  &:hover {
+    cursor: pointer;
+    background: $color-light-blue;
+  }
+}
+
 
 .mat-radio-button ~ .mat-radio-button {
   margin-left: 16px;
+}
+
+@media (min-width: 600px) {
+  main {
+    padding: 0 2rem;
+  }
 }

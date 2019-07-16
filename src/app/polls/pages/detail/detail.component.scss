@@ -1,0 +1,32 @@
+
+
+
+.poll-header {
+  background: #EAEDF0;
+
+  h1 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+.promo-votes {
+  display: flex;
+  background: linear-gradient(to left, #61C7E2, #27CCD3);
+  color: white;
+  padding: 1rem;
+
+  > div {
+    flex-grow: 1;
+    flex-basis: 0;
+    align-items: center;
+    display: flex;
+  }
+
+  .count h1 {
+    width: 100%;
+    text-align: right;
+    color: white;
+    font-size: 3rem;
+  }
+}

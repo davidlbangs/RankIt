@@ -1,6 +1,6 @@
 
-import {pluck,  distinctUntilChanged } from 'rxjs/operators';
-import { Observable ,  BehaviorSubject } from 'rxjs';
+import {pluck, distinctUntilChanged } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 import "rxjs/add/operator/pluck";
 
@@ -16,7 +16,8 @@ import { Poll } from './app/shared/models/poll.interface';
 export interface State {
   isOpen: boolean,
   poll:Poll,
-  polls: Poll[]
+  polls: Poll[],
+  backButton: string
   // activeThread: ChatThread,
   // chatThreads: ChatThread[],
   // post:Post,
@@ -35,7 +36,8 @@ export interface State {
 const state: State = {
   isOpen: undefined,
   poll: undefined,
-  polls: undefined
+  polls: undefined,
+  backButton: undefined
   // chatThreads: undefined,
   // activeThread: undefined,
   // post:undefined,
@@ -54,7 +56,7 @@ const state: State = {
 export class Store {
 
   private subject = new BehaviorSubject<State>(state);
-  private store = this.subject.asObservable(); // needs .distinctUntilChanged()
+  private store = this.subject.asObservable().pipe(distinctUntilChanged()); // needs .distinctUntilChanged()
 
   get value() {
     return this.subject.value;

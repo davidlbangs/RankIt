@@ -1,31 +1,50 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { RouterModule } from '@angular/router';
+
 import {
   MatButtonModule, 
   MatCheckboxModule, 
   MatListModule,
-  MatCardModule, 
-  MatRadioModule } from '@angular/material';
+  MatCardModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatOptionModule,
+  MatSelectModule,
+  MatRadioModule,
+  MatDialogModule } from '@angular/material';
 import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [HeaderComponent],
   imports: [
     CommonModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatListModule,
-    MatCardModule,
-    MatRadioModule
-  ],
-  exports: [
+    RouterModule,
     MatButtonModule,
     MatCheckboxModule,
     MatListModule,
     MatCardModule,
     MatRadioModule,
-    HeaderComponent
+    MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatDialogModule
+  ],
+  exports: [
+    RouterModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatListModule,
+    MatCardModule,
+    MatRadioModule,
+    HeaderComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatDialogModule
     ]
 })
 export class SharedModule { }

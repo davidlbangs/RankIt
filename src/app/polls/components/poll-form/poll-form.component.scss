@@ -1,0 +1,96 @@
+
+
+
+.poll-form__options {
+  font-size: 16px;
+}
+
+.poll-form__choices {
+  font-size: 16px;
+}
+
+span.explain {
+  margin-left: 5px;
+  border: 1px solid #BDCAD1;
+  border-radius: 50%;
+  color: #51B0C9;
+  display: inline-block;
+  width: 20px;
+  height: 18px;
+  padding-top:2px;
+  text-align: center;
+
+  &:hover {
+    background: #51B0C9;
+    color: white;
+    cursor: pointer;
+    border-color: #51B0C9;
+  }
+}
+
+.option-row {
+  width: 100%;
+  display: flex;
+
+  padding-top: 1rem;
+
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #EAEDF0;
+  margin-bottom: 0.25rem;
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  &__label {
+    flex-grow: 1;
+    display: flex; 
+    align-items: center;
+  }
+
+  &__option {
+  }
+
+  .mat-form-field + .mat-form-field {
+    margin-left: 10px;
+  }
+
+  .mat-form-field {
+    width: auto;
+    max-width: 120px;
+    margin-bottom: 0;
+  }
+
+}
+
+.cta-section__setup {
+    background: #EAEDF0;
+    line-height: 1.25;
+    padding: 1rem;
+
+    .option-row {
+      flex-direction: column;
+      .mat-form-field {
+        max-width: unset;
+        width: 100%;
+      }
+    }
+  }
+
+
+.mat-form-field {
+   width: 100%;
+}
+
+
+.mat-checkbox {
+  width: 100%;
+
+  label {
+    display: flex;
+    width: 100%;
+  }
+
+}

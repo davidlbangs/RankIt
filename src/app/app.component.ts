@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
@@ -21,12 +21,22 @@ import { Store } from 'store';
 
   `
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   SILLY_OVERLAY = (environment.production == false) ? true : false;
   title = 'rankit';
+
+  
+
+  
   items: Observable<any[]>;
-  constructor(private db: AngularFirestore, private store: Store) {
+  constructor(
+              private db: AngularFirestore, 
+              private store: Store) {
     this.items = db.collection('items').valueChanges();
+  }
+
+  ngOnInit() {
+  
   }
 
   checkState() {

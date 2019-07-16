@@ -5,8 +5,8 @@ export interface Poll {
   owner_uid: string;
 
   title: string;
-  choices: Choice[];
-  votes: Vote[];
+  choices?: Choice[];
+  votes?: Vote[];
   vote_count: number;
 
   // options
@@ -15,7 +15,7 @@ export interface Poll {
   length: {
     end_time: number;
     display_count: number;
-    display_units: number;
+    display_units: string;
   }
   randomize_order: boolean;
 
@@ -24,6 +24,7 @@ export interface Poll {
   // call to action
 
   cta: {
+    custom: boolean;
     label: string;
     url: string;
   }
@@ -33,8 +34,8 @@ export interface Poll {
 }
 
 export interface Choice {
-  id: string;
   label: string;
+  initial_order: number;
 }
 
 export interface Vote {

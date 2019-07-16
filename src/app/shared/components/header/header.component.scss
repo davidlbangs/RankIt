@@ -10,4 +10,22 @@ header {
     flex-basis: 0;
   }
 
+  .nav {
+    align-items: center;
+    display: flex;
+    margin-left: 1rem;
+  }
+
+  .backButton {
+
+  }
+
+}
+
+@media(min-width: 600px) {
+  header {
+    .nav {
+      margin-left: 2rem;
+    }
+  }
 }
