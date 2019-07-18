@@ -15,9 +15,10 @@ import {
   MatRadioModule,
   MatDialogModule } from '@angular/material';
 import { HeaderComponent } from './components/header/header.component';
+import { ShufflePipe } from './pipes/shuffle.pipe';
 
 @NgModule({
-  declarations: [HeaderComponent],
+  declarations: [HeaderComponent, ShufflePipe],
   imports: [
     CommonModule,
     RouterModule,

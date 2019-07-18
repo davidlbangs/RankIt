@@ -40,5 +40,6 @@ export interface Choice {
 
 export interface Vote {
   date_created?:string;
-
+  ip_address: string;
+  choices?: Choice[];
 }

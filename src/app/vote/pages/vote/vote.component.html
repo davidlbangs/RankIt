@@ -9,11 +9,41 @@
       
     </div>
 
-    {{poll | json }}
-
-
-    https://material.angular.io/cdk/drag-drop/overview
     
+
+
+    <div class="vote-container">
+          <div
+            cdkDropList
+            #voteList="cdkDropList"
+            [cdkDropListData]="vote.choices"
+            [cdkDropListConnectedTo]="[choiceList]"
+            class="vote-list"
+            (cdkDropListDropped)="drop($event)">
+              <poll-choice 
+                [choice]="choice" 
+                [votes]="vote.choices"
+                *ngFor="let choice of vote.choices" 
+                [active]="'true'"
+                cdkDrag></poll-choice>
+          </div>
+          <p class="explainer">Tap a {{poll.label}} below to vote.</p>
+    </div>
+
+    <div class="choice-container">
+      <div
+        cdkDropList
+        #choiceList="cdkDropList"
+        [cdkDropListData]="choices"
+        [cdkDropListConnectedTo]="[voteList]"
+        class="choice-list"
+        (cdkDropListDropped)="drop($event)">
+          <poll-choice [choice]="choice" *ngFor="let choice of choices" cdkDrag (click)="addToVote(choice)"></poll-choice>
+      </div>
+    </div>
+
+    
+    <button (click)='showVote()'>Show Vote</button>
   </main>
 
 </div>
