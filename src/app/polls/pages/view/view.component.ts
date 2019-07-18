@@ -24,12 +24,10 @@ import { Store } from 'store';
         <mat-card *ngFor="let poll of polls" [routerLink]="[poll.id]" class="mb-1 linked-card">
         <mat-card-title>{{poll.title}}</mat-card-title>
         <mat-card-subtitle>Open – 50 votes</mat-card-subtitle>
-
-        {{polls.length | json}}
      
 
         <mat-card *ngIf="polls.length == 0">
-          <mat-card-title>No polls yet!</mat-card-title>
+          <mat-card-title>No polls yet! How about making one?</mat-card-title>
         </mat-card>
       </mat-card>
         

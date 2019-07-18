@@ -9,15 +9,17 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ChoiceComponent } from './component/choice/choice.component';
 
 import {  DragDropModule } from '@angular/cdk/drag-drop';
+import { SuccessComponent } from './pages/success/success.component';
 
 export const routes:Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'not-found' },
   { path: 'not-found', pathMatch: 'full', component: NotFoundComponent },
   { path: ':id', component: VoteComponent },
+  { path: ':id/success', component: SuccessComponent },
 ];
 
 @NgModule({
-  declarations: [VoteComponent, NotFoundComponent, ChoiceComponent],
+  declarations: [VoteComponent, NotFoundComponent, ChoiceComponent, SuccessComponent],
   imports: [
     CommonModule,
     SharedModule,

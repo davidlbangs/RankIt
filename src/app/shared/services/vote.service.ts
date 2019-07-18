@@ -35,7 +35,7 @@ export class VoteService {
     console.log('submit', poll, vote);
     vote.id = this.db.createId();
     vote.date_created = Date.now();
-    this.db.doc<Vote>(`polls/${poll.id}/votes/${vote.id}`).set(vote);
+    return this.db.doc<Vote>(`polls/${poll.id}/votes/${vote.id}`).set(vote);
   }
 
 

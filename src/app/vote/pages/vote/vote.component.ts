@@ -10,7 +10,6 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import { AppSettings } from '../../../app.settings';
 
 import { Poll, Vote, Choice } from '../../../shared/models/poll.interface';
-
 import { VoteService } from '../../../shared/services/vote.service';
 
 @Component({
@@ -92,8 +91,10 @@ export class VoteComponent implements OnInit {
     }
   }
 
-  submitVote(poll:Poll, vote:Vote) {
-    this.voteService.submitVote(poll, vote);
+  async submitVote(poll:Poll, vote:Vote) {
+    await this.voteService.submitVote(poll, vote);
+
+    this.router.navigate(['vote', poll.id, 'success']);
   }
 
   addToVote(choice:Choice) {
