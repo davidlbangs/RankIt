@@ -92,6 +92,10 @@ export class VoteComponent implements OnInit {
     }
   }
 
+  submitVote(poll:Poll, vote:Vote) {
+    this.voteService.submitVote(poll, vote);
+  }
+
   addToVote(choice:Choice) {
     console.log(choice);
     this.choices = this.choices.filter(obj => obj !== choice); // Remove from old.

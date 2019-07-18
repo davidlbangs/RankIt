@@ -39,7 +39,8 @@ export interface Choice {
 }
 
 export interface Vote {
-  date_created?:string;
+  id?: string;
+  date_created?:number;
   ip_address: string;
   choices?: Choice[];
 }

@@ -4,13 +4,6 @@
     <p class="subtitle">{{defaultText.votingSubtitle}}</p>    
   </header>
   <main>
-    
-    <div class="selected">
-      
-    </div>
-
-    
-
 
     <div class="vote-container">
           <div
@@ -45,6 +38,14 @@
     
     <button (click)='showVote()'>Show Vote</button>
   </main>
+
+  <footer class="actions">
+    <button 
+      (click)="submitVote(poll, vote)"
+      [disabled]="!vote.choices.length"
+      mat-button mat-raised-button [color]="'primary'" 
+      class="d-block has-icon dark-icon button-large p-1"><i class="fa fa-chevron-right"></i>Submit My Vote</button>
+  </footer>
 
 </div>
 

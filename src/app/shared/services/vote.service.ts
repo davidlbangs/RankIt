@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, EMPTY, of } from 'rxjs';
 import { tap, filter, map } from 'rxjs/operators';
 
-import { Poll } from '../models/poll.interface';
+import { Poll, Vote } from '../models/poll.interface';
 import { AppSettings } from '../../app.settings';
 
 import { Store } from 'store';
@@ -26,9 +26,16 @@ export class VoteService {
     return this.db.doc<Poll>(`polls/${id}`).valueChanges()
     .pipe(
           tap({
-            next: val => { this.store.set('polls', val); return val; }
+            next: val => { this.store.set('poll', val); return val; }
           })
           );
+  }
+
+  submitVote(poll:Poll, vote:Vote) {
+    console.log('submit', poll, vote);
+    vote.id = this.db.createId();
+    vote.date_created = Date.now();
+    this.db.doc<Vote>(`polls/${poll.id}/votes/${vote.id}`).set(vote);
   }
 
 
