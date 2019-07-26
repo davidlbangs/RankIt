@@ -27,7 +27,7 @@ import { Store } from 'store';
           open, accepting votes
         </mat-card>
 
-        <a mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon"><i class="fa fa-eye"></i>View Results</a>
+        <a [routerLink]="['/results', poll.id, 'summary']" mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon"><i class="fa fa-eye"></i>View Results</a>
         <a [routerLink]="['/vote', poll.id]"
         mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon"><i class="fa fa-pencil"></i>Vote on this Poll</a>
       </main>

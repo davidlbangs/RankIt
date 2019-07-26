@@ -6,6 +6,7 @@ export interface Poll {
 
   title: string;
   choices?: Choice[];
+  results?: Result[];
   votes?: Vote[];
   vote_count: number;
 
@@ -43,4 +44,13 @@ export interface Vote {
   date_created?:number;
   ip_address: string;
   choices?: Choice[];
+}
+
+export interface Result{
+  percentages: number[];
+  label: string;
+  initial_order: number;
+  victory_round: number;
+  elimination_round: number;
+
 }

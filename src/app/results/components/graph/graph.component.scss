@@ -1,0 +1,75 @@
+
+
+.result-row {
+  height: 50px;
+  position: relative;
+  color: #283136;
+  display: flex;
+  align-items: center;
+
+  &.is-winner {
+    .bar {
+      background: linear-gradient(to bottom, #61C7E2, #27CCD3);
+    }
+
+    .difference.positive, .difference.negative {
+      color: white;
+    }
+  }
+
+  &.is-eliminated {
+    .meta {
+      .label {
+        text-decoration: line-through;
+      }
+    }
+  }
+
+  .meta {
+    display: flex;
+    // position: absolute;
+    z-index: 9;
+    top: 15px;
+    left: 5px;
+    align-items: center;
+  }
+  .percentage {
+    width: 50px;
+    text-align: right;
+    font-weight: bold;
+    margin-right: 9px;
+  }
+  .label {
+    margin-right: 6px;
+  }
+  .difference {
+    font-size: 0.8rem;
+    font-weight: 700;
+
+    &.positive {
+      color: #51B0C9;
+    }
+    &.negative {
+      color: #CC6D6D;
+    }
+  }
+
+  .bar {
+    z-index: 5;
+    height: 40px;
+    top: 6px;
+    min-width: 3px;
+    position: absolute;
+    background: #EAEDF0;
+    border-radius: 6px;
+  }
+
+  .threshold {
+    border-right: 2px dotted rgba(112, 120, 124, .30);
+    position: absolute;
+    z-index: 9;
+    height: 100%;
+    top: -6px;
+    right: 0;
+  }
+}
