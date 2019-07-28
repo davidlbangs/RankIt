@@ -101,7 +101,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   async removePoll(event: Poll) {
     const key = this.route.snapshot.params.id;
-     await this.pollService.removePoll(key);
+     await this.pollService.deletePoll(key);
   }
 
   backToPolls() {

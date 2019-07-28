@@ -30,12 +30,19 @@ import { Store } from 'store';
         </div>
 
         <mat-card class="mb-2">
-          open, accepting votes
+          <mat-slide-toggle [checked]="poll.is_open" (click)="toggleOpen(poll)">
+            {{poll.is_open ? 'Open, Accepting Votes' : 'Closed, Not Accepting Votes'}}
+          </mat-slide-toggle>
+
+          <p *ngIf="poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until you close it.</p>
         </mat-card>
 
-        <a [routerLink]="['/results', poll.id, 'summary']" mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon"><i class="fa fa-eye"></i>View Results</a>
-        <a [routerLink]="['/vote', poll.id]"
-        mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon"><i class="fa fa-pencil"></i>Vote on this Poll</a>
+        <button 
+          [routerLink]="['/results', poll.id, 'summary']" 
+          mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-signal"></i>View Results</button>
+        <button [routerLink]="['/vote', poll.id]"
+          [disabled]="!poll.is_open"
+        mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-pencil"></i>Vote on this Poll</button>
       </main>
 
       <hr class="mb-3" />
@@ -97,6 +104,10 @@ export class DetailComponent implements OnInit {
     await this.pollService.deletePoll(poll);
 
     this.router.navigate(['/polls']);
+  }
+
+  toggleOpen(poll:Poll) {
+    this.pollService.togglePollOpen(poll.id, poll.is_open);
   }
 
   toggleDelete() {

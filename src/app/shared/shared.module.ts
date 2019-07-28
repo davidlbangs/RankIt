@@ -13,6 +13,7 @@ import {
   MatOptionModule,
   MatSelectModule,
   MatRadioModule,
+  MatSlideToggleModule,
   MatDialogModule } from '@angular/material';
 import { HeaderComponent } from './components/header/header.component';
 import { ShufflePipe } from './pipes/shuffle.pipe';
@@ -31,6 +32,7 @@ import { ShufflePipe } from './pipes/shuffle.pipe';
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
+    MatSlideToggleModule,
     MatDialogModule
   ],
   exports: [
@@ -45,6 +47,7 @@ import { ShufflePipe } from './pipes/shuffle.pipe';
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
+    MatSlideToggleModule,
     MatDialogModule
     ]
 })

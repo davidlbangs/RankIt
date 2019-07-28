@@ -52,12 +52,16 @@ export class PollService {
     // TODO: pull real owner_uid
     poll.owner_uid = this.uid;
     poll.vote_count = 0;
-
+    poll.is_open = true;
     poll.id = this.db.createId(); // create the ID first, then use it to set.
     console.log('add', poll);
     await this.db.doc(`polls/${poll.id}`).set(poll);
 
     return poll.id;
+  }
+
+  togglePollOpen(id:string, is_open) {
+    return this.db.doc(`polls/${id}`).update({'is_open': !is_open });
   }
 
   updatePoll(key:string, poll:Poll) {
