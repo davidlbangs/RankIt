@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import {Store } from 'store';
+import { Store } from 'store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 

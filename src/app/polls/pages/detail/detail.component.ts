@@ -52,7 +52,7 @@ import { Store } from 'store';
 })
 export class DetailComponent implements OnInit {
 
-  poll$: Observable<any>; // should be meal
+  poll$: Observable<any>; // should be poll
   subscription: Subscription;
 
   constructor(

@@ -51,6 +51,7 @@ export class PollService {
   addPoll(poll:Poll) {
     // TODO: pull real owner_uid
     poll.owner_uid = this.uid;
+    poll.vote_count = 0;
 
     poll.id = this.db.createId(); // create the ID first, then use it to set.
     return this.db.doc(`polls/${poll.id}`).set(poll);
