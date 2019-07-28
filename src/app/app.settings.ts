@@ -22,6 +22,8 @@ export class AppSettings {
       "id": "",
       "owner_uid": "",
       "title": "", 
+      "date_created": 0,
+      "is_open": true,
       "choices": [
         {"label": "", "initial_order" : 0},
         {"label": "", "initial_order" : 1},

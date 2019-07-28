@@ -6,6 +6,8 @@ export interface Poll {
 
   title: string;
   is_open?: boolean;
+  is_promoted?: boolean;
+  date_created: number;
   choices?: Choice[];
   results?: Result[];
   votes?: Vote[];

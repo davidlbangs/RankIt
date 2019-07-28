@@ -27,6 +27,22 @@ export class PollService {
           })
           );
 
+  // publicPolls$: Observable<Poll[]> = this.db.collection<Poll>('polls', ref => ref.where('is_promoted', '==', 'true').where('is_open', '==', 'true').orderBy('date_created')).valueChanges()
+  //   .pipe(
+  //         tap({
+  //           next: val => this.store.set('publicPolls', val)
+  //         })
+  //         );
+
+  getPublicPolls() {
+    return this.db.collection<Poll>('polls', ref => ref.where('is_promoted', '==', true).where('is_open', '==', true).orderBy('date_created')).valueChanges()
+    .pipe(
+          tap({
+            next: val => this.store.set('publicPolls', val)
+          })
+          );
+  }
+
   getPoll(key:string) {
     if (!key) {
       return EMPTY; // no key? return an empty observable.
@@ -40,7 +56,11 @@ export class PollService {
   }
 
   get uid() {
-    return this.store.value.user.uid;
+    if(this.store.value.user) {
+      return this.store.value.user.uid;
+    } else {
+      return null;
+    }
   }
 
   initializePoll() {
@@ -53,6 +73,7 @@ export class PollService {
     poll.owner_uid = this.uid;
     poll.vote_count = 0;
     poll.is_open = true;
+    poll.date_created = Date.now();
     poll.id = this.db.createId(); // create the ID first, then use it to set.
     console.log('add', poll);
     await this.db.doc(`polls/${poll.id}`).set(poll);

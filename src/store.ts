@@ -18,6 +18,7 @@ export interface State {
   isOpen: boolean,
   poll:Poll,
   polls: Poll[],
+  publicPolls: Poll[],
   backButton: string
   // activeThread: ChatThread,
   // chatThreads: ChatThread[],
@@ -38,6 +39,7 @@ const state: State = {
   isOpen: undefined,
   poll: undefined,
   polls: undefined,
+  publicPolls: undefined,
   backButton: undefined,
   user: undefined,
   // chatThreads: undefined,
