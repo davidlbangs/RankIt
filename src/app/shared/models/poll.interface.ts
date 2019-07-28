@@ -5,6 +5,7 @@ export interface Poll {
   owner_uid: string;
 
   title: string;
+  is_open?: boolean;
   choices?: Choice[];
   results?: Result[];
   votes?: Vote[];

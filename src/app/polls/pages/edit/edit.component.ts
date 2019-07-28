@@ -83,8 +83,12 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   async addPoll(event: Poll) {
-    await this.pollService.addPoll(event);
-    this.backToPolls();
+    let newPollID = await this.pollService.addPoll(event);
+
+    console.log('poll added', newPollID);
+
+    this.router.navigate(['polls', newPollID]);
+
   }
 
   async updatePoll(event: Poll) {

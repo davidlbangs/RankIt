@@ -23,7 +23,7 @@ import { Store } from 'store';
 
         <mat-card *ngFor="let poll of polls" [routerLink]="[poll.id]" class="mb-1 linked-card">
         <mat-card-title>{{poll.title}}</mat-card-title>
-        <mat-card-subtitle>Open – 50 votes</mat-card-subtitle>
+        <mat-card-subtitle>{{poll.is_open ? 'Open' : 'Closed' }} – {{poll.vote_count ? poll.vote_count + ' votes' : 'No Votes'}}</mat-card-subtitle>
      
 
         <mat-card *ngIf="polls.length == 0">

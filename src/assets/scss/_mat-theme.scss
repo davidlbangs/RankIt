@@ -24,11 +24,19 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 @include angular-material-theme($candy-app-theme);
 
 .mat-form-field-appearance-outline .mat-form-field-infix {
-  padding-top: 0.5rem!important;
+  padding-top: 0rem!important;
+  padding-bottom: 0.5em!important;
+  line-height: 1.4;
 }
 .mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix {
-  top: 0!important;
+  top: -2px!important;
 }
+
+.mat-icon-button .mat-icon, .mat-icon-button i {
+  line-height: 18px!important;
+}
+
+
 
 .poll-form__choices .mat-form-field-wrapper {
   padding-bottom: 0.5rem!important;

@@ -15,7 +15,13 @@ import { Store } from 'store';
 
     <div class="detail" *ngIf="poll$ | async as poll">
       <header class="poll-header">
-        <h1 class="">{{ poll.title }}</h1>  
+        <h1 class="">{{ poll.title }}</h1>
+        <p>
+          <span *ngFor="let choice of poll.choices; let i = index">
+            {{ (i + 1) < poll.choices.length ? choice.label + ', ' : choice.label }}
+            
+          </span>
+        </p>  
       </header>
       <main class="mb-3">
         <div class="card promo-votes mt-2 mb-2">
@@ -43,6 +49,12 @@ import { Store } from 'store';
           <a mat-stroked-button color="primary" class="has-icon"><i class="fa fa-facebook-f"></i>Post</a>
         </div>
         <button mat-stroked-button color="primary" class="has-icon d-block mb-5"><i class="fa fa-code"></i>Copy Embed Code</button>
+
+        <hr class="mt-3 mb-4" />
+        <button (click)="toggleDelete()" mat-stroked-button color="red" class="has-icon"><i class="fa fa-times"></i>Delete Poll</button>
+        <div class="confirmDelete" *ngIf="showDelete">
+          Are you sure? <button mat-raised-button color="warn" (click)="deletePoll(poll)">Delete</button> <button mat-button (click)="toggleDelete()">Cancel</button>
+        </div>
       </main>
     </div>
 
@@ -54,6 +66,8 @@ export class DetailComponent implements OnInit {
 
   poll$: Observable<any>; // should be poll
   subscription: Subscription;
+
+  showDelete:boolean = false;
 
   constructor(
               private pollService: PollService,
@@ -77,6 +91,16 @@ export class DetailComponent implements OnInit {
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  async deletePoll(poll:Poll) {
+    await this.pollService.deletePoll(poll);
+
+    this.router.navigate(['/polls']);
+  }
+
+  toggleDelete() {
+    this.showDelete = !this.showDelete;
   }
 
 }

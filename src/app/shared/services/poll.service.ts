@@ -48,22 +48,25 @@ export class PollService {
     return of(initialPoll);
   }
 
-  addPoll(poll:Poll) {
+  async addPoll(poll:Poll) {
     // TODO: pull real owner_uid
     poll.owner_uid = this.uid;
     poll.vote_count = 0;
 
     poll.id = this.db.createId(); // create the ID first, then use it to set.
-    return this.db.doc(`polls/${poll.id}`).set(poll);
     console.log('add', poll);
+    await this.db.doc(`polls/${poll.id}`).set(poll);
+
+    return poll.id;
   }
 
   updatePoll(key:string, poll:Poll) {
     return this.db.doc(`polls/${key}`).update(poll);
   }
 
-  removePoll(poll:Poll) {
-    console.log('remove', poll);
+  deletePoll(poll:Poll) {
+    console.log("delte", poll);
+    return this.db.doc(`polls/${poll.id}`).delete();
   }
 }
 

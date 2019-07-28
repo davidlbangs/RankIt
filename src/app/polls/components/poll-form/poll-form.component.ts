@@ -13,9 +13,10 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
     <div class="poll-form">
       <form action="" [formGroup]='form'>
 
+        <h2>Question/Title of Poll</h2>
+
         <div class="poll-form__name">
-          <mat-form-field appearance="outline">
-            <mat-label>Question/Title of Poll</mat-label>
+          <mat-form-field appearance="outline" floatLabel="never">
             <input matInput placeholder="" formControlName="title">
           </mat-form-field>
         </div>
@@ -27,11 +28,15 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
           <div class="" formArrayName="choices">
             <mat-form-field appearance="outline" floatLabel="never" *ngFor="let c of choices.controls; index as i;">
               <div [formGroupName]="i">
-                <input matInput placeholder="" formControlName="label">
+                <input matInput placeholder="" formControlName="label" (keydown)="onKeydown($event, i)">
                 <input type="hidden" formControlName="initial_order" />
               </div>
 
-              <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+              <button 
+                *ngIf="choices.controls.length > 2"
+                mat-button matSuffix mat-icon-button aria-label="Remove"
+                tabindex="-1" 
+                (click)="removeChoice(i)">
                 <i class="fa fa-times"></i>
               </button>
               
@@ -81,8 +86,9 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
             <div class="option-row__option">
                   <mat-form-field>
                     <mat-select formControlName="winner_count">
-                      <mat-option value="1">1</mat-option>
-                      <mat-option value="2">2</mat-option>
+                      <mat-option *ngFor="let choice of choices.controls; let i = index" [value]="i+1">
+                        {{i+1}}
+                      </mat-option>
                     </mat-select>
                   </mat-form-field>
             </div>
@@ -329,6 +335,17 @@ export class PollFormComponent implements OnInit, OnChanges {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
+  }
+
+  onKeydown(event, counter) {
+    if (event.key === "Tab") {
+      counter = counter + 1;
+      let totalChoices = this.choices.controls.length;
+
+      if(counter == totalChoices) {
+          this.addChoice();
+      }
+    }
   }
 }
 
