@@ -4,6 +4,7 @@ const admin = require('firebase-admin');
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 
+import * as poll from './poll/poll';
 import * as vote from './vote/vote';
 
 // required to initialize

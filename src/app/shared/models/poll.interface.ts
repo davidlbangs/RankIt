@@ -20,7 +20,7 @@ export interface Poll {
     end_time: number;
     display_count: number;
     display_units: string;
-  }
+  };
   randomize_order: boolean;
 
   label: string;
@@ -31,7 +31,7 @@ export interface Poll {
     custom: boolean;
     label: string;
     url: string;
-  }
+  };
 
   // hidden option
   is_public: boolean;
@@ -44,16 +44,15 @@ export interface Choice {
 
 export interface Vote {
   id?: string;
-  date_created?:number;
+  date_created?: number;
   ip_address: string;
   choices?: Choice[];
 }
 
-export interface Result{
+export interface Result {
   percentages: number[];
   label: string;
   initial_order: number;
   victory_round: number;
   elimination_round: number;
-
 }

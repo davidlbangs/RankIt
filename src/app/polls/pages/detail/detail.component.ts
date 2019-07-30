@@ -35,6 +35,7 @@ import { Store } from 'store';
           </mat-slide-toggle>
 
           <p *ngIf="poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until you close it.</p>
+          <p *ngIf="!poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until {{poll.length.end_time | date : 'long'}}</p>
         </mat-card>
 
         <button 

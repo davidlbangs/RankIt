@@ -1,36 +1,25 @@
-import * as functions from 'firebase-functions';
-const admin = require('firebase-admin');
-
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-
-
-
-export const calcResults = function stv(foreignWinners: number, foreignBallots: string[][]) {
+function stv(winners, ballots) {
   
-  let winners = foreignWinners;
-  let ballots = foreignBallots;
-
   // helper objects
-  const name2totals = {};
-  const name2ballots = {};
-  const name2weights = {};
+  var name2totals = {};
+  var name2ballots = {};
+  var name2weights = {};
 
   // results arrays
-  const rounds = [];
-  const elected = [];
+  var rounds = [];
+  var elected = [];
 
   // THRESHOLD
   // Threshold is the number of votes that mathematically guarantees that the candidate cannot lose
   // Ex: 327 ballots / (2 winners + 1) = 109 + 1 = 110.
   // In a 2 winner race with 327 ballots, a candidate with 110 votes is guaranteed victory.
-  const threshold = Math.floor(ballots.length/(winners+1))+1;
+  var threshold = Math.floor(ballots.length/(winners+1))+1;
 
   // Factor
   // 
-  let factor = 1;
-  let elim: string;
-  let cans;
+  var factor = 1;
+  var elim;
+  var cans;
 
   // do...while the winner count is less than the "can win" count.
   do {
@@ -40,12 +29,12 @@ export const calcResults = function stv(foreignWinners: number, foreignBallots: 
       while (ballot.length) {
         
         // grab the name of the vote and remove from the ballot array.
-        const name:string | undefined = ballot.shift(); 
+        var name = ballot.shift(); 
 
         // if it's the first round, everyone gets through.
         // otherwise, we check to see if name is in name2totals
         if (rounds.length === 0 || name in name2totals) {
-          const new_weight = rounds.length === 0 || (name2weights[elim][i] * factor);
+          var new_weight = rounds.length === 0 || (name2weights[elim][i] * factor);
           name2ballots[name] = (name2ballots[name] || []);
           name2ballots[name].push(ballot);
           name2weights[name] = (name2weights[name] || []);
@@ -59,15 +48,15 @@ export const calcResults = function stv(foreignWinners: number, foreignBallots: 
 
 
     rounds.push({...name2totals});
-    const mx = Math.max(...Object.values(name2totals));
+    var mx = Math.max(...Object.values(name2totals));
     if (threshold <= mx) {
       winners--;
       elim = Object.entries(name2totals).filter(x=>x[1]===mx)[0][0];
       elected.push(elim);
       factor = (mx-threshold)/mx;
     } else {
-      const mn = Math.min(...Object.values(name2totals));
-      const mn_keys = Object.entries(name2totals).filter(x=>x[1]===mn).map(x=>x[0]);
+      var mn = Math.min(...Object.values(name2totals));
+      var mn_keys = Object.entries(name2totals).filter(x=>x[1]===mn).map(x=>x[0]);
       elim = mn_keys[parseInt((Math.random())*mn_keys.length)];
       factor = 1;
     }
@@ -87,26 +76,3 @@ export const calcResults = function stv(foreignWinners: number, foreignBallots: 
   return {"elected": elected, "rounds": rounds, "threshold": threshold};
 } 
 
-
-
-export const syncPoll = functions.firestore
-  .document('polls/{pollID}/votes/{voteID}')
-  .onCreate((snap, context) => {
-
-    // const tenetID = context.params.tenetID;
-    const pollID = context.params.pollID;
-    // const voteID = context.params.voteID;
-    // const message = snap.data();
-    const db = admin.firestore();
-
-
-    // update the relevant poll
-    const pollRef = db.collection('polls').doc(pollID);
-
-
-    return pollRef
-      .update({'vote_count': admin.firestore.FieldValue.increment(1)})
-      .then(() => console.log('updated poll!', pollID))
-      .catch((err:any) => console.log(err));
-
-  });

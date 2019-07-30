@@ -74,6 +74,12 @@ export class PollService {
     poll.vote_count = 0;
     poll.is_open = true;
     poll.date_created = Date.now();
+
+    if(poll.keep_open == false){
+      let factor = (poll.length.display_units === 'days') ? 86400000 : 3600000;
+      poll.length.end_time = poll.date_created + (poll.length.display_count * factor);
+    }
+
     poll.id = this.db.createId(); // create the ID first, then use it to set.
     console.log('add', poll);
     await this.db.doc(`polls/${poll.id}`).set(poll);
@@ -82,7 +88,9 @@ export class PollService {
   }
 
   togglePollOpen(id:string, is_open) {
-    return this.db.doc(`polls/${id}`).update({'is_open': !is_open });
+    // Change if the poll is open, but keep it open once they've switched.
+    // That way you can revive expired polls, if you want.
+    return this.db.doc(`polls/${id}`).update({'is_open': !is_open, 'keep_open': true });
   }
 
   updatePoll(key:string, poll:Poll) {
