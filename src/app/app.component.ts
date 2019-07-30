@@ -14,9 +14,13 @@ import { Subscription } from 'rxjs';
 
 
   <div class="wrapper">
-  <app-header></app-header>
-  <router-outlet></router-outlet>
+    <app-header></app-header>
+    <router-outlet></router-outlet>
+
+    
   </div>
+
+
 
   <div id="sillyOverlay" style="z-index: 999999;bottom: 10px; left: 30px;position:fixed;" *ngIf="SILLY_OVERLAY" >
     <button type="button" (click)="checkState()">Check State</button> 

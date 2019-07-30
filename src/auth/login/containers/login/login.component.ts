@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router} from '@angular/router';
-
 // services
 import { AuthService } from '../../../shared/services/auth/auth.service';
 
@@ -9,16 +8,20 @@ import { AuthService } from '../../../shared/services/auth/auth.service';
 @Component({
   selector: 'login',
   template: `
-    <div class=""> 
-      <auth-form (submitted)="loginUser($event)">
-        <h1>Login</h1>
-        <a routerLink="/auth/register">Not Registered?</a>
-        <button type="submit">Login</button>
-        <div class="error" *ngIf="error">
-          {{ error }}          
-        </div>
-      </auth-form>
-    </div>
+    <header class="poll-header">
+        <h1 class="">Sign In</h1>
+        <p>
+          Or Create an Account
+        </p>  
+      </header>
+    <main class="mt-3">
+      <firebase-ui
+       (signInSuccessWithAuthResult)="successCallback($event)"
+       (signInFailure)="errorCallback($event)"></firebase-ui>
+    </main>
+    
+
+     
   `
 })
 export class LoginComponent implements OnInit {
@@ -35,18 +38,24 @@ export class LoginComponent implements OnInit {
     
   }
 
-  // uses async await.
-  async loginUser(event: FormGroup) {
-      const { email, password } = event.value; // destructuring
-      
-      try {
-        await this.authService.loginUser(email, password);
-        // this is the "done" section of the promise.
-        this.router.navigate(['/']);
-      } catch (err) {
-        this.error = err.message;
-      }
-
-      
+  successCallback(signInSuccessData: any) {
+    // console.log('signed in', signInSuccessData);
+    this.router.navigate(['/polls']);
   }
+
+  errorCallback(errorData: any) {
+      console.error('something went wrong', errorData);
+  }  
+
+  // async loginUser(event: FormGroup) {
+  //     const { email, password } = event.value; // destructuring
+      
+  //     try {
+  //       await this.authService.loginUser(email, password);
+  //       // this is the "done" section of the promise.
+  //       this.router.navigate(['/']);
+  //     } catch (err) {
+  //       this.error = err.message;
+  //     }   
+  // }
 }

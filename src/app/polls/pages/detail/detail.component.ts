@@ -52,7 +52,7 @@ import { Store } from 'store';
         <h1 class="mb-1">Promote Poll</h1>
 
         <div class="flex-grid mb-1">
-          <button mat-stroked-button color="primary" class="has-icon"><i class="fa fa-link"></i>Copy Link</button>
+          <button mat-stroked-button color="primary" class="has-icon"><i class="fa fa-link"></i>Copy Voting Link</button>
           <a mat-stroked-button color="primary" class="has-icon"><i class="fa fa-twitter"></i>Tweet</a>
           <a mat-stroked-button color="primary" class="has-icon"><i class="fa fa-facebook-f"></i>Post</a>
         </div>

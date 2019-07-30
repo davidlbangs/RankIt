@@ -12,13 +12,13 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 
+
 export const ROUTES: Routes = [
   {
     path: 'auth',
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'login' },
-      { path: 'login', loadChildren: './login/login.module#LoginModule' },
-      { path: 'register', loadChildren: './register/register.module#RegisterModule' }
+      { path: 'login', loadChildren: './login/login.module#LoginModule' }
     ]
   }
 ];
@@ -35,6 +35,7 @@ export const firebaseConfig:FirebaseAppConfig = {
 
  // https://github.com/firebase/firebaseui-web
  // https://fireship.io/lessons/angularfire-google-oauth/
+ // https://github.com/RaphaelJenni/firebaseui-angular
 
 
 @NgModule({
