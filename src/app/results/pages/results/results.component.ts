@@ -20,7 +20,7 @@ import { VoteService } from '../../../shared/services/vote.service';
           <h1 class="">{{poll.title}}</h1>  
       </header>
 
-      <main>
+      <main class="clear-footer">
           <h2 class="mt-3 mb-1">Final Result</h2>
           <p class="mb-1">{{poll.vote_count}} Votes in 3 Rounds</p>
           
@@ -37,6 +37,19 @@ import { VoteService } from '../../../shared/services/vote.service';
           <p class="mb-3">Ranked Choice Voting is different from choose-only-one voting. If no singer gets 50% of the vote in round one, the singer with the fewest votes is eliminated and their voters get their next choice. See how Ranked Choice worked for this poll by clicking through the rounds.</p>
       </main>
       </div>
+
+      <footer class="actions">
+      <div class="half">
+        <button 
+          mat-button mat-raised-button [color]="'white'" 
+          class="d-block button-large p-1">Back</button>
+      </div>
+      <div class="half">
+        <button 
+          mat-button mat-raised-button [color]="'primary'" 
+          class="d-block button-large p-1">See Round 1</button>
+      </div>
+    </footer>
 
 
       <ng-template #loading>

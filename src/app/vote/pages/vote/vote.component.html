@@ -3,7 +3,7 @@
     <h1 class="mb-0 pb-1">{{poll.title}}</h1>
     <p class="subtitle" *ngIf="poll.is_open">{{defaultText.votingSubtitle}}</p>    
   </header>
-  <main *ngIf="poll.is_open; else closed">
+  <main *ngIf="poll.is_open; else closed" class="clear-footer">
 
     <div class="vote-container">
           <div

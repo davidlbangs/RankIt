@@ -16,18 +16,25 @@ import { VoteService } from '../../../shared/services/vote.service';
   template: `
 
     <div class="success-panel" *ngIf="poll$ | async as poll">
-      <main>
-      hey
-        <h1>{{heading}}</h1>
+      <main class="clear-footer">
+        <h2 class="mt-2 mb-2">Thank you for your vote.</h2>
 
-        {{body}}
+        <hr class="mb-2" />
 
-        <a href="{{ctaUrl(poll)}}">{{ctaLabel(poll)}}</a>
+        <h1 class="mb-2">{{heading}}</h1>
+
+        <p class="mb-2">{{body}}</p>
+
+        <a 
+          mat-raised-button [color]="'white'" 
+          class=" mb-3"
+          href="{{ctaUrl(poll)}}">{{ctaLabel(poll)}}</a>
       </main> 
     </div>
 
-    <footer class="actions">
-        <button 
+    <footer class="actions" *ngIf="poll$ | async as poll">
+        <button
+          [routerLink]="['/results', poll.id, 'summary']" 
           mat-button mat-raised-button [color]="'primary'" 
           class="d-block has-icon dark-icon button-large p-1">View Results</button>
     </footer>
