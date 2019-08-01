@@ -3,7 +3,8 @@ import { FormGroup } from '@angular/forms';
 import { Router} from '@angular/router';
 // services
 import { AuthService } from '../../../shared/services/auth/auth.service';
-
+import { Observable } from 'rxjs/Observable';
+import { Store } from '../../../../store';
 
 @Component({
   selector: 'login',
@@ -14,28 +15,39 @@ import { AuthService } from '../../../shared/services/auth/auth.service';
           Or Create an Account
         </p>  
       </header>
-    <main class="mt-3">
+    <main class="mt-3" *ngIf="!(user$ | async); else signedIn">
       <firebase-ui
        (signInSuccessWithAuthResult)="successCallback($event)"
        (signInFailure)="errorCallback($event)"></firebase-ui>
     </main>
     
+    <ng-template #signedIn>
+    <main>
+      <p class="mt-2 mb-1">You're already signed in.</p>
+
+      <p><a [routerLink]="['/polls']">Back to My Account</a>
+
+
+    </main>
+    </ng-template>
 
      
   `
 })
 export class LoginComponent implements OnInit {
-  
 
   error: string;
 
+  user$: Observable<any>;
+
   constructor(
+              private store:Store,
     private authService: AuthService,
     private router: Router
     ) {}
 
   ngOnInit() {
-    
+    this.user$ = this.store.select('user');
   }
 
   successCallback(signInSuccessData: any) {

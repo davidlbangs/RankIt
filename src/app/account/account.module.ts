@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { PasswordComponent } from './pages/password/password.component';
 import { AccountComponent } from './pages/account/account.component';
-
+import { SharedModule } from '../shared/shared.module';
 
 // guards
 import { AuthGuard } from '../../auth/shared/guards/auth.guard';
@@ -19,6 +19,7 @@ export const routes:Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    SharedModule
   ]
 })
 export class AccountModule { }

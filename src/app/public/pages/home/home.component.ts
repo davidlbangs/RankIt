@@ -12,10 +12,16 @@ import { Store } from 'store';
   template: `
     
     <main>
-    <button 
-      [routerLink]="['create']"
-      mat-button mat-raised-button [color]="'primary'" 
-      class="d-block has-icon dark-icon button-large mb-3"><i class="fa fa-plus-square"></i>Create Poll</button>
+    <button
+      *ngIf="user$ | async"
+      [routerLink]="['/polls']"
+      mat-button mat-raised-button [color]="'accent'" 
+      class="d-block has-icon dark-icon button-large mb-3">View My Polls <i class="fa fa-chevron-right"></i></button>
+      <button
+      *ngIf="!(user$ | async)"
+      [routerLink]="['/auth/login']"
+      mat-button mat-raised-button [color]="'accent'" 
+      class="d-block has-icon dark-icon button-large mb-3"><i class="fa fa-user-plus"></i>Sign Up to Create a Poll</button>
 
    <h1 class="mb-2 mt-2">Public Polls</h1>
       <hr class="mb-2" />
@@ -39,14 +45,13 @@ import { Store } from 'store';
       </div>
     </ng-template>
 
-    <hr class="mb-2 mt-5" />
-    <a routerLink="/account">Account</a>
     </main>
 
   `
 })
 export class HomeComponent implements OnInit {
   polls$: Observable<Poll[]>;
+  user$: Observable<any>;
   subscription: Subscription;
   constructor(
               private store: Store, 
@@ -58,6 +63,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.store.set('backButton', '');
     this.polls$ = this.store.select<Poll[]>('publicPolls');
+    this.user$ = this.store.select<any>('user');
     this.subscription = this.pollService.getPublicPolls().subscribe(); // returns subscription
   }
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store } from 'store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { AppSettings } from '../../../app.settings';
@@ -52,7 +52,11 @@ import { VoteService } from '../../../shared/services/vote.service';
 })
 export class ResultsComponent implements OnInit {
     poll$: Observable<Poll> = this.store.select('poll');
-
+    subscription:Subscription;
+    // user$ :Observable<any> = this.store.select('user').pipe(
+    //                                                         tap({
+    //                                                             next: this.store.set('backButton', 'polls')
+    //                                                             }));
   tempResults = [
     {
     'percentages': [.31, .49, .52],
@@ -100,7 +104,6 @@ export class ResultsComponent implements OnInit {
 
   ngOnInit() {
 
-
     this.route.paramMap
       .subscribe((params:ParamMap) => {
         let id = params.get('id');
@@ -114,6 +117,10 @@ export class ResultsComponent implements OnInit {
        
       });
 
+
+  }
+
+  ngOnDestroy() {
 
   }
 

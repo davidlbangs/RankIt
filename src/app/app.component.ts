@@ -14,7 +14,8 @@ import { Subscription } from 'rxjs';
 
 
   <div class="wrapper">
-    <app-header></app-header>
+    <app-header
+      [user]="user$ | async"></app-header>
     <router-outlet></router-outlet>
 
     

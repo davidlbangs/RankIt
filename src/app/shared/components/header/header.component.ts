@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
 // import { Router, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store } from 'store';
+import { User } from '../../../../auth/shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,6 @@ import { Store } from 'store';
     <header>
       <div class="nav">
         <div *ngIf="backButton$ | async as backButton">
-
          <a mat-mini-fab color="accent" [routerLink]="['/', backButton]" class="backButton"><i class="fa fa-chevron-left"></i></a>  
         </div>
       </div>
@@ -18,7 +18,9 @@ import { Store } from 'store';
         <img src="/assets/images/rankit-color.svg" alt="RankIt" [routerLink]="['/']" />
       </div>
       <div class="action">
-        
+        <div *ngIf="user">
+          <a mat-mini-fab color="" [routerLink]="['/account']" class="user"><i class="fa fa-user"></i></a>
+        </div>
       </div>
     </header>
 
@@ -27,6 +29,7 @@ import { Store } from 'store';
 })
 export class HeaderComponent implements OnInit {
   // @Input() backButton:string;
+  @Input() user:User;
   backButton$:Observable<string>;
   constructor(
               private store:Store) { }

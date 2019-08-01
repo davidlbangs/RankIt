@@ -10,10 +10,17 @@ header {
     flex-basis: 0;
   }
 
-  .nav {
+  .nav, .action {
     align-items: center;
     display: flex;
+  }
+  .nav {
     margin-left: 1rem;
+  }
+  .action {
+    margin-right: 1rem;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .backButton {
@@ -27,5 +34,8 @@ header {
     .nav {
       margin-left: 2rem;
     }
+    .action {
+    margin-right: 2rem;
+  }
   }
 }

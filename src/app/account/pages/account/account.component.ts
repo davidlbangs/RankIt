@@ -8,28 +8,27 @@ import { AuthService } from '../../../../auth/shared/services/auth/auth.service'
   styleUrls: ['./account.component.scss'],
   template: `
 
-    <main class="poll">
-        <div class="poll__title">
-          <h1 class="mb-2 mt-2">
-            
-            <span *ngIf="user$ | async as user; else title;">
-                Account
-              </span>
-              <ng-template #title>
-                Loading...
-              </ng-template>
-          </h1>
-          <hr class="mb-2" />
-        </div>
+   <header class="poll-header">
+      <h1 class="">Account</h1> 
+    </header>
+
+    <main *ngIf="user$ | async as user; else title;">
+
+          <h3 class=" mt-2 mb-1">
+            Email Address            
+          </h3>
+          <p class="explainer mb-1">The email address on an account cannot be changed.</p>
+          
+          <mat-form-field appearance="outline" floatLabel="never">
+            <input matInput placeholder="" formControlName="title" [value]="user.email" disabled>
+          </mat-form-field>
+
+
+        <!--<h3>Password</h3>
+        <a routerLink="/account/password">Change Password</a>-->
 
         <hr class="mb-2" />
-
-        <h3>Password</h3>
-        <a routerLink="/account/password">Change Password</a>
-
-        <hr class="mb-2" />
-
-        <a (click)="logout()">Log Out</a>
+        <button (click)="logout()" mat-stroked-button color="red" class="has-icon"><i class="fa fa-sign-out"></i>Log Out</button>
 
     </main>
 

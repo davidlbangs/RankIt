@@ -39,9 +39,6 @@ import { Store } from 'store';
         Fetching polls...
       </div>
     </ng-template>
-
-    <hr class="mb-2 mt-5" />
-    <a routerLink="/account">Account</a>
     </main>
 
   `
