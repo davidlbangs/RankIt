@@ -1,3 +1,9 @@
+
+function testMethod() {
+  console.log('hurrah');
+}
+
+
 function stv(winners, ballots) {
   
   // helper objects

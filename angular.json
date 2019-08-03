@@ -29,7 +29,9 @@
             "styles": [
               "src/assets/scss/app.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "src/app/shared/scripts/stv.js"
+            ]
           },
           "configurations": {
             "production": {

@@ -4,15 +4,17 @@ const admin = require('firebase-admin');
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 
+interface ballotCounter {
+  [key:string]: number;
+}
 
-
-export const calcResults = function stv(foreignWinners: number, foreignBallots: string[][]) {
+export const calcResults = function stv(foreignWinners: number, foreignBallots: string[][]) { 
   
   let winners = foreignWinners;
   let ballots = foreignBallots;
 
   // helper objects
-  const name2totals = {};
+  const name2totals: ballotCounter = {};
   const name2ballots = {};
   const name2weights = {};
 
@@ -45,7 +47,10 @@ export const calcResults = function stv(foreignWinners: number, foreignBallots: 
         // if it's the first round, everyone gets through.
         // otherwise, we check to see if name is in name2totals
         if (rounds.length === 0 || name in name2totals) {
-          const new_weight = rounds.length === 0 || (name2weights[elim][i] * factor);
+
+          // Significant change. this could be a bug.
+          // const new_weight:number = rounds.length === 0 || (name2weights[elim][i] * factor);
+          const new_weight:number = rounds.length === 0 ? 0 : (name2weights[elim][i] * factor);
           name2ballots[name] = (name2ballots[name] || []);
           name2ballots[name].push(ballot);
           name2weights[name] = (name2weights[name] || []);
@@ -68,7 +73,9 @@ export const calcResults = function stv(foreignWinners: number, foreignBallots: 
     } else {
       const mn = Math.min(...Object.values(name2totals));
       const mn_keys = Object.entries(name2totals).filter(x=>x[1]===mn).map(x=>x[0]);
-      elim = mn_keys[parseInt((Math.random())*mn_keys.length)];
+
+      const key:number = mn_keys.length * Math.random();
+      elim = mn_keys[key];
       factor = 1;
     }
     ballots = name2ballots[elim]; /* Changing the Reference */

@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "store": ["src/store.ts"]
+      "store": ["src/store.ts"],
+      "stv": ["src/app/shared/scripts/stv.js"]
     },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
