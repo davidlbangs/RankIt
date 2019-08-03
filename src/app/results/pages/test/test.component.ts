@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 // import * as stv from 'stv';
 declare function stv(winners, ballots): any;
-declare function testMethod(): any;
 
 interface ballotCounter {
   [key:string]: any; // should be number | true
