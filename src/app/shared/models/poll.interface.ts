@@ -9,7 +9,7 @@ export interface Poll {
   is_promoted?: boolean;
   date_created: number;
   choices?: Choice[];
-  results?: Result[];
+  results?: Results;
   votes?: Vote[];
   vote_count: number;
 
@@ -52,7 +52,7 @@ export interface Vote {
   choices?: string[];
 }
 
-export interface Result {
+export interface Results {
   elected: string[];
   rounds: {
     [key: string]: number;

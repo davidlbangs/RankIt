@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
-import { Poll, Result } from '../../../shared/models/poll.interface';
+import { Poll, Results } from '../../../shared/models/poll.interface';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -10,7 +10,7 @@ import { Poll, Result } from '../../../shared/models/poll.interface';
 })
 export class GraphComponent implements OnInit {
 
-  @Input() results: Result[];
+  @Input() results: Results;
   @Input() round: number;
 
   threshold:number = .50;
