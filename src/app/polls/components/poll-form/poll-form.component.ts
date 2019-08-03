@@ -27,10 +27,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
           </div>
           <div class="" formArrayName="choices">
             <mat-form-field appearance="outline" floatLabel="never" *ngFor="let c of choices.controls; index as i;">
-              <div [formGroupName]="i">
-                <input matInput placeholder="" formControlName="label" (keydown)="onKeydown($event, i)">
-                <input type="hidden" formControlName="initial_order" />
-              </div>
+                <input matInput placeholder="" [formControlName]="i" (keydown)="onKeydown($event, i)">
 
               <button 
                 *ngIf="choices.controls.length > 2"
@@ -234,12 +231,12 @@ export class PollFormComponent implements OnInit, OnChanges {
     return this.form.get('choices') as FormArray;
   }
 
-  get choiceControl() {
-    return this.fb.group({
-      label: [''],
-      initial_order: ['']
-    });
-  }
+  // get choiceControl() {
+  //   return this.fb.group({
+  //     label: [''],
+  //     initial_order: ['']
+  //   });
+  // }
 
   get required() {
     return (
@@ -270,11 +267,9 @@ export class PollFormComponent implements OnInit, OnChanges {
        
 
        if(value.choices) {
+         console.log('choices', value.choices);
          for(const item of value.choices) {
-           this.choices.push(this.fb.group({
-             'label': [item.label],
-             'initial_order': [item.initial_order]
-           }));
+           this.choices.push(new FormControl(item));
          }
        }
   }
@@ -302,7 +297,7 @@ export class PollFormComponent implements OnInit, OnChanges {
   }
 
   addChoice() {
-    this.choices.push(this.choiceControl);
+    this.choices.push(new FormControl(''));
   }
 
   removeChoice(index: number) {

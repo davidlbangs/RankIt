@@ -13,13 +13,13 @@ import { Choice } from '../../../shared/models/poll.interface';
           #{{index}}
         </div>
 
-        {{choice.label}}
+        {{choice}}
       </div>
     </div>
 
     <ng-template #inactive>
       <div class="choice {{active ? 'is-active' : '' }}" (click)="toggleVote()">
-        {{choice.label}}
+        {{choice}}
       </div>
     </ng-template>
 

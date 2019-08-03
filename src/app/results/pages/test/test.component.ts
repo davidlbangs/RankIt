@@ -60,6 +60,10 @@ export class TestComponent implements OnInit {
     testMethod();
   }
 
+
+  // newBall
+
+
   ballots: string[][] = [
     ["JOHN ERWIN","TOM NORDYKE","ANNIE YOUNG"],
     ["MEG FORNEY"],

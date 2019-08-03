@@ -37,22 +37,33 @@ export interface Poll {
   is_public: boolean;
 }
 
-export interface Choice {
-  label: string;
-  initial_order: number;
-}
+// export interface Choice {
+//   label: string;
+//   initial_order: number;
+// }
+
+// Choice is just a string for now, but may grow later.
+export type Choice = string;
 
 export interface Vote {
   id?: string;
   date_created?: number;
   ip_address: string;
-  choices?: Choice[];
+  choices?: string[];
 }
 
 export interface Result {
-  percentages: number[];
-  label: string;
-  initial_order: number;
-  victory_round: number;
-  elimination_round: number;
+  elected: string[];
+  rounds: {
+    [key:string]: number;
+  }[];
+  threshold: number;
 }
+
+// export interface Result {
+//   percentages: number[];
+//   label: string;
+//   initial_order: number;
+//   victory_round: number;
+//   elimination_round: number;
+// }

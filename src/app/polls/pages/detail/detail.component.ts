@@ -18,7 +18,7 @@ import { Store } from 'store';
         <h1 class="">{{ poll.title }}</h1>
         <p>
           <span *ngFor="let choice of poll.choices; let i = index">
-            {{ (i + 1) < poll.choices.length ? choice.label + ', ' : choice.label }}
+            {{ (i + 1) < poll.choices.length ? choice + ', ' : choice }}
             
           </span>
         </p>  
