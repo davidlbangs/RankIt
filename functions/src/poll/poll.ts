@@ -7,8 +7,8 @@ const MAX_CONCURRENT = 3;
 
 import { Poll } from '../../../src/app/shared/models/poll.interface';
 
-
-exports.closePolls = functions.pubsub.schedule('every 30 minutes').onRun(async context => {
+// was exports.
+export const closePolls = functions.pubsub.schedule('every 30 minutes').onRun(async context => {
   // Fetch all polls.
   const expiredPolls = await getExpiredPolls();
   // Use a pool so that we close maximum `MAX_CONCURRENT` polls in parallel.
@@ -27,11 +27,11 @@ function closePoll(expiredPolls:Poll[]){
     const db = admin.firestore();
 
     // update the relevant poll
-    const pollRef = db.collection('polls').doc(pollToClose!.id);
+    const pollRef = db.collection('polls').doc(pollToClose.id);
 
     return pollRef
       .update({'is_open': false})
-      .then(() => console.log('Closed poll ', pollToClose!.id, ' because it expired.'))
+      .then(() => console.log('Closed poll ', pollToClose.id, ' because it expired.'))
       .catch((err:any) => console.log(err));
   } else {
     return null;

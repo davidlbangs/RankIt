@@ -12,7 +12,7 @@ import { AuthService } from '../../../../auth/shared/services/auth/auth.service'
       <h1 class="">Account</h1> 
     </header>
 
-    <main *ngIf="user$ | async as user; else title;">
+    <main *ngIf="user$ | async as user;">
 
           <h3 class=" mt-2 mb-1">
             Email Address            
@@ -20,7 +20,7 @@ import { AuthService } from '../../../../auth/shared/services/auth/auth.service'
           <p class="explainer mb-1">The email address on an account cannot be changed.</p>
           
           <mat-form-field appearance="outline" floatLabel="never">
-            <input matInput placeholder="" formControlName="title" [value]="user.email" disabled>
+            <input matInput placeholder="" [value]="user.email" disabled>
           </mat-form-field>
 
 

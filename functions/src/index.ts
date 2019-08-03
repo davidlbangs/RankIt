@@ -13,6 +13,8 @@ admin.initializeApp(functions.config().firebase);
 
 export const syncPoll = vote.syncPoll;
 
+export const closePoll = poll.closePolls;
+
 export const helloWorld = functions.https.onRequest((request, response) => {
- response.send("Hello from Firebase!");
+ response.send("Hola from Firebase!");
 });

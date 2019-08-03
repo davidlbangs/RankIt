@@ -56,7 +56,7 @@ export class TestComponent implements OnInit {
 
   ngOnInit() {
     this.results = this.runVotes(2, this.ballots);
-    testMethod();
+    // testMethod();
   }
 
 

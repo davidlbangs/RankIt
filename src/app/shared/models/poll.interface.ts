@@ -55,7 +55,7 @@ export interface Vote {
 export interface Result {
   elected: string[];
   rounds: {
-    [key:string]: number;
+    [key: string]: number;
   }[];
   threshold: number;
 }
