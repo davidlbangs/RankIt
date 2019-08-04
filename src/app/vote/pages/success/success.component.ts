@@ -53,12 +53,19 @@ export class SuccessComponent implements OnInit {
               private store:Store) { }
 
   ngOnInit() {
-
+    let user = this.route.snapshot.data.resolverUser;
+    
     this.route.paramMap
       .subscribe((params:ParamMap) => {
         let id = params.get('id');
         if(id) {
           this.poll$ = this.voteService.getPoll(id);
+
+          if(user) {
+            this.store.set('backButton', ['/polls/', id]);
+          } else {
+            this.store.set('backButton', `/`);
+          }
         } else {
           this.router.navigate(['/vote/not-found']);
           

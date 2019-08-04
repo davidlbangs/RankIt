@@ -1,19 +1,27 @@
 
-
-<div 
-  class="result-row"
+<!--
   [class.is-winner]="result.victory_round >= round"
   [class.is-eliminated]="result.elimination_round >= round"
-  *ngFor="let result of results;">
+
+  <div class="difference negative">-6%</div>
+  objectKeys(results.rounds[round])
+-->
+
+<div 
+  *ngFor="let choice of all_choices"
+  class="result-row"
+  [class.is-winner]="getPercentage(round, choice) > winning_percentage"
+  [class.is-eliminated]="getPercentage(round, choice) === 0"
+  >
     <div class="meta">
-      <div class="percentage">{{result.percentages[round] | percent }}</div>
-      <div class="label">{{result.label}}</div>
-      <div class="difference negative">-6%</div>
+      <div class="percentage">{{getPercentage(round, choice) | percent }}</div>
+      <div class="label">{{choice}}</div>
+      
     </div>
     
     <div class="threshold"></div>
     <div 
       class="bar"
-      [style.width.%]="getWidth(result.percentages[round])"></div>
+      [style.width.%]="getWidth(getPercentage(round, choice))"></div>
 
 </div>

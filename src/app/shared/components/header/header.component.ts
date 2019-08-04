@@ -11,7 +11,7 @@ import { User } from '../../../../auth/shared/services/auth/auth.service';
     <header>
       <div class="nav">
         <div *ngIf="backButton$ | async as backButton">
-         <a mat-mini-fab color="accent" [routerLink]="['/', backButton]" class="backButton"><i class="fa fa-chevron-left"></i></a>  
+         <a mat-mini-fab color="accent" [routerLink]="backButton" class="backButton"><i class="fa fa-chevron-left"></i></a>  
         </div>
       </div>
       <div class="logo">

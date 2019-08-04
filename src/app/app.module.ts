@@ -16,6 +16,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 // AUTH
 import { AuthModule } from '../auth/auth.module';
+
+import { UserResolver } from './shared/services/resolver.service';
+
 // currently there is a bug while building the app with --prod
 // - https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/76
 // the plugin exposes the two libraries as well. You can use those:
@@ -64,7 +67,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     AuthModule,
     SharedModule
   ],
-  providers: [Store],
+  providers: [Store, UserResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -73,6 +73,7 @@ export class PollService {
     poll.owner_uid = this.uid;
     poll.vote_count = 0;
     poll.is_open = true;
+    poll.is_promoted = false;
     poll.date_created = Date.now();
 
     if(poll.keep_open == false){

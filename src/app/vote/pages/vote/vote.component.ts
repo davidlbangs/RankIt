@@ -39,9 +39,7 @@ export class VoteComponent implements OnInit {
 
     this.getIPAddress();
 
-    if(this.uid) {
-      this.store.set('backButton', 'polls');
-    }
+    let user = this.route.snapshot.data.resolverUser;
 
     this.route.paramMap
       .subscribe((params:ParamMap) => {
@@ -51,6 +49,13 @@ export class VoteComponent implements OnInit {
           this.poll$ = this.voteService.getPoll(id)
           .pipe(
                 tap(next => this.choices = this.displayChoices(next)));
+
+          if(user) {
+            this.store.set('backButton', ['/polls/', id]);
+          } else {
+            this.store.set('backButton', `/`);
+          }
+
         } else {
           this.router.navigate(['/vote/not-found']);
           
@@ -59,14 +64,6 @@ export class VoteComponent implements OnInit {
       });
 
 
-  }
-
-  
-  get uid() {
-    if(this.store.value.user) {
-      return this.store.value.user.uid;
-    }
-    else return null;
   }
 
   displayChoices(poll:Poll) {

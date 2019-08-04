@@ -11,11 +11,13 @@ import { ChoiceComponent } from './component/choice/choice.component';
 import {  DragDropModule } from '@angular/cdk/drag-drop';
 import { SuccessComponent } from './pages/success/success.component';
 
+import { UserResolver } from '../shared/services/resolver.service';
+
 export const routes:Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'not-found' },
   { path: 'not-found', pathMatch: 'full', component: NotFoundComponent },
-  { path: ':id', component: VoteComponent },
-  { path: ':id/success', component: SuccessComponent },
+  { path: ':id',resolve: { resolverUser: UserResolver}, component: VoteComponent },
+  { path: ':id/success', resolve: { resolverUser: UserResolver}, component: SuccessComponent },
 ];
 
 @NgModule({

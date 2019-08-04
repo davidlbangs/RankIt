@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { RouterModule } from '@angular/router';
+import {AngularFireAuthModule} from '@angular/fire/auth';
 
 import {
   MatButtonModule, 
@@ -23,6 +24,7 @@ import { ShufflePipe } from './pipes/shuffle.pipe';
   imports: [
     CommonModule,
     RouterModule,
+    AngularFireAuthModule,
     MatButtonModule,
     MatCheckboxModule,
     MatListModule,

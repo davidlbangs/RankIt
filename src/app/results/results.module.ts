@@ -9,13 +9,14 @@ import { GraphComponent } from './components/graph/graph.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { TestComponent } from './pages/test/test.component';
 
+import { UserResolver } from '../shared/services/resolver.service';
 
 export const routes:Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'not-found' },
   { path: 'not-found', pathMatch: 'full', component: NotFoundComponent },
   { path: 'test', pathMatch: 'full', component: TestComponent },
-  { path: ':id/:round', component: ResultsComponent },
-  { path: ':id/summary', component: ResultsComponent },
+  { path: ':id/:round', resolve: { resolverUser: UserResolver}, component: ResultsComponent },
+  { path: ':id/summary', resolve: { resolverUser: UserResolver}, component: ResultsComponent },
 ];
 
 

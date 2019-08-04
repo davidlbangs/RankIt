@@ -4,7 +4,7 @@ import { HttpClient} from '@angular/common/http';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store } from 'store';
 import { Observable, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, distinct } from 'rxjs/operators';
 
 import { AppSettings } from '../../../app.settings';
 
@@ -29,19 +29,22 @@ import { VoteService } from '../../../shared/services/vote.service';
           <p class="mb-1">{{poll.vote_count}} Votes in 3 Rounds</p>
           
           <hr>
-          {{results | json }}
 
-          <hr />
           <div class="mb-3 mt-1">
-            <results-graph [results]="tempResults" [round]="'1'"></results-graph>
+            <results-graph 
+              [results]="shiftedResults$ | async" 
+              [all_choices]="poll.choices"
+              [round]="round"
+              [total_rounds]="poll.results.rounds.length"
+              [winner_count]="poll.winner_count"></results-graph>
           </div>
 
           <hr>
 
           <h2 class="mt-3 mb-1">Poll Summary</h2>
 
-          <p class="mb-2">After 3 rounds, Jordin Sparks wins with 1226 first-choice votes, 324 second-choice votes, and 99 third-choice votes.</p> 
-          <p class="mb-3">Ranked Choice Voting is different from choose-only-one voting. If no singer gets 50% of the vote in round one, the singer with the fewest votes is eliminated and their voters get their next choice. See how Ranked Choice worked for this poll by clicking through the rounds.</p>
+          <p class="mb-2">After {{ getTotalRounds(results) }} rounds, <span *ngFor="let winner of poll.results.elected">{{winner}}</span> wins. More coming soon.</p> 
+          <!--<p class="mb-3">Ranked Choice Voting is different from choose-only-one voting. If no singer gets 50% of the vote in round one, the singer with the fewest votes is eliminated and their voters get their next choice. See how Ranked Choice worked for this poll by clicking through the rounds.</p>-->
       </main>
 
       <footer class="actions">
@@ -54,9 +57,16 @@ import { VoteService } from '../../../shared/services/vote.service';
       </div>
       <div class="half">
         <button
+          *ngIf="round < poll.results.rounds.length" 
           (click)="toRound(nextRound, poll)"
           mat-button mat-raised-button [color]="'primary'" 
           class="d-block button-large p-1">See Round {{ nextRound }}</button>
+        <button
+          mat-button mat-raised-button [color]="'primary'" 
+          class="d-block button-large p-1"
+          *ngIf="round ===poll.results.rounds.length" >
+          Continue button TODO
+        </button>
       </div>
     </footer>
      </div>
@@ -82,60 +92,21 @@ import { VoteService } from '../../../shared/services/vote.service';
 })
 export class ResultsComponent implements OnInit {
     poll$: Observable<Poll> = this.store.select('poll');
-    subscription:Subscription;
 
+    shiftedResults$:Observable<Results> = this.store.select('poll')
+    .pipe(
+          distinct(),
+          map((poll:Poll) => this.getShiftedRounds(poll.results)));
+
+    // Local state :)
     round: number;
-    // user$ :Observable<any> = this.store.select('user').pipe(
-    //                                                         tap({
-    //                                                             next: this.store.set('backButton', 'polls')
-    //                                                             }));
+    shiftedResults: Results;
+    // user$: Observable<any> = this.store.select('user')
+    // .pipe(distinct(),
+    //       map(user => this.store.set('backButton', '/polls')));
 
-  newResults = { 
-    "elected": [ "Elliott" ], 
-    "rounds": [ 
-      { "Elliott": 9, "James": 4, "Lewis": 2, "Micah": 6 }, 
-      { "Elliott": 9, "James": 5, "Micah": 6 }, 
-      { "Elliott": 9, "Micah": 7 } ], 
-      "threshold": 11 
-    }
-    
-  tempResults = [
-    {
-    'percentages': [.31, .49, .52],
-    'label': 'Jordin Sparks',
-    'initial_order': 0,
-    'victory_round': 1,
-    'elimination_round': null
-    },
-    {
-    'percentages': [.31, .33, .41],
-    'label': 'Chris Daughtry',
-    'initial_order': 2,
-    'victory_round': null,
-    'elimination_round': null
-    },
-    {
-    'percentages': [.16, .16, .16],
-    'label': 'Kelly Clarkson',
-    'initial_order': 1,
-    'victory_round': null,
-    'elimination_round': null
-    },
-    {
-    'percentages': [.08, .08, 0],
-    'label': 'Ruben Studdard',
-    'initial_order': 4,
-    'victory_round': null,
-    'elimination_round': null
-    },
-    {
-    'percentages': [.08, 0, 0],
-    'label': 'Taylor Hicks',
-    'initial_order': 4,
-    'victory_round': null,
-    'elimination_round': 2
-    }
-  ];
+    subscription: Subscription;
+
 
   constructor(
               private location:Location,
@@ -147,23 +118,48 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.subscription = this.user$.subscribe();
+
+    let user = this.route.snapshot.data.resolverUser;
 
     this.route.paramMap
       .subscribe((params:ParamMap) => {
         let id = params.get('id');
-
 
         this.round = (params.get('round') === 'summary') ? 0 : parseInt(params.get('round'));
 
         console.log(params);
         if(id) {
           this.poll$ = this.voteService.getPoll(id);
+
+          if(user) {
+            this.store.set('backButton', ['/polls/', id]);
+          } else {
+            this.store.set('backButton', `/`);
+          }
         } else {
           this.router.navigate(['/vote/not-found']);
-          
+         
         }
        
       });
+  }
+
+  /**
+    * Shifted Rounds fixes the 0 index problem.
+    *   Since we want to display the final round up front, 
+    *   and each round is numbered starting from 1, it simplifies.
+    */
+  getShiftedRounds(results:Results) {
+    const lastRound = results.rounds.slice(-1)[0];    
+    const shiftedResults = {...results, rounds: [...results.rounds]};
+
+    shiftedResults.rounds.unshift(lastRound);
+    return shiftedResults;
+  }
+
+  getLastRound(results:Results) {
+    return results.rounds.length;
   }
 
   getTotalRounds(results:Results) {
@@ -193,7 +189,7 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-
+    // this.subscription.unsubscribe();
   }
 
 }
