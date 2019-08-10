@@ -9,7 +9,19 @@
   font-size: 16px;
 }
 
+.alert {
+  div {
+    background: #C9519B;
+  font-weight: bold;
+  color: white;
+  padding: 1rem;
+  font-size: 0.9rem;
+  }
+  padding-bottom: 1rem;
+}
+
 span.explain {
+  font-size: 15px;
   margin-left: 5px;
   border: 1px solid #BDCAD1;
   border-radius: 50%;
@@ -17,7 +29,8 @@ span.explain {
   display: inline-block;
   width: 20px;
   height: 18px;
-  padding-top:2px;
+  padding-top:1px;
+  padding-bottom: 1px;
   text-align: center;
 
   &:hover {

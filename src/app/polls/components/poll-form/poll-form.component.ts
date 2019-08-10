@@ -17,8 +17,13 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 
         <div class="poll-form__name">
           <mat-form-field appearance="outline" floatLabel="never">
-            <input matInput placeholder="" formControlName="title">
+            <input matInput placeholder="" formControlName="title" required>
           </mat-form-field>
+          <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
+            <div *ngIf="title.errors.required">
+              A poll question is required.
+            </div>
+          </div>
         </div>
 
         <div class="poll-form__choices mb-4">
@@ -100,6 +105,11 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
                   </mat-form-field>
             </div>
           </div>
+          <div *ngIf="label.invalid && (label.dirty || label.touched)" class="alert alert-danger">
+              <div *ngIf="label.errors.required">
+                A label is required.
+              </div>
+            </div>
 
           <div class="cta-section" formGroupName="cta">
             <div class="option-row">
@@ -141,6 +151,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
             <button 
               type="button"
               *ngIf="!exists"
+              [disabled]="form.invalid && (form.dirty || form.touched)"
               (click)="createPoll()"
               mat-raised-button [color]="'primary'" 
               class=" has-icon dark-icon mb-3 mr-1">
@@ -156,6 +167,12 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
             </button>
             <!-- ../ takes back to previously came from -->
             <a mat-button [routerLink]="['../']" class="button button--cancel">Cancel</a>
+          </div>
+
+          <div *ngIf="form.invalid && (form.dirty || form.touched)" class="alert">
+              <div>
+                There are errors that need to be fixed above before this poll can be created.
+              </div>
           </div>
 
           <div class="poll-form__delete" *ngIf="exists">
@@ -193,7 +210,7 @@ export class PollFormComponent implements OnInit, OnChanges {
     remove = new EventEmitter<Poll>();
 
   form = this.fb.group({
-    title: [''],
+    title: ['', Validators.required],
     keep_open: [''],
     choices: this.fb.array(['']),
     length: this.fb.group({
@@ -203,7 +220,7 @@ export class PollFormComponent implements OnInit, OnChanges {
     }),
     winner_count: [''],
     randomize_order: [''],
-    label: [''],
+    label: ['', Validators.required],
     cta: this.fb.group({
       custom: [''],
       label: [''],
@@ -217,6 +234,8 @@ export class PollFormComponent implements OnInit, OnChanges {
     public dialog: MatDialog
     ) {}
 
+  get title() { return this.form.get('title'); }
+  get label() { return this.form.get('label'); }
 
   get showLength() {
     return !this.form.get('keep_open').value;
@@ -262,14 +281,12 @@ export class PollFormComponent implements OnInit, OnChanges {
        this.emptyChoices(); 
 
        const value = this.poll;
-       console.log(value);
        this.form.patchValue(value); // patch value updates portion of form.
        
 
        if(value.choices) {
-         console.log('choices', value.choices);
          for(const item of value.choices) {
-           this.choices.push(new FormControl(item));
+           this.choices.push(new FormControl(item, Validators.required));
          }
        }
   }
@@ -297,7 +314,7 @@ export class PollFormComponent implements OnInit, OnChanges {
   }
 
   addChoice() {
-    this.choices.push(new FormControl(''));
+    this.choices.push(new FormControl('', Validators.required));
   }
 
   removeChoice(index: number) {
@@ -319,7 +336,7 @@ export class PollFormComponent implements OnInit, OnChanges {
     }
     if(picker == 'label') {
       title = 'Custom Labels';
-      body = '<p style="margin-bottom:1rem;">When showing how results are calculated, it helps to change the word “choice” to something specific to your poll. The label should always be singular.</p><p><strong>Example:</strong> In a poll on NBA players, we would use <strong>player</strong> as the label since “player” describes Michael Jordan, LeBron James, and Tim Duncan.</p>';
+      body = 'When showing how results are calculated, it helps to change the word “choice” to something specific to your poll. The label should always be singular.<br /><br /><strong>Example:</strong> In a poll on NBA players, we would use <strong>player</strong> as the label since “player” describes Michael Jordan, LeBron James, and Tim Duncan.';
     }
 
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
@@ -349,6 +366,7 @@ export class PollFormComponent implements OnInit, OnChanges {
   selector: 'dialog-overview',
   styles: [`
   div.body { font-size: 15px; color: #69757C; line-height: 1.3;}
+  p { margin-bottom: 1rem;}
   `],
   template: `
 

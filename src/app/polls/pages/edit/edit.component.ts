@@ -59,14 +59,10 @@ export class EditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.set('backButton', 'polls');
     this.subscription = this.pollService.getUserPolls().subscribe();
-    
+
     this.poll$ = this.route.params
     .pipe(
           switchMap(params => {
-              // console.log(param);
-              // let blah:Poll = this.pollService.getPoll(param.id);
-              // console.log(blah);
-              // return blah;
 
               let id = params.id;
               if(id) {
