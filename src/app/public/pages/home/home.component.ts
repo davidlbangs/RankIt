@@ -27,7 +27,7 @@ import { Store } from 'store';
       <hr class="mb-2" />
     <div *ngIf="polls$ | async as polls; else loading;">
 
-        <mat-card *ngFor="let poll of polls" [routerLink]="['vote', poll.id]" class="mb-1 linked-card">
+        <mat-card *ngFor="let poll of polls" [routerLink]="['/vote', poll.id]" class="mb-1 linked-card">
         <mat-card-title>{{poll.title}}</mat-card-title>
         <mat-card-subtitle>{{poll.is_open ? 'Open' : 'Closed' }} – {{poll.vote_count ? poll.vote_count + ' votes' : 'No Votes'}}</mat-card-subtitle>
      
