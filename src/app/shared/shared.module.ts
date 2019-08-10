@@ -15,12 +15,14 @@ import {
   MatSelectModule,
   MatRadioModule,
   MatSlideToggleModule,
+  MatSnackBarModule,
   MatDialogModule } from '@angular/material';
 import { HeaderComponent } from './components/header/header.component';
 import { ShufflePipe } from './pipes/shuffle.pipe';
+import { SharePollComponent } from './components/share-poll/share-poll.component';
 
 @NgModule({
-  declarations: [HeaderComponent, ShufflePipe],
+  declarations: [HeaderComponent, ShufflePipe, SharePollComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -32,6 +34,7 @@ import { ShufflePipe } from './pipes/shuffle.pipe';
     MatRadioModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSnackBarModule,
     MatOptionModule,
     MatSelectModule,
     MatSlideToggleModule,
@@ -43,8 +46,10 @@ import { ShufflePipe } from './pipes/shuffle.pipe';
     MatCheckboxModule,
     MatListModule,
     MatCardModule,
+    MatSnackBarModule,
     MatRadioModule,
     HeaderComponent,
+    SharePollComponent,
     MatFormFieldModule,
     MatInputModule,
     MatOptionModule,

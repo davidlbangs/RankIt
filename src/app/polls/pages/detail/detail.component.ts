@@ -51,11 +51,7 @@ import { Store } from 'store';
       <main class="pb-3">
         <h1 class="mb-1">Promote Poll</h1>
 
-        <div class="flex-grid mb-1">
-          <button mat-stroked-button color="primary" class="has-icon"><i class="fa fa-link"></i>Copy Voting Link</button>
-          <a mat-stroked-button color="primary" class="has-icon"><i class="fa fa-twitter"></i>Tweet</a>
-          <a mat-stroked-button color="primary" class="has-icon"><i class="fa fa-facebook-f"></i>Post</a>
-        </div>
+        <share-poll [poll]="poll"></share-poll>
         <button mat-stroked-button color="primary" class="has-icon d-block mb-5"><i class="fa fa-code"></i>Copy Embed Code</button>
 
         <hr class="mt-3 mb-4" />
