@@ -23,6 +23,9 @@ import { MetaService } from '@ngx-meta/core';
             
           </span>
         </p>  
+        <p *ngIf="poll.winner_count > 1">
+          ({{poll.winner_count}} Winners)
+        </p>
       </header>
       <main class="mb-3">
         <div class="card promo-votes mt-2 mb-2">

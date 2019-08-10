@@ -1,12 +1,9 @@
 import * as functions from 'firebase-functions';
 const admin = require('firebase-admin');
 
-// import * as stv from '../stv.js';
-// declare function stv(winners, ballots): any;
 
-
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
+// Start writing Firebase Functions
+// https://firebase.google.com/docs/functions/typescript
 
 
 function stv(winners, ballots) {
@@ -112,32 +109,39 @@ export const syncPoll = functions.firestore
     const pollID = context.params.pollID;
     // const voteID = context.params.voteID;
     const db = admin.firestore();
-    const pollRef = db.collection('polls').doc(pollID);
+    const pollRef = db.doc(`polls/${pollID}`);
     const votesRef = db.collection(`polls/${pollID}/votes`);
 
-    // get All Votes
-    return votesRef.get()
-      .then(function(querySnapshot) {
-        const votes = [];
-        let results = {};
-        
-        // Iterate all Votes
-        querySnapshot.forEach(function(doc){
-          votes.push(doc.data().choices);
-        });
+    // 1. Get Poll
+    // 2. get All Votes
 
-        results = calculateResults(1, votes);
+    return pollRef.get()
+      .then(snapshot => snapshot.data())
+      .then(poll => {
+        // -----
 
+        return votesRef.get()
+          .then(function(querySnapshot) {
+            const votes = [];
+            let results = {};
+            
+            // Iterate all Votes
+            querySnapshot.forEach(function(doc){
+              votes.push(doc.data().choices);
+            });
 
-        return pollRef
-            .update({'results': results, 'vote_count': admin.firestore.FieldValue.increment(1)})
-            .then(() => console.log('results', results, 'updated poll!', pollID))
-            .catch((err:any) => console.log(err));
+            results = calculateResults(poll.winner_count, votes);
 
-          
+            // update data
+            return pollRef
+                .update({'results': results, 'vote_count': admin.firestore.FieldValue.increment(1)})
+                .then(() => console.log('results', results, 'updated poll!', pollID));  
+          });
+
+        // -----
+
       })
-      .catch(err => console.log(err))
-
+      .catch(err => console.log(err));
     
 
   });

@@ -56,38 +56,55 @@ import { MetaService } from '@ngx-meta/core';
               [total_rounds]="poll.results.rounds.length"
               [total_votes]="poll.vote_count"
               [winner_count]="poll.winner_count"></results-explanation> 
+
+          <div class="mt-3">
+            <share-poll [poll]="poll"></share-poll>
+          </div>
       </main>
 
-      <footer class="actions">
-      <div class="half">
-        <button
-          *ngIf="round !== 0" 
-          (click)="toRound(lastRound, poll)"
-          mat-button mat-raised-button [color]="'white'" 
-          class="d-block button-large p-1">Back</button>
-      </div>
-      <div class="half">
-        <button
-          *ngIf="round < poll.results.rounds.length" 
-          (click)="toRound(nextRound, poll)"
-          mat-button mat-raised-button [color]="'primary'" 
-          class="d-block button-large p-1">See Round {{ nextRound }}</button>
-        <button
-          mat-button mat-raised-button [color]="'primary'" 
-          class="d-block button-large p-1"
-          *ngIf="round ===poll.results.rounds.length" >
-          Continue button TODO
-        </button>
-      </div>
+      <footer class="actions" *ngIf="poll.results as results;">
+        <div class="half">
+          <button
+            *ngIf="round !== 0" 
+            (click)="toRound(lastRound, poll)"
+            mat-button mat-raised-button [color]="'white'" 
+            class="d-block button-large p-1">Back</button>
+        </div>
+        <div class="half">
+          <button
+            *ngIf="round < poll.results.rounds.length" 
+            (click)="toRound(nextRound, poll)"
+            mat-button mat-raised-button [color]="'primary'" 
+            class="d-block button-large p-1">See Round {{ nextRound }}</button>
+          <button
+            mat-button mat-raised-button [color]="'primary'" 
+            class="d-block button-large p-1"
+            *ngIf="round ===poll.results.rounds.length" >
+            Continue button TODO
+          </button>
+        </div>
     </footer>
+
+        <ng-template #noResults>
+           <main>
+            <div class="alert" *ngIf="poll.is_open" class="mt-3 mb-3">
+              <p class="mb-2">There are no results yet. How about voting?</p>
+              <p>
+                <button [routerLink]="['/vote', poll.id]"
+                mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-pencil"></i>Vote on this Poll</button>
+              </p>
+            </div>
+
+            <div class="alert" *ngIf="!poll.is_open" class="mt-3 mb-3">
+              <p class="mb-2">Hmm...There are no results to display, but this poll is closed. Sorry!</p>
+              <p>
+                <button [routerLink]="['/']"
+                mat-raised-button color="" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-chevron-left"></i>Back to Home Page</button>
+              </p>
+            </div>
+          </main>
+        </ng-template>
      </div>
-
-
-      <ng-template #noResults>
-          <div class="message">
-            so...there aren't any results yet.TODO
-          </div>
-      </ng-template>
 
 
       <ng-template #loading>
