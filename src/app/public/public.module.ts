@@ -6,20 +6,28 @@ import { SharedModule } from '../shared/shared.module';
 
 import { HomeComponent } from './pages/home/home.component';
 import { MetaGuard } from '@ngx-meta/core';
+import { PrivacyComponent } from './pages/privacy/privacy.component';
 
 export const routes:Routes = [
-  { path: '', pathMatch: 'full', component: HomeComponent,
-  canActivate: [MetaGuard],
+  { path: 'privacy', component: PrivacyComponent, canActivate: [MetaGuard],
+    data: {
+          meta: {
+            title: 'Privacy Policy'
+          }
+    } 
+  },
+  { path: '', pathMatch: 'full', component: HomeComponent, canActivate: [MetaGuard],
     data: {
           meta: {
             title: 'Home'
           }
-    } }
+    } 
+  }
 ];
 
 
 @NgModule({
-  declarations: [HomeComponent],
+  declarations: [HomeComponent, PrivacyComponent],
   imports: [
     CommonModule,
     SharedModule,
