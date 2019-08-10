@@ -44,6 +44,17 @@ hr {
   }
 }
 
+.alert {
+  div {
+    background: #C9519B;
+  font-weight: bold;
+  color: white;
+  padding: 1rem;
+  font-size: 0.9rem;
+  }
+  padding-bottom: 1rem;
+}
+
 .poll-header {
   background: #EAEDF0;
   padding: 1rem;

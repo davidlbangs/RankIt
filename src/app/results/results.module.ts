@@ -10,6 +10,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { TestComponent } from './pages/test/test.component';
 
 import { UserResolver } from '../shared/services/resolver.service';
+import { ExplanationComponent } from './components/explanation/explanation.component';
 
 export const routes:Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'not-found' },
@@ -21,7 +22,7 @@ export const routes:Routes = [
 
 
 @NgModule({
-  declarations: [ResultsComponent, GraphComponent, NotFoundComponent, TestComponent],
+  declarations: [ResultsComponent, GraphComponent, NotFoundComponent, TestComponent, ExplanationComponent],
   imports: [
     CommonModule,
     SharedModule,

@@ -22,6 +22,11 @@ import { VoteService } from '../../../shared/services/vote.service';
       </header>
 
       <main class="clear-footer" *ngIf="poll.results as results; else noResults">
+          <div class="alert mt-3" *ngIf="poll.vote_count < poll.choices.length">
+            <div>
+              Heads up: this poll doesn't have many votes yet. Results are displayed below, but the results will be more meaningful once more people have voted. 
+            </div>
+          </div>
           <h2 class="mt-3 mb-1">
             {{ (round === 0) ? 'Final Result' : 'Round ' + round }}
             <span *ngIf="round === getTotalRounds(results)">(Final Result)</span>
@@ -41,10 +46,15 @@ import { VoteService } from '../../../shared/services/vote.service';
 
           <hr>
 
-          <h2 class="mt-3 mb-1">Poll Summary</h2>
+          <h2 class="mt-3 mb-1">{{ round === 0 ? 'Poll' : 'Round'}} Summary</h2>
 
-          <p class="mb-2">After {{ getTotalRounds(results) }} rounds, <span *ngFor="let winner of poll.results.elected">{{winner}}</span> wins. More coming soon.</p> 
-          <!--<p class="mb-3">Ranked Choice Voting is different from choose-only-one voting. If no singer gets 50% of the vote in round one, the singer with the fewest votes is eliminated and their voters get their next choice. See how Ranked Choice worked for this poll by clicking through the rounds.</p>-->
+          <results-explanation 
+              [results]="shiftedResults$ | async" 
+              [all_choices]="poll.choices"
+              [round]="round"
+              [total_rounds]="poll.results.rounds.length"
+              [total_votes]="poll.vote_count"
+              [winner_count]="poll.winner_count"></results-explanation> 
       </main>
 
       <footer class="actions">
