@@ -65,7 +65,7 @@ export class PollService {
   }
 
   get uid() {
-    console.log('getting uid', this.store.value);
+    // console.log('getting uid', this.store.value);
     if(this.store.value.user) {
       return this.store.value.user.uid;
     } else {
@@ -92,7 +92,7 @@ export class PollService {
     }
 
     poll.id = this.db.createId(); // create the ID first, then use it to set.
-    console.log('add', poll);
+    // console.log('add', poll);
     await this.db.doc(`polls/${poll.id}`).set(poll);
 
     return poll.id;
@@ -109,7 +109,7 @@ export class PollService {
   }
 
   deletePoll(poll:Poll) {
-    console.log("delte", poll);
+    // console.log("delte", poll);
     return this.db.doc(`polls/${poll.id}`).delete();
   }
 }

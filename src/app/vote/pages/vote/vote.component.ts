@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store } from 'store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-
+import { environment } from '../../../../environments/environment';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 import { AppSettings } from '../../../app.settings';
@@ -19,7 +19,7 @@ import { MetaService } from '@ngx-meta/core';
   styleUrls: ['./vote.component.scss']
 })
 export class VoteComponent implements OnInit {
-
+  LOCAL_OVERLAY = (environment.production == false) ? true : false;
   defaultText = AppSettings.defaultText;
   vote:Vote = {"ip_address": null, "choices": Array()}; // local state
   choices: Choice[];
@@ -66,8 +66,6 @@ export class VoteComponent implements OnInit {
         }
        
       });
-
-
   }
 
   displayChoices(poll:Poll) {
@@ -99,9 +97,28 @@ export class VoteComponent implements OnInit {
   }
 
   addToVote(choice:Choice) {
-    console.log(choice);
+    console.log('add', choice);
     this.choices = this.choices.filter(obj => obj !== choice); // Remove from old.
     this.vote.choices.push(choice); // add to new.
+  }
+
+  removeFromVote(choice:Choice) {
+    this.vote.choices = this.vote.choices.filter(obj => obj !== choice);
+    this.choices.push(choice);
+  }
+
+  moveUp(choice:Choice) {
+    const index = this.vote.choices.indexOf(choice);
+    if (index > 0) {
+      this.vote.choices = this.array_move(this.vote.choices, index, index - 1);
+    }
+  }
+
+  moveDown(choice:Choice) {
+    const index = this.vote.choices.indexOf(choice);
+    if (index < this.vote.choices.length) {
+      this.vote.choices = this.array_move(this.vote.choices, index, index + 1);
+    }
   }
 
   getIPAddress() {
@@ -113,6 +130,18 @@ export class VoteComponent implements OnInit {
 
   showVote() {
     console.log('vote', this.vote);
+  }
+
+
+ array_move(arr, old_index, new_index) {
+    if (new_index >= arr.length) {
+        var k = new_index - arr.length + 1;
+        while (k--) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+    return arr; // for testing
   }
 
 }

@@ -92,7 +92,6 @@ export class DetailComponent implements OnInit {
     this.poll$ = this.route.params
     .pipe(
           switchMap(param => {
-            console.log(param);
             const poll = this.pollService.getPoll(param.id);
             return poll;
           }),

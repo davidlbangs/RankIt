@@ -1,6 +1,37 @@
 $color-teal: #51B0C9;
 
 
+.choice-wrapper {
+  display: flex;
+
+  .controls {
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+
+    .control {
+      // height: 33.333%;
+      flex: 0 0 50%;
+      button {
+          line-height: 30px;
+          padding: 0 12px;
+        // line-height: auto;
+        // height: 20px;
+        // line-height: 20px;
+        // line-height: 1;
+      }
+    }
+  }
+  .choice {
+    flex-grow: 1;
+  }
+}
+
+span.custom-remove {
+  color: #CC6D6D;
+  font-weight: bold;
+}
+
 .choice {
   min-height: 60px;
   background: #EAEDF0;

@@ -7,7 +7,7 @@ import { Poll, Results, Choice } from '../../../shared/models/poll.interface';
   selector: 'results-explanation',
   styleUrls: ['./explanation.component.scss'],
   template: `
-      {{results | json }}
+     
       
       <div *ngIf="isSummary">
         <p class="mb-2">After {{ total_rounds }} {{ (total_rounds > 1) ? 'rounds' : 'round'}}, <strong>{{results.elected[0]}}</strong> wins. More coming soon.</p>
