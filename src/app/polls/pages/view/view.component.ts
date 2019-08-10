@@ -56,7 +56,8 @@ export class ViewComponent implements OnInit {
   ngOnInit() {
     this.store.set('backButton', '');
     this.polls$ = this.store.select<Poll[]>('polls');
-    this.subscription = this.pollService.polls$.subscribe(); // returns subscription
+    // this.subscription = this.pollService.polls$.subscribe(); // returns subscription
+    this.subscription = this.pollService.getUserPolls().subscribe();
   }
 
   ngOnDestroy() {

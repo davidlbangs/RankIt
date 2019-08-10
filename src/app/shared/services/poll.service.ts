@@ -20,12 +20,21 @@ export class PollService {
     private store:Store,
     private db: AngularFirestore) { }
 
-  polls$: Observable<Poll[]> = this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', this.uid)).valueChanges()
+  // polls$: Observable<Poll[]> = this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', this.uid)).valueChanges()
+  //   .pipe(
+  //         tap({
+  //           next: val => this.store.set('polls', val)
+  //         })
+  //         );
+
+  getUserPolls() {
+    return this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', this.uid)).valueChanges()
     .pipe(
           tap({
             next: val => this.store.set('polls', val)
           })
           );
+  }
 
   // publicPolls$: Observable<Poll[]> = this.db.collection<Poll>('polls', ref => ref.where('is_promoted', '==', 'true').where('is_open', '==', 'true').orderBy('date_created')).valueChanges()
   //   .pipe(
@@ -56,6 +65,7 @@ export class PollService {
   }
 
   get uid() {
+    console.log('getting uid', this.store.value);
     if(this.store.value.user) {
       return this.store.value.user.uid;
     } else {

@@ -21,6 +21,9 @@ import { User } from '../../../../auth/shared/services/auth/auth.service';
         <div *ngIf="user">
           <a mat-mini-fab color="" [routerLink]="['/account']" class="user"><i class="fa fa-user"></i></a>
         </div>
+        <div *ngIf="!user">
+          <a mat-button color="" [routerLink]="['/auth/login']" class="button">Login</a>
+        </div>
       </div>
     </header>
 

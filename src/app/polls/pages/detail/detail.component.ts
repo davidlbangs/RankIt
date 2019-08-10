@@ -86,7 +86,7 @@ export class DetailComponent implements OnInit {
 
   ngOnInit() {
     this.store.set('backButton', 'polls');
-    this.subscription = this.pollService.polls$.subscribe();
+    this.subscription = this.pollService.getUserPolls().subscribe();
     
     this.poll$ = this.route.params
     .pipe(
