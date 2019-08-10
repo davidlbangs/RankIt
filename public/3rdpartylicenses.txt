@@ -342,6 +342,9 @@ Apache-2.0
 @firebase/webchannel-wrapper
 Apache-2.0
 
+@ngx-meta/core
+MIT
+
 core-js
 MIT
 Copyright (c) 2014-2019 Denis Pushkarev

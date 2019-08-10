@@ -51,7 +51,8 @@ export class VoteComponent implements OnInit {
           this.poll$ = this.voteService.getPoll(id)
           .pipe(
                 tap(next => this.choices = this.displayChoices(next)),
-                tap(next => this.meta.setTitle('Vote – ' + next.title)));
+                tap(next => this.meta.setTitle('Vote – ' + next.title))
+                );
 
           if(user) {
             this.store.set('backButton', ['/polls/', id]);
