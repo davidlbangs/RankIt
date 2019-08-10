@@ -11,6 +11,7 @@ import { AppSettings } from '../../../app.settings';
 
 import { Poll, Vote, Choice } from '../../../shared/models/poll.interface';
 import { VoteService } from '../../../shared/services/vote.service';
+import { MetaService } from '@ngx-meta/core';
 
 @Component({
   selector: 'app-vote',
@@ -28,6 +29,7 @@ export class VoteComponent implements OnInit {
 
 
   constructor(
+              private readonly meta: MetaService,
               private http:HttpClient,
               private router:Router,
               private voteService:VoteService,
@@ -48,7 +50,8 @@ export class VoteComponent implements OnInit {
         if(id) {
           this.poll$ = this.voteService.getPoll(id)
           .pipe(
-                tap(next => this.choices = this.displayChoices(next)));
+                tap(next => this.choices = this.displayChoices(next)),
+                tap(next => this.meta.setTitle('Vote – ' + next.title)));
 
           if(user) {
             this.store.set('backButton', ['/polls/', id]);

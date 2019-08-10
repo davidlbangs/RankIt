@@ -5,10 +5,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 
 import { HomeComponent } from './pages/home/home.component';
-
+import { MetaGuard } from '@ngx-meta/core';
 
 export const routes:Routes = [
-  { path: '', pathMatch: 'full', component: HomeComponent }
+  { path: '', pathMatch: 'full', component: HomeComponent,
+  canActivate: [MetaGuard],
+    data: {
+          meta: {
+            title: 'Home'
+          }
+    } }
 ];
 
 

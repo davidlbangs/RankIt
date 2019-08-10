@@ -7,9 +7,16 @@ import { SharedModule } from '../shared/shared.module';
 
 // guards
 import { AuthGuard } from '../../auth/shared/guards/auth.guard';
+import { MetaGuard } from '@ngx-meta/core';
 
 export const routes:Routes = [
-  { path: '', pathMatch: 'full', canActivate: [AuthGuard], component: AccountComponent },
+  { path: '', pathMatch: 'full', canActivate: [AuthGuard, MetaGuard], component: AccountComponent,
+  data: {
+          meta: {
+            title: 'Account'
+          }
+    }, 
+  },
   { path: 'password', canActivate: [AuthGuard], component: PasswordComponent }
 ];
 

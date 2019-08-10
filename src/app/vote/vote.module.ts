@@ -12,12 +12,19 @@ import {  DragDropModule } from '@angular/cdk/drag-drop';
 import { SuccessComponent } from './pages/success/success.component';
 
 import { UserResolver } from '../shared/services/resolver.service';
+import { MetaGuard } from '@ngx-meta/core';
 
 export const routes:Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'not-found' },
   { path: 'not-found', pathMatch: 'full', component: NotFoundComponent },
   { path: ':id',resolve: { resolverUser: UserResolver}, component: VoteComponent },
-  { path: ':id/success', resolve: { resolverUser: UserResolver}, component: SuccessComponent },
+  { path: ':id/success', canActivate: [MetaGuard], resolve: { resolverUser: UserResolver}, component: SuccessComponent,
+  data: {
+          meta: {
+            title: 'Vote Received!'
+          }
+    },
+   }
 ];
 
 @NgModule({

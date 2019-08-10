@@ -12,10 +12,24 @@ import { PollFormComponent, DialogOverviewExampleDialog } from './components/pol
 
 // guards
 import { AuthGuard } from '../../auth/shared/guards/auth.guard';
+import { MetaGuard } from '@ngx-meta/core';
 
 export const routes:Routes = [
-  { path: '', canActivate: [AuthGuard], component: ViewComponent },
-  { path: 'create', canActivate: [AuthGuard], component: EditComponent },
+  { path: '', canActivate: [AuthGuard, MetaGuard],
+    component: ViewComponent, 
+    data: {
+          meta: {
+            title: 'My Polls'
+          }
+    },
+   },
+  { path: 'create', canActivate: [AuthGuard, MetaGuard], component: EditComponent,
+  data: {
+          meta: {
+            title: 'Create Poll'
+          }
+    },
+  },
   { path: ':id', canActivate: [AuthGuard], component: DetailComponent },
   { path: ':id/edit', canActivate: [AuthGuard], component: EditComponent }
 ];

@@ -12,9 +12,18 @@ import { TestComponent } from './pages/test/test.component';
 import { UserResolver } from '../shared/services/resolver.service';
 import { ExplanationComponent } from './components/explanation/explanation.component';
 
+import { MetaGuard } from '@ngx-meta/core';
+
 export const routes:Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'not-found' },
-  { path: 'not-found', pathMatch: 'full', component: NotFoundComponent },
+  { path: 'not-found', pathMatch: 'full', component: NotFoundComponent, 
+    canActivate: [MetaGuard],
+    data: {
+          meta: {
+            title: 'No Poll Found'
+          }
+    }
+  },
   { path: 'test', pathMatch: 'full', component: TestComponent },
   { path: ':id/:round', resolve: { resolverUser: UserResolver}, component: ResultsComponent },
   { path: ':id/summary', resolve: { resolverUser: UserResolver}, component: ResultsComponent },

@@ -16,13 +16,27 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 // AUTH
 import { AuthModule } from '../auth/auth.module';
-
 import { UserResolver } from './shared/services/resolver.service';
-
-// currently there is a bug while building the app with --prod
-// - https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/76
-// the plugin exposes the two libraries as well. You can use those:
 import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
+
+// META
+import { MetaModule, MetaLoader, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core';
+
+export function metaFactory(): MetaLoader {
+  return new MetaStaticLoader({
+    pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
+    pageTitleSeparator: ' - ',
+    applicationName: 'RankIt',
+    defaults: {
+      title: 'RankIt',
+      description: 'RankIt facilitates polls using Ranked Choice Voting.',
+      'og:image': 'https://rankit-vote.firebaseapp.com/assets/images/rankit-share-image.jpg',
+      'og:type': 'website',
+      'og:locale': 'en_US',
+      'og:locale:alternate': 'en_US,nl_NL,tr_TR'
+    }
+  });
+}
 
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
@@ -58,6 +72,10 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
   ],
   imports: [
     BrowserModule,
+    MetaModule.forRoot({
+      provide: MetaLoader,
+      useFactory: (metaFactory)
+    }),
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,

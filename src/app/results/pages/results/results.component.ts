@@ -4,12 +4,13 @@ import { HttpClient} from '@angular/common/http';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store } from 'store';
 import { Observable, Subscription } from 'rxjs';
-import { map, distinct } from 'rxjs/operators';
+import { map, distinct, tap  } from 'rxjs/operators';
 
 import { AppSettings } from '../../../app.settings';
 
 import { Poll, Vote, Choice, Results } from '../../../shared/models/poll.interface';
 import { VoteService } from '../../../shared/services/vote.service';
+import { MetaService } from '@ngx-meta/core';
 
 @Component({
   selector: 'app-results',
@@ -119,6 +120,7 @@ export class ResultsComponent implements OnInit {
 
 
   constructor(
+              private readonly meta: MetaService,
               private location:Location,
               private http:HttpClient,
               private router:Router,
@@ -140,7 +142,9 @@ export class ResultsComponent implements OnInit {
 
         console.log(params);
         if(id) {
-          this.poll$ = this.voteService.getPoll(id);
+          this.poll$ = this.voteService.getPoll(id)
+          .pipe(
+                tap(next => this.meta.setTitle('Results – ' + next.title)));
 
           if(user) {
             this.store.set('backButton', ['/polls/', id]);

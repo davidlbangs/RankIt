@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 
 
 import { Poll } from '../../../shared/models/poll.interface';
 import { PollService } from '../../../shared/services/poll.service';
 import { Store } from 'store';
+import { MetaService } from '@ngx-meta/core';
 
 @Component({
   selector: 'app-detail',
@@ -74,6 +75,7 @@ export class DetailComponent implements OnInit {
   showDelete:boolean = false;
 
   constructor(
+              private readonly meta: MetaService,
               private pollService: PollService,
               private router:Router,
               private store:Store,
@@ -88,9 +90,10 @@ export class DetailComponent implements OnInit {
     .pipe(
           switchMap(param => {
             console.log(param);
-            let poll = this.pollService.getPoll(param.id);
+            const poll = this.pollService.getPoll(param.id);
             return poll;
-          })
+          }),
+          tap(next => this.meta.setTitle(next.title))
           );
   }
   ngOnDestroy() {
