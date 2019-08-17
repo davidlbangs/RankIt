@@ -23,7 +23,7 @@ import { Store } from 'store';
       mat-button mat-raised-button [color]="'accent'" 
       class="d-block has-icon dark-icon button-large mb-3"><i class="fa fa-user-plus"></i>Sign Up to Create a Poll</button>
 
-   <h1 class="mb-2 mt-2">Public Polls</h1>
+   <h1 class="mb-2 mt-2">Featured Polls</h1>
       <hr class="mb-2" />
     <div *ngIf="polls$ | async as polls; else loading;">
 

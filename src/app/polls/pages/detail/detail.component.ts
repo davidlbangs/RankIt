@@ -56,8 +56,7 @@ import { MetaService } from '@ngx-meta/core';
         <h1 class="mb-1">Promote Poll</h1>
 
         <share-poll [poll]="poll"></share-poll>
-        <button mat-stroked-button color="primary" class="has-icon d-block mb-5"><i class="fa fa-code"></i>Copy Embed Code</button>
-
+        <embed-poll [poll]="poll"></embed-poll>
         <hr class="mt-3 mb-4" />
         <button (click)="toggleDelete()" mat-stroked-button color="red" class="has-icon"><i class="fa fa-times"></i>Delete Poll</button>
         <div class="confirmDelete" *ngIf="showDelete">

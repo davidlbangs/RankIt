@@ -25,7 +25,7 @@ import { MetaService } from '@ngx-meta/core';
       <main class="clear-footer" *ngIf="poll.results as results; else noResults">
           <div class="alert mt-3" *ngIf="poll.vote_count < poll.choices.length">
             <div>
-              Heads up: this poll doesn't have many votes yet. Results are displayed below, but the results will be more meaningful once more people have voted. 
+              Heads up: this poll doesn't have many votes yet. Results are displayed below, but they will more meaningful once more people have voted. 
             </div>
           </div>
           <h2 class="mt-3 mb-1">
@@ -35,6 +35,12 @@ import { MetaService } from '@ngx-meta/core';
           <p class="mb-1">{{poll.vote_count}} Votes in 3 Rounds</p>
           
           <hr>
+
+          <div class="mt-3 mb-3">
+            {{ poll.results | json }}
+          </div>
+
+          <hr />
 
           <div class="mb-3 mt-1">
             <results-graph 
@@ -129,11 +135,8 @@ export class ResultsComponent implements OnInit {
     // Local state :)
     round: number;
     shiftedResults: Results;
-    // user$: Observable<any> = this.store.select('user')
-    // .pipe(distinct(),
-    //       map(user => this.store.set('backButton', '/polls')));
 
-    subscription: Subscription;
+    // subscription: Subscription;
 
 
   constructor(

@@ -20,9 +20,10 @@ import {
 import { HeaderComponent } from './components/header/header.component';
 import { ShufflePipe } from './pipes/shuffle.pipe';
 import { SharePollComponent } from './components/share-poll/share-poll.component';
+import { EmbedPollComponent } from './components/embed-poll/embed-poll.component';
 
 @NgModule({
-  declarations: [HeaderComponent, ShufflePipe, SharePollComponent],
+  declarations: [HeaderComponent, ShufflePipe, SharePollComponent, EmbedPollComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -50,6 +51,7 @@ import { SharePollComponent } from './components/share-poll/share-poll.component
     MatRadioModule,
     HeaderComponent,
     SharePollComponent,
+    EmbedPollComponent,
     MatFormFieldModule,
     MatInputModule,
     MatOptionModule,
