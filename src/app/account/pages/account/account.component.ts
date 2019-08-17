@@ -19,7 +19,7 @@ import { AuthService } from '../../../../auth/shared/services/auth/auth.service'
           </h3>
           <p class="explainer mb-1">The email address on an account cannot be changed.</p>
           
-          <mat-form-field appearance="outline" floatLabel="never">
+          <mat-form-field appearance="outline" floatLabel="never" style="width:100%;">
             <input matInput placeholder="" [value]="user.email" disabled>
           </mat-form-field>
 
