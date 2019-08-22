@@ -150,7 +150,6 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.subscription = this.user$.subscribe();
 
     let user = this.route.snapshot.data.resolverUser;
 
@@ -164,7 +163,7 @@ export class ResultsComponent implements OnInit {
         if(id) {
           this.poll$ = this.voteService.getPoll(id)
           .pipe(
-                tap(next => this.meta.setTitle('Results – ' + next.title)));
+                tap(next => this.meta.setTitle('Results - ' + next.title)));
 
           if(user) {
             this.store.set('backButton', ['/polls/', id]);
@@ -223,7 +222,6 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    // this.subscription.unsubscribe();
   }
 
 }

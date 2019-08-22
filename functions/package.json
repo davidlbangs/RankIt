@@ -14,9 +14,11 @@
   },
   "main": "lib/functions/src/index.js",
   "dependencies": {
+    "es6-promise-pool": "^2.5.0",
+    "express": "^4.17.1",
     "firebase-admin": "~7.0.0",
     "firebase-functions": "^2.3.0",
-    "es6-promise-pool": "^2.5.0"
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "firebase-functions-test": "^0.1.6",
