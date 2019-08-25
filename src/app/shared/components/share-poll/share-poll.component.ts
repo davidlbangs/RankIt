@@ -11,14 +11,14 @@ import { Poll } from '../../../shared/models/poll.interface';
   template: `
     <div class="flex-grid mb-1">
           <button 
-              mat-stroked-button color="primary" class="has-icon"
+              mat-stroked-button color="primary" class="has-icon bg-white"
               (click)="copyVoteLink(voteLink)"><i class="fa fa-link"></i>Copy Voting Link</button>
           <a
             target="_BLANK"
             href="{{ buildTweetLink(voteLink, poll.title)}}" 
-            mat-stroked-button color="primary" class="has-icon"><i class="fa fa-twitter"></i>Tweet</a>
+            mat-stroked-button color="primary" class="has-icon bg-white"><i class="fa fa-twitter"></i>Tweet</a>
           <a 
-            mat-stroked-button color="primary" class="has-icon"
+            mat-stroked-button color="primary" class="has-icon bg-white"
             target="_BLANK"
             href="{{ buildFacebookLink(voteLink)}}" ><i class="fa fa-facebook-f"></i>Post</a>
     </div>

@@ -83,10 +83,11 @@ import { MetaService } from '@ngx-meta/core';
             mat-button mat-raised-button [color]="'primary'" 
             class="d-block button-large p-1">See Round {{ nextRound }}</button>
           <button
-            mat-button mat-raised-button [color]="'primary'" 
+            mat-button mat-raised-button [color]="'primary'"
+            (click)="toAfterResults(poll)"
             class="d-block button-large p-1"
             *ngIf="round ===poll.results.rounds.length" >
-            Continue button TODO
+            Continue
           </button>
         </div>
     </footer>
@@ -159,7 +160,8 @@ export class ResultsComponent implements OnInit {
 
         this.round = (params.get('round') === 'summary') ? 0 : parseInt(params.get('round'));
 
-        console.log(params);
+        console.log('setting round', this.round);
+
         if(id) {
           this.poll$ = this.voteService.getPoll(id)
           .pipe(
@@ -206,7 +208,10 @@ export class ResultsComponent implements OnInit {
 
     // tell the router about the change.
     this.updateLocation(destination, poll.id);
+  }
 
+  toAfterResults(poll:Poll){
+    this.router.navigate(['results', 'share', poll.id]);
   }
 
   updateLocation(currentRound:number | 'summary', id:string) {

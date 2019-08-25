@@ -11,23 +11,18 @@ import { Poll, Vote, Choice } from '../../../shared/models/poll.interface';
 import { VoteService } from '../../../shared/services/vote.service';
 
 @Component({
-  selector: 'app-success',
-  styleUrls: ['./success.component.scss'],
+  selector: 'app-after-results',
+  styleUrls: ['./after-results.component.scss'],
   template: `
 
     <success-card 
-      [poll]="poll$ | async"
-      [fromVote]="'true'"></success-card>
+      [poll]="poll$ | async"></success-card>
 
     <footer class="actions" *ngIf="poll$ | async as poll">
-        <button
-          [routerLink]="['/results', poll.id, 'summary']" 
-          mat-button mat-raised-button [color]="'primary'" 
-          class="d-block has-icon dark-icon button-large p-1">View Results</button>
     </footer>
   `
 })
-export class SuccessComponent implements OnInit {
+export class AfterResultsComponent implements OnInit {
   poll$:Observable<Poll> = this.store.select('poll');
 
   constructor(
@@ -46,7 +41,7 @@ export class SuccessComponent implements OnInit {
           this.poll$ = this.voteService.getPoll(id);
 
           if(user) {
-            this.store.set('backButton', ['/polls/', id]);
+            this.store.set('backButton', ['/results/', id, 'summary']);
           } else {
             this.store.set('backButton', `/`);
           }

@@ -7,21 +7,23 @@
   objectKeys(results.rounds[round])
 -->
 
-<div 
-  *ngFor="let choice of all_choices"
-  class="result-row"
-  [class.is-winner]="getPercentage(round, choice) >= winning_percentage"
-  [class.is-eliminated]="getPercentage(round, choice) === 0"
-  >
-    <div class="meta">
-      <div class="percentage">{{getPercentage(round, choice) | percent }}</div>
-      <div class="label">{{choice}}</div>
+<div *ngIf="results">
+  <div 
+    *ngFor="let choice of all_choices"
+    class="result-row"
+    [class.is-winner]="getPercentage(round, choice) >= winning_percentage"
+    [class.is-eliminated]="getPercentage(round, choice) === 0"
+    >
+      <div class="meta">
+        <div class="percentage">{{getPercentage(round, choice) | percent }}</div>
+        <div class="label">{{choice}}</div>
+        
+      </div>
       
-    </div>
-    
-    <div class="threshold"></div>
-    <div 
-      class="bar"
-      [style.width.%]="getWidth(getPercentage(round, choice))"></div>
+      <div class="threshold"></div>
+      <div 
+        class="bar"
+        [style.width.%]="getWidth(getPercentage(round, choice))"></div>
 
+  </div>
 </div>

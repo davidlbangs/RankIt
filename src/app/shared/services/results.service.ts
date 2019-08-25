@@ -56,7 +56,6 @@ export class ResultsService {
       // let currentChoices = Object.keys(this.rounds[round]).length;
       voteAdjustment = pastWinners * threshold;
     }
-    console.log('adjusting vote', voteAdjustment);
 
     return this.sum(rounds[round]) + voteAdjustment;
   }

@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { Poll, Results, Choice } from '../../../shared/models/poll.interface';
 import { ResultsService } from '../../../shared/services/results.service';
@@ -9,7 +9,7 @@ import { ResultsService } from '../../../shared/services/results.service';
   selector: 'results-explanation',
   styleUrls: ['./explanation.component.scss'],
   template: `
-
+    <div *ngIf="results">
       <div *ngIf="isPollSummary; else RoundSummary">
         <p class="mb-2">{{ pollSummaryStatement()}}</p>
         <p>Ranked Choice Voting (RCV) is different from choose-only-one voting. Voters get to rank candidates in order of choice. If a candidate receives more than half of the first choices, they win, just like any other election. If not, the candidate with the fewest votes is eliminated, and voters who picked that candidate as ‘number 1’ will have their votes count for their next choice. This process continues until a candidate wins with more than half of the votes.</p>
@@ -24,10 +24,11 @@ import { ResultsService } from '../../../shared/services/results.service';
       <div *ngIf="isWinningRound">
         We have a winner!
       </div>
+    </div>
      
   `
 })
-export class ExplanationComponent {
+export class ExplanationComponent implements OnInit {
   @Input() results: Results;
   @Input() winner_count: number;
   @Input() round: number;
@@ -42,6 +43,9 @@ export class ExplanationComponent {
 
   constructor(private resultsService: ResultsService) { }
 
+  ngOnInit() {
+    console.log('booting explanation', this.results);
+  }
 
   get isPollSummary() { return (this.round === 0 );}
   get isWinningRound() { return (this.round === this.total_rounds);}

@@ -13,6 +13,7 @@ import { UserResolver } from '../shared/services/resolver.service';
 import { ExplanationComponent } from './components/explanation/explanation.component';
 
 import { MetaGuard } from '@ngx-meta/core';
+import { AfterResultsComponent } from './pages/after-results/after-results.component';
 
 export const routes:Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'not-found' },
@@ -24,14 +25,17 @@ export const routes:Routes = [
           }
     }
   },
+  { path: 'share/:id', resolve: { resolverUser: UserResolver}, component: AfterResultsComponent },
+  { path: ':id', pathMatch: 'full', redirectTo: ':id/summary'},
   { path: 'test', pathMatch: 'full', component: TestComponent },
   { path: ':id/:round', resolve: { resolverUser: UserResolver}, component: ResultsComponent },
-  { path: ':id/summary', resolve: { resolverUser: UserResolver}, component: ResultsComponent },
+  { path: ':id/summary', resolve: { resolverUser: UserResolver}, component: ResultsComponent }
+  
 ];
 
 
 @NgModule({
-  declarations: [ResultsComponent, GraphComponent, NotFoundComponent, TestComponent, ExplanationComponent],
+  declarations: [ResultsComponent, GraphComponent, NotFoundComponent, TestComponent, ExplanationComponent, AfterResultsComponent],
   imports: [
     CommonModule,
     SharedModule,

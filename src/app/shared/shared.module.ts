@@ -21,9 +21,10 @@ import { HeaderComponent } from './components/header/header.component';
 import { ShufflePipe } from './pipes/shuffle.pipe';
 import { SharePollComponent } from './components/share-poll/share-poll.component';
 import { EmbedPollComponent } from './components/embed-poll/embed-poll.component';
+import { SuccessCardComponent } from './components/success-card/success-card.component';
 
 @NgModule({
-  declarations: [HeaderComponent, ShufflePipe, SharePollComponent, EmbedPollComponent],
+  declarations: [HeaderComponent, ShufflePipe, SharePollComponent, EmbedPollComponent, SuccessCardComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -52,6 +53,7 @@ import { EmbedPollComponent } from './components/embed-poll/embed-poll.component
     HeaderComponent,
     SharePollComponent,
     EmbedPollComponent,
+    SuccessCardComponent,
     MatFormFieldModule,
     MatInputModule,
     MatOptionModule,

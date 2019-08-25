@@ -51,14 +51,11 @@ export class VoteComponent implements OnInit {
           this.poll$ = this.voteService.getPoll(id)
           .pipe(
                 tap(next => this.choices = this.displayChoices(next)),
-                tap(next => this.meta.setTitle('Vote - ' + next.title))
+                tap(next => this.meta.setTitle('Vote - ' + next.title)),
+                tap(next => {
+                  this.setBackButton(user, next)
+                })
                 );
-
-          if(user) {
-            this.store.set('backButton', ['/polls/', id]);
-          } else {
-            this.store.set('backButton', `/`);
-          }
 
         } else {
           this.router.navigate(['/vote/not-found']);
@@ -130,6 +127,18 @@ export class VoteComponent implements OnInit {
 
   showVote() {
     console.log('vote', this.vote);
+  }
+
+  isPollOwner(uid, poll_owner) {
+    return (uid === poll_owner);
+  }
+
+  setBackButton(user, poll:Poll) {
+    if(user && this.isPollOwner(user.uid, poll.owner_uid)) {
+      this.store.set('backButton', ['/polls/', poll.id]);
+    } else {
+      this.store.set('backButton', `/`);
+    }
   }
 
 

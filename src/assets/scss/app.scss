@@ -30,6 +30,14 @@ main {
   padding: 0 1rem;
 }
 
+a.bg-white, button.bg-white {
+  background: white;
+
+  &:hover {
+    background: #f1f1f1;
+  }
+}
+
 hr {
   border: 0;
   border-top: 3px solid $color-light-blue;
