@@ -32,7 +32,7 @@ import { MetaService } from '@ngx-meta/core';
             {{ (round === 0) ? 'Final Result' : 'Round ' + round }}
             <span *ngIf="round === getTotalRounds(results)">(Final Result)</span>
           </h2>
-          <p class="mb-1">{{poll.vote_count}} Votes in 3 Rounds</p>
+          <p class="mb-1">{{poll.vote_count}} Votes in {{poll.results.rounds.length}} Rounds</p>
           
           <hr>
 

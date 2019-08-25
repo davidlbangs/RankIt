@@ -36,6 +36,25 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
   line-height: 18px!important;
 }
 
+.mat-button-focus-overlay {
+  pointer-events: inherit;
+  cursor: pointer;
+}
+
+.mat-raised-button.mat-primary:hover {
+  background: darken($color-primary, 25%);
+  cursor: pointer;
+}
+
+.mat-mini-fab.mat-accent:hover {
+  background: darken(#ff4081, 20%);
+}
+
+.has-icon .fa {
+  position: relative;
+  top: -2px;
+}
+
 
 
 .poll-form__choices .mat-form-field-wrapper {

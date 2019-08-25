@@ -1,18 +1,25 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { Poll, Results, Choice } from '../../../shared/models/poll.interface';
+import { ResultsService } from '../../../shared/services/results.service';
+
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'results-explanation',
   styleUrls: ['./explanation.component.scss'],
   template: `
-     
-      
-      <div *ngIf="isSummary">
-        <p class="mb-2">After {{ total_rounds }} {{ (total_rounds > 1) ? 'rounds' : 'round'}}, <strong>{{results.elected[0]}}</strong> wins. More coming soon.</p>
+
+      <div *ngIf="isPollSummary; else RoundSummary">
+        <p class="mb-2">{{ pollSummaryStatement()}}</p>
         <p>Ranked Choice Voting (RCV) is different from choose-only-one voting. Voters get to rank candidates in order of choice. If a candidate receives more than half of the first choices, they win, just like any other election. If not, the candidate with the fewest votes is eliminated, and voters who picked that candidate as ‘number 1’ will have their votes count for their next choice. This process continues until a candidate wins with more than half of the votes.</p>
       </div>
+
+      <ng-template #RoundSummary>
+        <p class="mb-2">
+          Hi.
+        </p>
+      </ng-template>
 
       <div *ngIf="isWinningRound">
         We have a winner!
@@ -20,7 +27,7 @@ import { Poll, Results, Choice } from '../../../shared/models/poll.interface';
      
   `
 })
-export class ExplanationComponent implements OnInit {
+export class ExplanationComponent {
   @Input() results: Results;
   @Input() winner_count: number;
   @Input() round: number;
@@ -28,12 +35,33 @@ export class ExplanationComponent implements OnInit {
   @Input() total_rounds: number;
   @Input() total_votes: number;
 
-  constructor() { }
+  get rounds() { return this.results.rounds; }
+  get elected() { return this.results.elected; }
+  get winning_percentage() { return 1 / (this.winner_count + 1); }
+  get threshold() { return this.results.threshold; }
 
-  ngOnInit() {
+  constructor(private resultsService: ResultsService) { }
+
+
+  get isPollSummary() { return (this.round === 0 );}
+  get isWinningRound() { return (this.round === this.total_rounds);}
+
+
+  pollSummaryStatement() {
+    const wins = (this.winner_count > 1) ? 'win' : 'wins';
+    const rounds = (this.total_rounds > 1) ? 'rounds' : 'round';
+    let electedString:string = this.resultsService.candidateListString(this.results.elected);
+    return `After ${this.total_rounds} ${rounds}, ${electedString} ${wins}.`;
   }
 
-  get isSummary() { return (this.round === 0 );}
-  get isWinningRound() { return (this.round === this.total_rounds);}
+  roundSummaryStatement() {
+
+  }
+
+  getLeader(round) {
+
+  }
+
+
 
 }
