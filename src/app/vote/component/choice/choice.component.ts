@@ -18,15 +18,14 @@ import { Choice } from '../../../shared/models/poll.interface';
       <div class="controls">
         <div class="control">
           <button 
-            *ngIf="index > 1"
-            (click)="onMoveUp(choice)" mat-button><i class="fa fa-chevron-up"></i></button>
+            (click)="onMoveUp(choice, index)" mat-button><i class="fa fa-chevron-up"></i></button>
         </div>
-        <div class="control" *ngIf="index === votes.length">
-          <button (click)="onToggleVote(choice)" mat-button><span class="custom-remove">–</span></button>
+        <div class="control">
+          <button (click)="onToggleVote(choice, index)" mat-button><span class="custom-remove">–</span></button>
         </div>
-        <div class="control" *ngIf="index < votes.length">
+        <div class="control">
           <button 
-          (click)="onMoveDown(choice)" mat-button><i class="fa fa-chevron-down"></i></button>
+          (click)="onMoveDown(choice, index)" mat-button><i class="fa fa-chevron-down"></i></button>
         </div>
       </div>
     </div>
@@ -57,8 +56,8 @@ export class ChoiceComponent implements OnInit {
     return this.votes.indexOf(this.choice) + 1;
   }
 
-  onMoveUp(choice:string) { this.moveUp.emit(choice); }
-  onMoveDown(choice:string) { this.moveDown.emit(choice); }
-  onToggleVote(choice:string) { this.toggle.emit(choice); }
+  onMoveUp(choice:string, index: number) { (index > 1) ? this.moveUp.emit(choice) : null; }
+  onMoveDown(choice:string, index: number) { (index != this.votes.length) ? this.moveDown.emit(choice) : null; }
+  onToggleVote(choice:string, index: number) {  this.toggle.emit(choice); }
 
 }

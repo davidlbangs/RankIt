@@ -20,9 +20,10 @@
 
 .vote-list {
   min-height: 80px;
-  margin-bottom: 1.6rem;
+  margin-bottom: 0.25rem;
   display: flex;
   flex-wrap: wrap;
+  padding-bottom: 2.75rem;
 
   > * {
     flex: 0 100%;
