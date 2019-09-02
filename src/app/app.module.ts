@@ -19,7 +19,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 // AUTH
 import { AuthModule } from '../auth/auth.module';
 import { UserResolver } from './shared/services/resolver.service';
-import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
+// import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
 
 // META
 import { MetaModule, MetaLoader, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core';
@@ -41,30 +41,30 @@ export function metaFactory(): MetaLoader {
 }
 
 
-const firebaseUiAuthConfig: firebaseui.auth.Config = {
-  signInFlow: 'popup',
-  signInOptions: [
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    {
-      scopes: [
-        'public_profile',
-        'email'
-      ],
-      customParameters: {
-        'auth_type': 'reauthenticate'
-      },
-      provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID
-    },
-    firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-    {
-      requireDisplayName: false,
-      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
-    }
-  ],
-  tosUrl: '<your-tos-link>',
-  privacyPolicyUrl: '<your-privacyPolicyUrl-link>',
-  credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM
-};
+// const firebaseUiAuthConfig: firebaseui.auth.Config = {
+//   signInFlow: 'popup',
+//   signInOptions: [
+//     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+//     {
+//       scopes: [
+//         'public_profile',
+//         'email'
+//       ],
+//       customParameters: {
+//         'auth_type': 'reauthenticate'
+//       },
+//       provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID
+//     },
+//     firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+//     {
+//       requireDisplayName: false,
+//       provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
+//     }
+//   ],
+//   tosUrl: '<your-tos-link>',
+//   privacyPolicyUrl: '<your-privacyPolicyUrl-link>',
+//   credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM
+// };
 
 
 
@@ -82,7 +82,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
+    // FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     BrowserAnimationsModule,
     AuthModule,
     SharedModule

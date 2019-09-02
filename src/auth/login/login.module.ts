@@ -6,7 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './containers/login/login.component';
 
 // Auth Module UI
-import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
+// import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
 
 export const ROUTES: Routes = [
   {
@@ -19,7 +19,7 @@ export const ROUTES: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(ROUTES),
-    FirebaseUIModule,
+    // FirebaseUIModule,
     SharedModule
   ],
   declarations: [

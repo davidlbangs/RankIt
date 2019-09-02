@@ -16,9 +16,7 @@ import { Store } from '../../../../store';
         </p>  
       </header>
     <main class="mt-3" *ngIf="!(user$ | async); else signedIn">
-      <firebase-ui
-       (signInSuccessWithAuthResult)="successCallback($event)"
-       (signInFailure)="errorCallback($event)"></firebase-ui>
+      
     </main>
     
     <ng-template #signedIn>
