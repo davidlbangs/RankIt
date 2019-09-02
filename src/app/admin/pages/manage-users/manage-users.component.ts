@@ -15,7 +15,7 @@ import { Store } from 'store';
       <hr class="mb-2" />
     <div *ngIf="users$ | async as users; else loading;" class="pb-4">
 
-        <mat-card *ngFor="let user of users" class="mb-1 linked-card">
+        <mat-card *ngFor="let user of users" [routerLink]="['/admin/polls-by-user/', user.uid]" class="mb-1 linked-card">
         <mat-card-title>{{user.email}}</mat-card-title>
         <mat-card-subtitle>{{ user.roles.admin ? 'Admin' : ''}}</mat-card-subtitle>
      

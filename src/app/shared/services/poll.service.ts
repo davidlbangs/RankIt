@@ -20,8 +20,15 @@ export class PollService {
     private store:Store,
     private db: AngularFirestore) { }
 
-  getUserPolls() {
-    return this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', this.uid)).valueChanges()
+  getUserPolls(uid?: string = this.uid) {
+    // if(!uid) {
+    //   console.log('hi', this.uid);
+    //   let uid = this.uid;
+    // }
+
+    console.log('got a uid', uid);
+
+    return this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', uid)).valueChanges()
     .pipe(
           tap({
             next: val => this.store.set('polls', val)
