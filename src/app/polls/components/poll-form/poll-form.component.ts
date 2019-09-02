@@ -81,6 +81,11 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
             <mat-checkbox formControlName="randomize_order" name="randomize_order" [labelPosition]="'before'">Randomize Order</mat-checkbox>
             
           </div>
+
+          <div class="option-row">
+            <mat-checkbox formControlName="limit_votes" name="limit_votes" [labelPosition]="'before'">Limit Repeat Voting</mat-checkbox>
+            
+          </div>
           <div class="option-row">
             <div class="option-row__label">
               Winners <span class="explain" (click)="openDialog('winners')">?</span>
@@ -212,6 +217,7 @@ export class PollFormComponent implements OnInit, OnChanges {
   form = this.fb.group({
     title: ['', Validators.required],
     keep_open: [''],
+    limit_votes: [''],
     choices: this.fb.array(['']),
     length: this.fb.group({
       end_time: [''],

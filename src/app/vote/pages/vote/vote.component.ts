@@ -10,8 +10,11 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import { AppSettings } from '../../../app.settings';
 
 import { Poll, Vote, Choice } from '../../../shared/models/poll.interface';
+import { User } from '../../../shared/models/user.interface';
 import { VoteService } from '../../../shared/services/vote.service';
 import { MetaService } from '@ngx-meta/core';
+import { CookieService } from 'ngx-cookie-service';
+
 
 @Component({
   selector: 'app-vote',
@@ -29,6 +32,7 @@ export class VoteComponent implements OnInit {
 
 
   constructor(
+              private cookie:CookieService,
               private readonly meta: MetaService,
               private http:HttpClient,
               private router:Router,
@@ -43,13 +47,15 @@ export class VoteComponent implements OnInit {
 
     let user = this.route.snapshot.data.resolverUser;
 
+
     this.route.paramMap
       .subscribe((params:ParamMap) => {
         let id = params.get('id');
-        // console.log(params);
+
         if(id) {
           this.poll$ = this.voteService.getPoll(id)
           .pipe(
+                tap(poll => this.limit_vote(poll, user)),
                 tap(next => this.choices = this.displayChoices(next)),
                 tap(next => this.meta.setTitle('Vote - ' + next.title)),
                 tap(next => {
@@ -127,6 +133,21 @@ export class VoteComponent implements OnInit {
 
   showVote() {
     console.log('vote', this.vote);
+  }
+
+  limit_vote(poll:Poll, user:User) {
+    console.log('made it!');
+
+    const alreadyVoted = this.cookie.get('rankit-' + poll.id);
+
+    // decide if they've voted already
+    if(
+       alreadyVoted &&
+       poll.limit_votes &&
+       (!user || !this.isPollOwner(user.uid, poll.owner_uid))
+       ) {
+      this.router.navigate(['/vote', poll.id, 'success']);
+    }
   }
 
   isPollOwner(uid, poll_owner) {

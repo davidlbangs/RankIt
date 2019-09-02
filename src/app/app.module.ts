@@ -11,6 +11,8 @@ import { environment } from '../environments/environment';
 
 import { SharedModule } from './shared/shared.module';
 import { Store } from 'store';
+import { CookieService } from 'ngx-cookie-service';
+
 // Material
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -85,7 +87,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     AuthModule,
     SharedModule
   ],
-  providers: [Store, UserResolver],
+  providers: [Store, UserResolver, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

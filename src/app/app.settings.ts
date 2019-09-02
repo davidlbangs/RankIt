@@ -23,6 +23,7 @@ export class AppSettings {
       "title": "", 
       "date_created": 0,
       "is_open": true,
+      "limit_votes": true,
       "choices": ["", "",  ""],
       "votes": [],
       "vote_count": 0,

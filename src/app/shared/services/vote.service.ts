@@ -8,7 +8,7 @@ import { Poll, Vote } from '../models/poll.interface';
 import { AppSettings } from '../../app.settings';
 
 import { Store } from 'store';
-
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,7 @@ export class VoteService {
 
 
   constructor(
+              private cookie: CookieService,
               private store:Store,
               private db: AngularFirestore) { }
 
@@ -32,7 +33,12 @@ export class VoteService {
   }
 
   submitVote(poll:Poll, vote:Vote) {
-    console.log('submit', poll, vote);
+    // console.log('submit', poll, vote);
+
+    if(poll.limit_votes) {
+      this.cookie.set('rankit-' + poll.id, 'voted');
+    }
+
     vote.id = this.db.createId();
     vote.date_created = Date.now();
     return this.db.doc<Vote>(`polls/${poll.id}/votes/${vote.id}`).set(vote);
