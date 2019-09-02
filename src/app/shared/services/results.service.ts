@@ -87,6 +87,25 @@ export class ResultsService {
     return c;
   }
 
+  /**
+    * Gets the leader or loser
+    *
+    */
+  getEdges(round:number, results:Results, edge:'max'|'min' = 'max') {
+    const values = Object.values(results.rounds[round]);
+    const logicalTest = (edge === 'max')? Math.max(...values) : Math.min(...values);
+    const roundArr = Object.keys(results.rounds[round]);
+    let selectedList: string[] = [];
+
+    for(let choice of roundArr){
+      if(results.rounds[round][choice] === logicalTest) {
+        selectedList.push(choice);
+      }
+    }
+    // we return the string and the count so we can detect if we need plural.
+    return {string: this.candidateListString(selectedList), count: selectedList.length};
+  }  
+
 
   /**
     * Utility: Add all the values in an object.

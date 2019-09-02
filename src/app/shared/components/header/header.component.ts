@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
 // import { Router, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store } from 'store';
-import { User } from '../../../../auth/shared/services/auth/auth.service';
+import { User } from '../../models/user.interface';
 
 @Component({
   selector: 'app-header',

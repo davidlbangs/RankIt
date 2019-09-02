@@ -3,57 +3,63 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/do';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { auth } from 'firebase/app';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators';
+import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 
+import { User } from '../../../../app/shared/models/user.interface';
+
 import { Store } from 'store';
-
-
-export interface User {
-  email: string,
-  uid: string,
-  authenticated: boolean,
-  displayName?: string
-}
 
 
 @Injectable()
 export class AuthService {
   
-  auth$ = this.af.authState
-    .do(next => {
-      if (!next) {
-        this.store.set('user', null);
-        return;
-      }
-
-      const user:User = {
-        email: next.email,
-        uid: next.uid,
-        authenticated: true
-      };
-      this.store.set('user', user);
-    });
+  user$: Observable<User | void>;
 
   constructor(
     private store:Store,
-    private af: AngularFireAuth,
+    private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private router: Router
-    ) {}
+    ) {
+
+    this.user$ = this.afAuth.authState
+      .pipe(
+              switchMap( user => {
+                 if(user) {
+                   
+                   // temporarily set the user from the auth state.
+                   const tempUser = {
+                     uid: user.uid,
+                     email: user.email,
+                     roles: {user: true}
+                   }
+                   this.store.set('user', tempUser);
+
+                   // get the actual user.
+                   return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+                 } else {
+                   return of(null);
+                 }
+              }),
+              map( next => this.store.set('user', next))
+            )
+  }
 
 
   get authState() {
-    return this.af.authState; // observable to keep auth state. returns user.
+    return this.afAuth.authState; // observable to keep auth state. returns user.
   }
 
   get user() {
-    return this.af.auth.currentUser;
+    return this.afAuth.auth.currentUser;
   }
 
   async googleSignin() {
-    const provider = new auth.GoogleAuthProvider();
-    const credential = await this.af.auth.signInWithPopup(provider);
+    const provider = new firebase.auth.GoogleAuthProvider();
+    const credential = await this.afAuth.auth.signInWithPopup(provider);
     return this.updateUserData(credential.user);
   }
 
@@ -61,31 +67,65 @@ export class AuthService {
     // Sets user data to firestore on login
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
 
-    const data: User = { 
+    const data: any = { 
       uid: user.uid, 
-      email: user.email, 
-      displayName: user.displayName,
-      authenticated: true  // could be an issue.
+      email: user.email,
+      roles: {
+        user: true
+      }
     } 
 
     return userRef.set(data, { merge: true })
 
   }
 
+  /*
+   * ROLES
+   */
+
+  canRead(user: User): boolean {
+    const allowed = ['admin', 'user']
+    return this.checkAuthorization(user, allowed)
+  }
+
+  canEdit(user: User): boolean {
+    const allowed = ['admin']
+    return this.checkAuthorization(user, allowed)
+  }
+
+  canDelete(user: User): boolean {
+    const allowed = ['admin']
+    return this.checkAuthorization(user, allowed)
+  }
+
+
+
+  // determines if user has matching role
+  private checkAuthorization(user: User, allowedRoles: string[]): boolean {
+    if (!user) return false
+    for (const role of allowedRoles) {
+      if ( user.roles[role] ) {
+        return true
+      }
+    }
+    return false
+  } 
+
+
   // returns a promise.
   // can call `.then` or async await
   createUser(email: string, password: string) {
-     return this.af.auth
+     return this.afAuth.auth
        .createUserWithEmailAndPassword(email, password);
   }
 
   loginUser(email: string, password: string) {
-    return this.af.auth
+    return this.afAuth.auth
       .signInWithEmailAndPassword(email, password);
   }
 
   async signOut() {
-    await this.af.auth.signOut();
+    await this.afAuth.auth.signOut();
     this.store.unset();
     this.router.navigate(['/']);
   }

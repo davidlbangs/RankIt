@@ -6,7 +6,7 @@ import { tap, filter, map } from 'rxjs/operators';
 
 import { Poll } from '../models/poll.interface';
 import { AppSettings } from '../../app.settings';
-
+import { User } from '../models/user.interface';
 
 import { Store } from 'store';
 
@@ -20,13 +20,6 @@ export class PollService {
     private store:Store,
     private db: AngularFirestore) { }
 
-  // polls$: Observable<Poll[]> = this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', this.uid)).valueChanges()
-  //   .pipe(
-  //         tap({
-  //           next: val => this.store.set('polls', val)
-  //         })
-  //         );
-
   getUserPolls() {
     return this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', this.uid)).valueChanges()
     .pipe(
@@ -35,13 +28,6 @@ export class PollService {
           })
           );
   }
-
-  // publicPolls$: Observable<Poll[]> = this.db.collection<Poll>('polls', ref => ref.where('is_promoted', '==', 'true').where('is_open', '==', 'true').orderBy('date_created')).valueChanges()
-  //   .pipe(
-  //         tap({
-  //           next: val => this.store.set('publicPolls', val)
-  //         })
-  //         );
 
   getPublicPolls() {
     return this.db.collection<Poll>('polls', ref => ref.where('is_promoted', '==', true).where('is_open', '==', true).orderBy('date_created')).valueChanges()
@@ -92,7 +78,6 @@ export class PollService {
     }
 
     poll.id = this.db.createId(); // create the ID first, then use it to set.
-    // console.log('add', poll);
     await this.db.doc(`polls/${poll.id}`).set(poll);
 
     return poll.id;
@@ -109,7 +94,6 @@ export class PollService {
   }
 
   deletePoll(poll:Poll) {
-    // console.log("delte", poll);
     return this.db.doc(`polls/${poll.id}`).delete();
   }
 }

@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Store } from 'store';
 import { Router } from '@angular/router';
-import { AuthService, User } from '../auth/shared/services/auth/auth.service';
+import { AuthService } from '../auth/shared/services/auth/auth.service';
+import { User } from './shared/models/user.interface';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -31,7 +32,6 @@ import { Subscription } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   SILLY_OVERLAY = (environment.production == false) ? true : false;
-  title = 'rankit';
   user$: Observable<User>;
   subscription: Subscription;
   
@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-     this.subscription = this.authService.auth$.subscribe();
+     this.subscription = this.authService.user$.subscribe();
      this.user$ = this.store.select('user');
   }
 

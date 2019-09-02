@@ -11,6 +11,8 @@ import { AppSettings } from '../../../app.settings';
 import { Poll, Vote, Choice, Results } from '../../../shared/models/poll.interface';
 import { VoteService } from '../../../shared/services/vote.service';
 import { MetaService } from '@ngx-meta/core';
+import { environment } from '../../../../environments/environment';
+
 
 @Component({
   selector: 'app-results',
@@ -36,11 +38,13 @@ import { MetaService } from '@ngx-meta/core';
           
           <hr>
 
-          <div class="mt-3 mb-3">
+          <div class="mt-3 mb-3" *ngIf="LOCAL_OVERLAY">
             {{ poll.results | json }}
+
+            <hr />
           </div>
 
-          <hr />
+          
 
           <div class="mb-3 mt-1">
             <results-graph 
@@ -61,7 +65,8 @@ import { MetaService } from '@ngx-meta/core';
               [round]="round"
               [total_rounds]="poll.results.rounds.length"
               [total_votes]="poll.vote_count"
-              [winner_count]="poll.winner_count"></results-explanation> 
+              [winner_count]="poll.winner_count"
+              [label]="poll.label"></results-explanation> 
 
           <div class="mt-3">
             <share-poll [poll]="poll"></share-poll>
@@ -126,6 +131,7 @@ import { MetaService } from '@ngx-meta/core';
   `
 })
 export class ResultsComponent implements OnInit {
+    LOCAL_OVERLAY = (environment.production == false) ? true : false;
     poll$: Observable<Poll> = this.store.select('poll');
 
     shiftedResults$:Observable<Results> = this.store.select('poll')

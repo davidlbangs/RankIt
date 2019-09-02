@@ -46,6 +46,12 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
   cursor: pointer;
 }
 
+.mat-mini-fab {
+  &:hover {
+    background: #f1f1f1;
+  }
+}
+
 .mat-mini-fab.mat-accent:hover {
   background: darken(#ff4081, 20%);
 }

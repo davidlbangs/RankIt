@@ -10,7 +10,7 @@ import { Poll } from './app/shared/models/poll.interface';
 // import { Topic, ChatThread } from './app/shared/models/chat.interface';
 // import { Tenet } from './app/shared/models/tenet.interface';
 // import { UserMeta, FirebaseUser } from './app/shared/models/person.interface';
-import { User } from './auth/shared/services/auth/auth.service';
+import { User } from './app/shared/models/user.interface';
 
 // import { Cookie } from './models/cookie.interface';
 

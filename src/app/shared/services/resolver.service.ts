@@ -9,7 +9,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 // import { AuthService } from '../../auth/shared/services/auth/auth.service';
 import { Store } from 'store';
 
-// import { UserMeta } from '../../shared/models/person.interface';
+// import { User } from '../../shared/models/user.interface';
 
 @Injectable()
 export class UserResolver implements Resolve<any> {
