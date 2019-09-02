@@ -29,6 +29,15 @@ export class PollService {
           );
   }
 
+  getAdminPolls() {
+    return this.db.collection<Poll>('polls').valueChanges()
+    .pipe(
+          tap({
+            next: val => this.store.set('polls', val)
+          })
+          );
+  }
+
   getPublicPolls() {
     return this.db.collection<Poll>('polls', ref => ref.where('is_promoted', '==', true).where('is_open', '==', true).orderBy('date_created')).valueChanges()
     .pipe(
@@ -87,6 +96,10 @@ export class PollService {
     // Change if the poll is open, but keep it open once they've switched.
     // That way you can revive expired polls, if you want.
     return this.db.doc(`polls/${id}`).update({'is_open': !is_open, 'keep_open': true });
+  }
+
+  togglePollPromoted(id:string, is_promoted) {
+    return this.db.doc(`polls/${id}`).update({'is_promoted': !is_promoted});
   }
 
   updatePoll(key:string, poll:Poll) {

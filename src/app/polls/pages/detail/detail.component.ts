@@ -3,6 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { AuthService } from '../../../../auth/shared/services/auth/auth.service';
 
 import { Poll } from '../../../shared/models/poll.interface';
 import { PollService } from '../../../shared/services/poll.service';
@@ -36,6 +37,15 @@ import { MetaService } from '@ngx-meta/core';
         <mat-card class="mb-2">
           <mat-slide-toggle [checked]="poll.is_open" (click)="toggleOpen(poll)">
             {{poll.is_open ? 'Open, Accepting Votes' : 'Closed, Not Accepting Votes'}}
+          </mat-slide-toggle>
+
+          <p *ngIf="poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until you close it.</p>
+          <p *ngIf="!poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until {{poll.length.end_time | date : 'long'}}</p>
+        </mat-card>
+
+        <mat-card class="mb-2" *ngIf="canPromotePoll()">
+          <mat-slide-toggle [checked]="poll.is_promoted" (click)="togglePromoted(poll)">
+            {{poll.is_promoted ? 'Promoted' : 'Not Promoted'}}
           </mat-slide-toggle>
 
           <p *ngIf="poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until you close it.</p>
@@ -77,6 +87,7 @@ export class DetailComponent implements OnInit {
   showDelete:boolean = false;
 
   constructor(
+              private auth: AuthService,
               private readonly meta: MetaService,
               private pollService: PollService,
               private router:Router,
@@ -111,8 +122,17 @@ export class DetailComponent implements OnInit {
     this.pollService.togglePollOpen(poll.id, poll.is_open);
   }
 
+  togglePromoted(poll:Poll) {
+    this.pollService.togglePollPromoted(poll.id, poll.is_promoted);
+  }
+
   toggleDelete() {
     this.showDelete = !this.showDelete;
+  }
+
+  canPromotePoll() {
+    const user = this.store.value.user;
+    return this.auth.canPromotePoll(user);
   }
 
 }

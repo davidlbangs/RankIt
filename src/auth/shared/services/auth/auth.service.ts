@@ -29,7 +29,6 @@ export class AuthService {
       .pipe(
               switchMap( user => {
                  if(user) {
-                   
                    // temporarily set the user from the auth state.
                    const tempUser = {
                      uid: user.uid,
@@ -83,8 +82,8 @@ export class AuthService {
    * ROLES
    */
 
-  canRead(user: User): boolean {
-    const allowed = ['admin', 'user']
+  canPromotePoll(user: User): boolean {
+    const allowed = ['admin']
     return this.checkAuthorization(user, allowed)
   }
 

@@ -8,20 +8,31 @@ import { ManagePollsComponent } from './pages/manage-polls/manage-polls.componen
 import { MetaGuard } from '@ngx-meta/core';
 import { UserResolver } from '../shared/services/resolver.service';
 
+import { AdminGuard } from '../../auth/shared/guards/admin.guard';
+
+import { ManageUsersComponent } from './pages/manage-users/manage-users.component';
+
 export const routes:Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'manage-polls' },
-  { path: 'manage-polls', canActivate: [MetaGuard], resolve: { resolverUser: UserResolver}, component: ManagePollsComponent,
+  { path: 'manage-polls', canActivate: [MetaGuard, AdminGuard], resolve: { resolverUser: UserResolver}, component: ManagePollsComponent,
   data: {
           meta: {
             title: 'Admin - Manage Polls'
           }
-    },
+    }
+   },
+   { path: 'manage-users', canActivate: [MetaGuard, AdminGuard], resolve: { resolverUser: UserResolver}, component: ManageUsersComponent,
+  data: {
+          meta: {
+            title: 'Admin - Manage Users'
+          }
+    }
    }
 ];
 
 
 @NgModule({
-  declarations: [ManagePollsComponent],
+  declarations: [ManagePollsComponent, ManageUsersComponent],
   imports: [
     CommonModule,
     SharedModule,

@@ -49,9 +49,7 @@ export class ViewComponent implements OnInit {
   constructor(
               private store: Store, 
               private db: AngularFirestore, 
-              private pollService:PollService) {
-    // this.polls = db.collection('items').valueChanges();
-  }
+              private pollService:PollService) {}
 
   ngOnInit() {
     this.store.set('backButton', '');

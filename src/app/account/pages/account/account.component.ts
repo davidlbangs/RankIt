@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from 'store';
 
+import { Router } from '@angular/router';
+
 import { AuthService } from '../../../../auth/shared/services/auth/auth.service';
 
 @Component({
@@ -23,6 +25,11 @@ import { AuthService } from '../../../../auth/shared/services/auth/auth.service'
             <input matInput placeholder="" [value]="user.email" disabled>
           </mat-form-field>
 
+          <div class="admin mb-3" *ngIf="user.roles.admin">
+            <h3 class="mt-2 mb-1">Admin</h3>
+            <button (click)="toAdmin('manage-polls')" mat-stroked-button [color]="'accent'" class="has-icon mr-1"><i class="fa fa-rocket"></i>Manage Polls</button>
+            <button (click)="toAdmin('manage-users')" mat-stroked-button [color]="'accent'" class="has-icon"><i class="fa fa-rocket"></i>Manage Users</button>
+          </div>
 
         <!--<h3>Password</h3>
         <a routerLink="/account/password">Change Password</a>-->
@@ -39,6 +46,7 @@ export class AccountComponent implements OnInit {
   user$ = this.store.select('user');
 
   constructor(
+              private router: Router,
               private authService: AuthService,
               private store:Store) { }
 
@@ -48,6 +56,10 @@ export class AccountComponent implements OnInit {
 
   logout() {
     this.authService.signOut();
+  }
+
+  toAdmin(route?: string) {
+    this.router.navigate(['/admin', route]);
   }
 
 }

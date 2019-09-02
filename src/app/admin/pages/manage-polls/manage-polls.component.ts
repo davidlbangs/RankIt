@@ -1,19 +1,57 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable, Subscription } from 'rxjs';
+
+import { Poll } from '../../../shared/models/poll.interface';
+import { PollService } from '../../../shared/services/poll.service';
+import { Store } from 'store';
 
 @Component({
   selector: 'app-manage-polls',
   template: `
-    <p>
-      manage-polls works!
-    </p>
+    <main>
+      <h1 class="mb-2 mt-2"><strong>Admin:</strong> Manage All Polls</h1>
+      <hr class="mb-2" />
+    <div *ngIf="polls$ | async as polls; else loading;" class="pb-4">
+
+        <mat-card *ngFor="let poll of polls" [routerLink]="['/polls/', poll.id]" class="mb-1 linked-card">
+        <mat-card-title>{{poll.title}}</mat-card-title>
+        <mat-card-subtitle>{{poll.is_open ? 'Open' : 'Closed' }} – {{poll.vote_count ? poll.vote_count + ' votes' : 'No Votes'}} {{ poll.is_promoted ? ' – Promoted Poll' : '' }}</mat-card-subtitle>
+     
+
+        <mat-card *ngIf="polls.length == 0">
+          <mat-card-title>No polls yet! How about making one?</mat-card-title>
+        </mat-card>
+      </mat-card>
+        
+    </div>
+
+    <ng-template #loading>
+      <div class="message">
+        <img src="/assets/images/loading.svg" alt="" />
+        Fetching polls...
+      </div>
+    </ng-template>
+    </main>
   `,
   styleUrls: ['./manage-polls.component.scss']
 })
 export class ManagePollsComponent implements OnInit {
-
-  constructor() { }
+  polls$: Observable<Poll[]>;
+  subscription: Subscription;
+  constructor(
+              private store: Store, 
+              private db: AngularFirestore, 
+              private pollService:PollService) {}
 
   ngOnInit() {
+    this.store.set('backButton', 'account');
+    this.polls$ = this.store.select<Poll[]>('polls');
+    this.subscription = this.pollService.getAdminPolls().subscribe();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

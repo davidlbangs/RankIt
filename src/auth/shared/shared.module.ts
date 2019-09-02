@@ -10,6 +10,7 @@ import { AuthService } from './services/auth/auth.service';
 
 // guards
 import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ export class SharedModule {
       ngModule: SharedModule,
       providers: [
         AuthService,
-        AuthGuard
+        AuthGuard,
+        AdminGuard
       ]
     };
   }
