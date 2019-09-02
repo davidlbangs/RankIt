@@ -20,7 +20,7 @@ export class PollService {
     private store:Store,
     private db: AngularFirestore) { }
 
-  getUserPolls(uid?: string = this.uid) {
+  getUserPolls(uid: string = this.uid) {
     // if(!uid) {
     //   console.log('hi', this.uid);
     //   let uid = this.uid;

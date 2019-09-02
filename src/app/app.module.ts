@@ -73,7 +73,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     AppComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     MetaModule.forRoot({
       provide: MetaLoader,
       useFactory: (metaFactory)
