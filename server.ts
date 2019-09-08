@@ -54,6 +54,8 @@ app.get('*.*', express.static(DIST_FOLDER, {
   maxAge: '1y'
 }));
 
+app.use(require('prerender-node').set('prerenderToken', 'Dmq9oEPFIqRzSjxKGFhf'));
+
 // All regular routes use the Universal engine
 // was DIST_FOLDER, APP_NAME
 // res.render(join(DIST_FOLDER, APP_NAME + '-webpack', 'index.html'), { req });
