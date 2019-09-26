@@ -1,29 +1,37 @@
 import { Component, OnInit } from '@angular/core';
-import { Router} from '@angular/router';
-
 import { FormGroup } from '@angular/forms';
-
-// services
+import { Router} from '@angular/router';
 import { AuthService } from '../../../shared/services/auth/auth.service';
+import { Observable } from 'rxjs/Observable';
+import { Store } from '../../../../store';
+import { PlatformService } from '@trilon/ng-universal';
+import {AuthProvider} from 'ngx-auth-firebaseui';
 
 @Component({
   selector: 'register',
   template: `
-    <div class="">
-      <auth-form (submitted)="registerUser($event)">
-      <h1>Register</h1>
-        <a routerLink="/auth/login">Already have an account?</a>
-        <button type="submit">Create Account</button>
 
-        <button (click)="googleSignIn()">
-        <i class="fa fa-google"></i> Connect Google
-    </button>
+    <main class="mt-3" *ngIf="!(user$ | async); else signedIn">
+      <div *ngIf="isBrowser" class="login-component">
+          <ngx-auth-firebaseui
+            (onSuccess)="successCallback($event)"
+            (onError)="errorCallback($event)"
+            [tabindex]="'1'"
+            [guestEnabled]="'false'"
+            [providers]="[providers.Google, providers.Facebook, providers.Twitter]">
+            </ngx-auth-firebaseui>
+       </div>
+    </main>
+    
+    <ng-template #signedIn>
+    <main>
+      <p class="mt-2 mb-1">You're already signed in.</p>
 
-        <div class="error" *ngIf="error">
-          {{ error }}          
-        </div>
-    </auth-form>
-    </div>
+      <p><a [routerLink]="['/polls']">Back to My Account</a>
+
+
+    </main>
+    </ng-template>
 
     
   `
@@ -31,35 +39,48 @@ import { AuthService } from '../../../shared/services/auth/auth.service';
 export class RegisterComponent implements OnInit {
   
   error: string;
+  providers = AuthProvider;
+  isBrowser:boolean;
+  user$: Observable<any>;
 
   constructor(
-    private authService: AuthService,
-    private router: Router
-    ) {}
+              private store:Store,
+              private authService: AuthService,
+              private router: Router,
+              private platformService:PlatformService
+    ) {
+    this.isBrowser = platformService.isBrowser;
+  }
 
 
   ngOnInit() {
-    
+    this.user$ = this.store.select('user');
   }
 
-  // uses async await.
-  async registerUser(event: FormGroup) {
-      const { email, password } = event.value; // destructuring
+  successCallback(signInSuccessData: any) {
+    // console.log('signed in', signInSuccessData);
+    this.router.navigate(['/polls']);
+  }
+
+  errorCallback(errorData: any) {
+      console.error('something went wrong', errorData);
+  } 
+
+  // async registerUser(event: FormGroup) {
+  //     const { email, password } = event.value; // destructuring
       
-      try {
-        await this.authService.createUser(email, password);
-        // this is the "done" section of the promise.
-        this.router.navigate(['/']);
-      } catch (err) {
-        this.error = err.message;
-      }
-  }
+  //     try {
+  //       await this.authService.createUser(email, password);
+  //       // this is the "done" section of the promise.
+  //       this.router.navigate(['/']);
+  //     } catch (err) {
+  //       this.error = err.message;
+  //     }
+  // }
 
-  async googleSignIn() {
-    await this.authService.googleSignin();
 
-    this.router.navigate(['/']);
-  }
+
+
 }
 
 

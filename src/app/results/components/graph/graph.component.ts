@@ -47,7 +47,6 @@ export class GraphComponent implements OnInit {
       return width;
     }
   }
-
   
 
 }

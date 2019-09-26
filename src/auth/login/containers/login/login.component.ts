@@ -1,22 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router} from '@angular/router';
-// services
 import { AuthService } from '../../../shared/services/auth/auth.service';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '../../../../store';
+import { PlatformService } from '@trilon/ng-universal';
+import {AuthProvider} from 'ngx-auth-firebaseui';
+
 
 @Component({
   selector: 'login',
+  styleUrls: ['login.component.scss'],
   template: `
-    <header class="poll-header">
-        <h1 class="">Sign In</h1>
-        <p>
-          Or Create an Account
-        </p>  
-      </header>
+
     <main class="mt-3" *ngIf="!(user$ | async); else signedIn">
-      
+      <div *ngIf="isBrowser" class="pb-5 login-component">
+          <ngx-auth-firebaseui
+            (onSuccess)="successCallback($event)"
+            (onError)="errorCallback($event)"
+            [guestEnabled]="false"
+            [providers]="[providers.Google, providers.Facebook, providers.Twitter]">
+            </ngx-auth-firebaseui>
+       </div>
     </main>
     
     <ng-template #signedIn>
@@ -35,14 +40,19 @@ import { Store } from '../../../../store';
 export class LoginComponent implements OnInit {
 
   error: string;
+  isBrowser:boolean;
+  providers = AuthProvider;
 
   user$: Observable<any>;
 
   constructor(
               private store:Store,
-    private authService: AuthService,
-    private router: Router
-    ) {}
+              private authService: AuthService,
+              private router: Router,
+              private platformService:PlatformService
+    ) {
+    this.isBrowser = platformService.isBrowser;
+  }
 
   ngOnInit() {
     this.user$ = this.store.select('user');
@@ -56,16 +66,4 @@ export class LoginComponent implements OnInit {
   errorCallback(errorData: any) {
       console.error('something went wrong', errorData);
   }  
-
-  // async loginUser(event: FormGroup) {
-  //     const { email, password } = event.value; // destructuring
-      
-  //     try {
-  //       await this.authService.loginUser(email, password);
-  //       // this is the "done" section of the promise.
-  //       this.router.navigate(['/']);
-  //     } catch (err) {
-  //       this.error = err.message;
-  //     }   
-  // }
 }

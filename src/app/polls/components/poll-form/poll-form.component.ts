@@ -5,6 +5,8 @@ import { PollService } from '../../../shared/services/poll.service';
 import { Poll } from '../../../shared/models/poll.interface';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
+
 @Component({
   selector: 'poll-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -226,7 +228,7 @@ export class PollFormComponent implements OnInit, OnChanges {
     }),
     winner_count: [''],
     randomize_order: [''],
-    label: ['', Validators.required],
+    label: ['', [Validators.required, RxwebValidators.unique()]],
     cta: this.fb.group({
       custom: [''],
       label: [''],
@@ -292,7 +294,7 @@ export class PollFormComponent implements OnInit, OnChanges {
 
        if(value.choices) {
          for(const item of value.choices) {
-           this.choices.push(new FormControl(item, Validators.required));
+           this.choices.push(new FormControl(item, [Validators.required, RxwebValidators.unique()]));
          }
        }
   }

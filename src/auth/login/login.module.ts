@@ -7,10 +7,16 @@ import { LoginComponent } from './containers/login/login.component';
 
 // Auth Module UI
 // import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
+import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
 
 export const ROUTES: Routes = [
   {
-    path: '', component: LoginComponent
+    path: '', component: LoginComponent,
+    data: {
+          meta: {
+            title: 'Login'
+          }
+    }
   }
 ];
 
@@ -19,6 +25,7 @@ export const ROUTES: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(ROUTES),
+    NgxAuthFirebaseUIModule,
     // FirebaseUIModule,
     SharedModule
   ],

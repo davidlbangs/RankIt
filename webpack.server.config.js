@@ -13,7 +13,9 @@ module.exports = {
        in the Node environment, let's skip it.
        Note: you may need to exclude other dependencies depending
        on your project. */
-    /^firebase/
+    /^firebase/,
+    /^firebaseui/,
+    /^firebaseui-angular/
   ],
   output: {
     // Export a UMD of the webpacked server.ts & deps, for

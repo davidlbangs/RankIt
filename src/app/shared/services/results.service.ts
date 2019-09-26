@@ -21,7 +21,7 @@ export class ResultsService {
        results.elected.includes(choice) && 
        !rounds[round][choice]
        ) {
-          console.log('elected prev round', choice, round);
+          // console.log('elected prev round', choice, round);
           return winning_percentage;
     }
 
@@ -104,8 +104,41 @@ export class ResultsService {
     }
     // we return the string and the count so we can detect if we need plural.
     return {string: this.candidateListString(selectedList), count: selectedList.length};
-  }  
+  } 
 
+  /**
+    * Returns an array of choices by vote count.
+    *
+    */
+
+  getChoicesByVoteCount(round:number, results:Results, voteCount:number) {
+    const roundArray = Object.entries(results.rounds[round]);
+    let tieChoices = [];
+    for(const [choice, choiceCount] of roundArray) {
+      if(choiceCount == voteCount) {
+        tieChoices.push(choice);
+      }
+    }
+    return tieChoices;
+  }
+
+  /**
+    * Determines if there's a tie.
+    * If there is, it returns the count of votes that resulted in the tie.
+    */
+  hasTie(round:number, results:Results) {
+    const lastRound = results.rounds[round];
+    const counts = Object.values(lastRound);
+    const max = Math.max(...counts);
+    const countOfMax = counts.filter(function(x){ return x === max; }).length
+    return (countOfMax > 1) ? max : 0;
+
+  } 
+
+
+  isLastRound(round:number, results:Results) {
+    return (results.rounds.length - 1) === round || round === 0;
+  }
 
   /**
     * Utility: Add all the values in an object.

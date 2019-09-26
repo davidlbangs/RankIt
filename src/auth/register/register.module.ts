@@ -5,11 +5,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 
 import { RegisterComponent } from './containers/register/register.component';
-
+import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
 
 export const ROUTES: Routes = [
   {
-    path: '', component: RegisterComponent
+    path: '', component: RegisterComponent,
+    data: {
+          meta: {
+            title: 'Register'
+          }
+    }
   }
 ];
 
@@ -18,7 +23,8 @@ export const ROUTES: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(ROUTES),
-    SharedModule
+    SharedModule,
+    NgxAuthFirebaseUIModule
   ],
   declarations: [
   RegisterComponent

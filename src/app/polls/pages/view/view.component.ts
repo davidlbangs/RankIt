@@ -19,17 +19,16 @@ import { Store } from 'store';
 
    <h1 class="mb-2 mt-2">My Polls</h1>
       <hr class="mb-2" />
-    <div *ngIf="polls$ | async as polls; else loading;">
+    <div *ngIf="polls$ | async as polls; else loading;" class="pb-5">
 
         <mat-card *ngFor="let poll of polls" [routerLink]="[poll.id]" class="mb-1 linked-card">
-        <mat-card-title>{{poll.title}}</mat-card-title>
-        <mat-card-subtitle>{{poll.is_open ? 'Open' : 'Closed' }} – {{poll.vote_count ? poll.vote_count + ' votes' : 'No Votes'}} {{ poll.is_promoted ? ' – Promoted Poll' : '' }}</mat-card-subtitle>
-     
-
-        <mat-card *ngIf="polls.length == 0">
-          <mat-card-title>No polls yet! How about making one?</mat-card-title>
+          <mat-card-title>{{poll.title}}</mat-card-title>
+          <mat-card-subtitle>{{poll.is_open ? 'Open' : 'Closed' }} – {{poll.vote_count ? poll.vote_count + ' votes' : 'No Votes'}} {{ poll.is_promoted ? ' – Promoted Poll' : '' }}</mat-card-subtitle>
         </mat-card>
-      </mat-card>
+
+        <mat-card *ngIf="!polls.length">
+          <mat-card-title>No polls yet! How about <a [routerLink]="['create']">creating one</a>?</mat-card-title>
+        </mat-card>
         
     </div>
 
@@ -52,7 +51,7 @@ export class ViewComponent implements OnInit {
               private pollService:PollService) {}
 
   ngOnInit() {
-    this.store.set('backButton', '');
+    this.store.set('backButton', 'home');
     this.polls$ = this.store.select<Poll[]>('polls');
     // this.subscription = this.pollService.polls$.subscribe(); // returns subscription
     this.subscription = this.pollService.getUserPolls().subscribe();

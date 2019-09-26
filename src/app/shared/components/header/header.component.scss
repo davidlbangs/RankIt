@@ -23,6 +23,14 @@ header {
     justify-content: flex-end;
   }
 
+  .logo {
+    transition: opacity 0.2s;
+    &:hover {
+      opacity: 0.8;
+      cursor: pointer;
+    }
+  }
+
   .backButton {
 
   }

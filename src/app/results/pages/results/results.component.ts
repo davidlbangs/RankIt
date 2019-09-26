@@ -25,7 +25,7 @@ import { environment } from '../../../../environments/environment';
       </header>
 
       <main class="clear-footer" *ngIf="poll.results as results; else noResults">
-          <div class="alert mt-3" *ngIf="poll.vote_count < poll.choices.length">
+          <div class="alert mt-3" *ngIf="poll.vote_count < (poll.choices.length * 2 + 1)">
             <div>
               Heads up: this poll doesn't have many votes yet. Results are displayed below, but they will more meaningful once more people have voted. 
             </div>
@@ -34,7 +34,7 @@ import { environment } from '../../../../environments/environment';
             {{ (round === 0) ? 'Final Result' : 'Round ' + round }}
             <span *ngIf="round === getTotalRounds(results)">(Final Result)</span>
           </h2>
-          <p class="mb-1">{{poll.vote_count}} Votes in {{poll.results.rounds.length}} Rounds</p>
+          <p class="mb-1">{{poll.vote_count}} votes in {{poll.results.rounds.length}} rounds to elect {{poll.winner_count}} {{poll.label}}s.</p>
           
           <hr>
 

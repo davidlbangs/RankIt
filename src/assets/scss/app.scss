@@ -4,7 +4,7 @@
 // https://material.angular.io/guide/theming
 // https://material.angular.io/components/checkbox/overview
 @import "reset";
-// @import '~firebaseui/dist/firebaseui.css';
+@import '~firebaseui/dist/firebaseui.css';
 @import "variables";
 @import "utility";
 @import "mat-theme";
@@ -36,6 +36,15 @@ a.bg-white, button.bg-white {
   &:hover {
     background: #f1f1f1;
   }
+}
+
+.login-component {
+  button {
+  .mat-icon {
+    position: relative;
+    top: 5px;
+  }
+}
 }
 
 hr {

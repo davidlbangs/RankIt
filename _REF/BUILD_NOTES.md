@@ -11,4 +11,3 @@ added to search console:
 
 TODO
 - add billing to Pre-Render
-- https://github.com/AnthonyNahas/ngx-auth-firebaseui

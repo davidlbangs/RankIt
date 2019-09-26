@@ -26,8 +26,6 @@ export class PollService {
     //   let uid = this.uid;
     // }
 
-    console.log('got a uid', uid);
-
     return this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', uid)).valueChanges()
     .pipe(
           tap({
@@ -44,6 +42,19 @@ export class PollService {
           })
           );
   }
+
+  getExpiredPolls() {
+    const pollsRef = this.db.collection('polls', ref => ref.where('keep_open', '==', 'true').where('length.end_time', '<', Date.now()));
+
+    return pollsRef.valueChanges()
+    .pipe(
+          tap({
+            next: val => this.store.set('polls', val)
+          })
+          );
+  }
+
+  // pollsRef.where('keep_open', '==', 'true').where('length.end_time', '<', Date.now())
 
   getPublicPolls() {
     return this.db.collection<Poll>('polls', ref => ref.where('is_promoted', '==', true).where('is_open', '==', true).orderBy('date_created')).valueChanges()
@@ -87,6 +98,8 @@ export class PollService {
     poll.is_open = true;
     poll.is_promoted = false;
     poll.date_created = Date.now();
+
+    // console.log(poll.owner_uid);
 
     if(poll.keep_open == false){
       let factor = (poll.length.display_units === 'days') ? 86400000 : 3600000;

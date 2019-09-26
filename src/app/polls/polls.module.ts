@@ -14,6 +14,8 @@ import { PollFormComponent, DialogOverviewExampleDialog } from './components/pol
 import { AuthGuard } from '../../auth/shared/guards/auth.guard';
 import { MetaGuard } from '@ngx-meta/core';
 
+import {  RxReactiveFormsModule } from "@rxweb/reactive-form-validators";
+
 export const routes:Routes = [
   { path: '', canActivate: [AuthGuard, MetaGuard],
     component: ViewComponent, 
@@ -42,6 +44,7 @@ export const routes:Routes = [
     CommonModule,
     CommonModule,
     ReactiveFormsModule,
+    RxReactiveFormsModule,
     RouterModule.forChild(routes),
     SharedModule
   ]
