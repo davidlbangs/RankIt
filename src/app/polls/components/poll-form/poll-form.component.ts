@@ -294,7 +294,7 @@ export class PollFormComponent implements OnInit, OnChanges {
 
        if(value.choices) {
          for(const item of value.choices) {
-           this.choices.push(new FormControl(item, [Validators.required, RxwebValidators.unique()]));
+           this.choices.push(new FormControl(item, [Validators.required]));
          }
        }
   }

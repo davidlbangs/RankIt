@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, EMPTY, of } from 'rxjs';
 import { tap, filter, map } from 'rxjs/operators';
 
-import { Poll } from '../models/poll.interface';
+import { Poll, Description } from '../models/poll.interface';
 import { AppSettings } from '../../app.settings';
 import { User } from '../models/user.interface';
 
@@ -63,6 +63,10 @@ export class PollService {
             next: val => this.store.set('publicPolls', val)
           })
           );
+  }
+
+  getDescription() {
+    return this.db.doc<Description>('admin/settings').valueChanges();
   }
 
   getPoll(key:string) {

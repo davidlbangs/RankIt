@@ -5,20 +5,28 @@ $color-teal: #51B0C9;
   display: flex;
 
   .controls {
+    margin-left: 10px;
     flex-grow: 0;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 
     .control {
       // height: 33.333%;
       flex: 0 0 33.333332%;
       button {
-          line-height: 30px;
-          padding: 0 12px;
-        // line-height: auto;
-        // height: 20px;
-        // line-height: 20px;
-        // line-height: 1;
+          border: 0;
+          display: block;
+          margin-top: 5px;
+          // line-height: 30px;
+
+          padding: 0 8px;
+          min-width: 30px;
+
+          &:hover {
+            background: #f5f5f5;
+          }
+        
       }
     }
   }
@@ -27,12 +35,37 @@ $color-teal: #51B0C9;
   }
 }
 
+@media(max-width:600px) {
+  .choice-wrapper {
+    .controls {
+      .control {
+        &.control-move-up, &.control-move-down {
+          // display:none;
+        }
+      }
+    }
+  }
+}
+
+@media(min-width:600px) {
+  // .choice-wrapper {
+  //   .controls {
+  //     max-height: 60px;
+  //     top:-5px; position: relative;
+  //     .control {
+
+  //     }
+  //   }
+  // }
+}
+
 span.custom-remove {
   color: #CC6D6D;
   font-weight: bold;
 }
 
 .choice {
+  height: 100%;
   min-height: 60px;
   background: #EAEDF0;
   border: 1px solid #BDCAD1;
@@ -42,7 +75,7 @@ span.custom-remove {
   display: flex;
   align-items: center;
   justify-content: center; 
-
+  text-align: center;
   color: #283136;
   font-size: 18px;
   font-weight: bold;
@@ -53,11 +86,13 @@ span.custom-remove {
     border-color: $color-teal;
   }
 
+  // "is-active" is when it's been voted for.
   &.is-active {
     color: white;
     background: $color-teal;
     border-color: darken($color-teal, 15%);
     justify-content: flex-start;
+    text-align: left;
 
     .index {
       color: darken($color-teal, 30%);

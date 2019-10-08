@@ -16,16 +16,16 @@ import { Choice } from '../../../shared/models/poll.interface';
         {{choice}}
       </div>
       <div class="controls">
-        <div class="control">
+        <div class="control control-move-up">
           <button 
-            (click)="onMoveUp(choice, index)" mat-button><i class="fa fa-chevron-up"></i></button>
+            (click)="onMoveUp(choice, index)"><i class="fa fa-chevron-up"></i></button>
         </div>
-        <div class="control">
-          <button (click)="onToggleVote(choice, index)" mat-button><span class="custom-remove">–</span></button>
+        <div class="control control-delete">
+          <button (click)="onToggleVote(choice, index)"><span class="custom-remove">–</span></button>
         </div>
-        <div class="control">
+        <div class="control control-move-down">
           <button 
-          (click)="onMoveDown(choice, index)" mat-button><i class="fa fa-chevron-down"></i></button>
+          (click)="onMoveDown(choice, index)"><i class="fa fa-chevron-down"></i></button>
         </div>
       </div>
     </div>

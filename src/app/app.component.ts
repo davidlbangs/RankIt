@@ -19,6 +19,11 @@ import { Subscription } from 'rxjs';
       [user]="user$ | async"></app-header>
     <router-outlet></router-outlet>
 
+
+    <footer class="app-footer">
+      Powered by <a href="https://www.fairvote.org">FairVote</a>.
+    </footer>
+
     
   </div>
 

@@ -11,7 +11,7 @@
   <div 
     *ngFor="let choice of all_choices"
     class="result-row"
-    [class.is-winner]="getPercentage(round, choice) >= winning_percentage"
+    [class.is-winner]="declareWinner(round, choice)"
     [class.is-eliminated]="getPercentage(round, choice) === 0"
     >
       <div class="meta">

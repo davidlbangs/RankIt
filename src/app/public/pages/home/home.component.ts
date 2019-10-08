@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, Subscription } from 'rxjs';
 
-import { Poll } from '../../../shared/models/poll.interface';
+import { Poll, Description } from '../../../shared/models/poll.interface';
 import { PollService } from '../../../shared/services/poll.service';
 import { Store } from 'store';
 
@@ -39,17 +39,11 @@ import { Store } from 'store';
         
     </div>
 
-    <h1 class="mb-2 mt-4">What is Ranked Choice Voting?</h1>
-      <div class="mb-2 responsive-wrapper">
-        <iframe width="700" height="394" class="embed-responsive-item" src="https://www.youtube.com/embed/XIMLoLxmTDw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </div>
+    <div *ngIf="description$ | async as description">
+      <home-description [content]="description"></home-description>
+    </div>
 
-      <p class="mb-1">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-      <p class="mb-2"> Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>
-
-      <p class="pb-4">
-        <a href="https://www.fairvote.org" class="btn btn-primary" mat-button mat-raised-button [color]="'accent'" >Learn More at Fairvote.org</a>
-        </p>
+    
 
     <ng-template #loading>
       <div class="message">
@@ -64,6 +58,8 @@ import { Store } from 'store';
 })
 export class HomeComponent implements OnInit {
   polls$: Observable<Poll[]>;
+  description$: Observable<Description>;
+
   user$: Observable<any>;
   subscription: Subscription;
   constructor(
@@ -78,6 +74,8 @@ export class HomeComponent implements OnInit {
     this.polls$ = this.store.select<Poll[]>('publicPolls');
     this.user$ = this.store.select<any>('user');
     this.subscription = this.pollService.getPublicPolls().subscribe(); // returns subscription
+
+    this.description$ = this.pollService.getDescription();
   }
 
   ngOnDestroy() {

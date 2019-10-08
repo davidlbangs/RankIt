@@ -61,6 +61,12 @@ export interface Results {
   threshold: number;
 }
 
+export interface Description {
+  headline: string;
+  text: string;
+  video_url: string;
+}
+
 // export interface Result {
 //   percentages: number[];
 //   label: string;

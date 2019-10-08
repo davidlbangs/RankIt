@@ -12,7 +12,10 @@ import { ResultsService } from '../../../shared/services/results.service';
     <div *ngIf="results">
       <div *ngIf="isPollSummary(round); else RoundSummary">
         <p class="mb-2">{{ pollSummaryStatement()}}</p>
-        <p>Ranked Choice Voting (RCV) is different from choose-only-one voting. Voters get to rank candidates in order of choice. If a candidate receives more than half of the first choices, they win, just like any other election. If not, the candidate with the fewest votes is eliminated, and voters who picked that candidate as ‘number 1’ will have their votes count for their next choice. This process continues until a candidate wins with more than half of the votes.</p>
+        <p *ngIf="!isMultiWinner" class="mb-2">With Ranked Choice Voting (RCV), voters get to rank candidates in order of choice. If a candidate receives more than half of the first choices, they win, just like any other election. If not, the candidate with the fewest votes is eliminated, and voters who picked that candidate as ‘number 1’ will have their votes count for their next choice.This process continues until a candidate wins with more than half of the votes. </p>
+
+        <p *ngIf="isMultiWinner" class="mb-2">In a multi-winner ranked choice voting poll with {{winner_count}} winners, each winner must get at least {{ 1 / (winner_count + 1) | percent }} of the vote. The percentage of votes required (threshold) depends on how many seats are being elected - the more seats there are to fill, the lower the percentage needed to win.</p>
+        <p *ngIf="isMultiWinner">Voters rank candidates in order of choice. If no candidate meets the percentage of votes needed to win, the candidate with the lowest number of votes is eliminated and voters who picked that candidate will have their votes count for their next choice. If a candidate does meet the percentage of votes needed, any extra votes count proportionally toward voters’ next choices.</p>
       </div>
 
       <ng-template #RoundSummary>
@@ -45,14 +48,17 @@ export class ExplanationComponent implements OnInit {
   get elected() { return this.results.elected; }
   get winning_percentage() { return 1 / (this.winner_count + 1); }
   get threshold() { return this.results.threshold; }
-
+  get isMultiWinner() { return (this.winner_count > 1) ? true : false; }
+  get isWinningRound() { return (this.round === this.total_rounds);}
   constructor(private resultsService: ResultsService) { }
 
   ngOnInit() {
+
+    console.log('results', this.results);
   }
 
   isPollSummary(round) { return this.isLastRound(round);}
-  get isWinningRound() { return (this.round === this.total_rounds);}
+  
 
   roundHasWinner(round) {
     const values = Object.values(this.rounds[round]);
@@ -108,7 +114,7 @@ export class ExplanationComponent implements OnInit {
     const oneAtaTime = (losers.count > 1) ? ' one at a time' : '';
     const remaining = (this.winner_count > 1) ? 'remaining ' : '';
 
-    return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. So, the ${losingCandidate} with the fewest votes, ${losers.string}, will be eliminated${oneAtaTime}. Voters who chose ${losers.string} will have their votes transferred to their next preferred choice.`;
+    return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. So, the ${losingCandidate} with the fewest votes, ${losers.string}, will be eliminated${oneAtaTime}. Voters who chose ${losers.string} will have their votes redistributed to the remaining ${this.label}s based on their next preferences.`;
   }
 
   pollSummaryStatement() {
@@ -121,7 +127,7 @@ export class ExplanationComponent implements OnInit {
     if(hasTie > 0) {
       return this.tieSummaryStatement(hasTie);
     }
-    return `After ${this.total_rounds} ${rounds}, ${electedString} ${wins}.`;
+    return `After ${this.total_rounds} ${rounds} and ${this.total_votes} votes, ${electedString} ${wins}.`;
   }
 
   tieSummaryStatement(winnerVoteCount:number) {
@@ -135,7 +141,7 @@ export class ExplanationComponent implements OnInit {
     const winners = this.getWinners(round);
     const winnerArray = Object.keys(winners);
     const winnerString = this.resultsService.candidateListString(winnerArray);
-    return `Because ${winnerString} has more than the minimum number of votes needed to win and we're looking for multiple winners, we redistribute the extra votes to the remaining ${this.label}s in the next round.`;
+    return `${winnerString}’s votes in excess of the threshold will be redistributed to the remaining ${this.label}s based on ${winnerString}’s voter’s next preferences. `;
   }
 
   roundSummaryStatement() {

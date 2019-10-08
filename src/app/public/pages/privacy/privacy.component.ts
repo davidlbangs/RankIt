@@ -9,7 +9,7 @@ import { MetaService } from '@ngx-meta/core';
           <h1 class="">Privacy Policy</h1>  
       </header>
       <main>
-        TODO
+        <p class="pt-4 pb-4" style="padding-top:2rem;">Please read our privacy policy <a href="https://app.termly.io/document/privacy-policy/2bab93f5-e82a-4c6b-95a9-7d3e0b67754b">here</a>.</p>
       </main>
   `,
   styleUrls: ['./privacy.component.scss']
@@ -24,7 +24,7 @@ export class PrivacyComponent implements OnInit {
 
   ngOnInit() {
     this.store.set('backButton', '/');
-    this.meta.setTitle('DYNAMIC PRIVACY')
+    this.meta.setTitle('Privacy Policy');
   }
 
 }

@@ -68,9 +68,12 @@ import { environment } from '../../../../environments/environment';
               [winner_count]="poll.winner_count"
               [label]="poll.label"></results-explanation> 
 
-          <div class="mt-3">
+          <div class="mt-3 mb-3">
             <share-poll [poll]="poll"></share-poll>
           </div>
+
+          <hr class="mb-3" />
+      <p class="mb-2 subtle-text small-text">Percentages may not add up to 100 because some ballots get all their choices eliminated.</p>
       </main>
 
       <footer class="actions" *ngIf="poll.results as results;">

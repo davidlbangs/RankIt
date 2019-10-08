@@ -10,6 +10,8 @@
 @import "mat-theme";
 @import "type";
 
+
+
 body {
   background: $color-light-blue;
 
@@ -28,6 +30,21 @@ body {
 
 main {
   padding: 0 1rem;
+}
+
+footer.app-footer {
+  margin: 2rem 1rem 0;
+  padding-top: 1rem;
+  padding-bottom: 3rem;
+
+  border-top: 2px solid #f5f5f5;
+
+  color: #aaa;
+  font-size: 0.8rem;
+
+  a {
+    color: #888;
+  }
 }
 
 a.bg-white, button.bg-white {
@@ -86,6 +103,13 @@ hr {
   }
 }
 
+.subtle-text {
+  color: #888;
+}
+.small-text {
+  font-size: 0.9rem;
+}
+
 main.clear-footer {
   padding-bottom: 140px;
 }
@@ -127,6 +151,10 @@ footer.actions {
   }
   main {
     padding: 0 2rem;
+  }
+
+  footer.app-footer {
+    margin: 2rem 2rem 0;
   }
 
   footer.actions {

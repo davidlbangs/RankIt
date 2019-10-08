@@ -82,7 +82,7 @@ export class VoteComponent implements OnInit {
 
 
   drop(event: CdkDragDrop<string[]>) {
-    console.log('event', event);
+    // console.log('event', event);
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -100,7 +100,7 @@ export class VoteComponent implements OnInit {
   }
 
   addToVote(choice:Choice) {
-    console.log('add', choice);
+    // console.log('add', choice);
     this.choices = this.choices.filter(obj => obj !== choice); // Remove from old.
     this.vote.choices.push(choice); // add to new.
   }
@@ -136,8 +136,6 @@ export class VoteComponent implements OnInit {
   }
 
   limit_vote(poll:Poll, user:User) {
-    console.log('made it!');
-
     const alreadyVoted = this.cookie.get('rankit-' + poll.id);
 
     // decide if they've voted already
