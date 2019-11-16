@@ -4,7 +4,7 @@ import { Poll } from './shared/models/poll.interface';
 
 export class AppSettings {
 
-    public static productionUrl = 'https://rankit-vote.firebaseapp.com';
+    public static productionUrl = 'https://rankit.vote';
 
     // public static validScores = [15, 5, 3, 1, 0];
 

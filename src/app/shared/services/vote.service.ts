@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 import { Observable, EMPTY, of } from 'rxjs';
-import { tap, filter, map } from 'rxjs/operators';
+import { tap, filter, map, first } from 'rxjs/operators';
 
 import { Poll, Vote } from '../models/poll.interface';
 import { AppSettings } from '../../app.settings';
@@ -26,6 +26,7 @@ export class VoteService {
   getPoll(id:string):Observable<Poll> {
     return this.db.doc<Poll>(`polls/${id}`).valueChanges()
     .pipe(
+          first(),
           tap({
             next: val => { this.store.set('poll', val); return val; }
           })

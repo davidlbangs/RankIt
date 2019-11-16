@@ -27,7 +27,7 @@ import { environment } from '../../../../environments/environment';
       <main class="clear-footer" *ngIf="poll.results as results; else noResults">
           <div class="alert mt-3" *ngIf="poll.vote_count < (poll.choices.length * 2 + 1)">
             <div>
-              Heads up: this poll doesn't have many votes yet. Results are displayed below, but they will more meaningful once more people have voted. 
+              Heads up: this poll doesn't have many votes yet. Results are displayed below, but they will be more meaningful once more people have voted. 
             </div>
           </div>
           <h2 class="mt-3 mb-1">
@@ -44,6 +44,9 @@ import { environment } from '../../../../environments/environment';
             <hr />
           </div>
 
+          <div class="threshold-container">
+          <span class="threshold-explanation">{{ 1/(1 + poll.winner_count) | percent }} TO WIN</span>
+          </div>
           
 
           <div class="mb-3 mt-1">
@@ -174,7 +177,9 @@ export class ResultsComponent implements OnInit {
         if(id) {
           this.poll$ = this.voteService.getPoll(id)
           .pipe(
-                tap(next => this.meta.setTitle('Results - ' + next.title)));
+                tap(next => this.meta.setTitle('Results - ' + next.title)),
+                tap(next => this.checkRound(next, params.get('round')))
+          );
 
           if(user) {
             this.store.set('backButton', ['/polls/', id]);
@@ -200,6 +205,12 @@ export class ResultsComponent implements OnInit {
 
     shiftedResults.rounds.unshift(lastRound);
     return shiftedResults;
+  }
+
+  checkRound(poll:Poll, currentRound) {
+    if(poll.results.rounds.length < currentRound) {
+      this.router.navigate(['/results/' + poll.id]);
+    }
   }
 
   getLastRound(results:Results) {

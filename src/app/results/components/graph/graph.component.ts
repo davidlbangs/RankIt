@@ -54,7 +54,7 @@ export class GraphComponent implements OnInit {
   getWidth(percentage:number) {
     let width = percentage/this.winning_percentage * 100;
     if(width >= 101){
-      return 101;
+      return 103;
     } else {
       return width;
     }

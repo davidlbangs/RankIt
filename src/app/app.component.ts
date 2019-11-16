@@ -21,7 +21,7 @@ import { Subscription } from 'rxjs';
 
 
     <footer class="app-footer">
-      Powered by <a href="https://www.fairvote.org">FairVote</a>.
+      Powered by <a href="https://www.fairvote.org">FairVote</a>.<br />Problems with the app? Email <a href="mailto:rankit@fairvote.org">rankit@fairvote.org</a>.
     </footer>
 
     

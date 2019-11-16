@@ -12,7 +12,7 @@ import { Poll } from '../../../shared/models/poll.interface';
     <div class="flex-grid mb-1">
           <button 
               mat-stroked-button color="primary" class="has-icon bg-white"
-              (click)="copyVoteLink(voteLink)"><i class="fa fa-link"></i>Copy Voting Link</button>
+              (click)="copyVoteLink(voteLink)"><i class="fa fa-link"></i>Copy Link</button>
           <a
             target="_BLANK"
             href="{{ buildTweetLink(voteLink, poll.title)}}" 

@@ -36,8 +36,18 @@
     flex-wrap: wrap;
     min-height: 120px;
   > * {
-    flex: 0 47%;
-    margin: 1.5%;
+    // flex: 0 47%;
+    flex: 0 100%;
+    margin: 1.5% 5%;
+  }
+}
+
+@media (min-width: 600px) {
+  .choice-list {
+    > * {
+      flex: 0 auto;
+      margin: 1.0%;
+    }
   }
 }
 
