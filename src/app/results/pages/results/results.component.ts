@@ -6,6 +6,8 @@ import { Store } from 'store';
 import { Observable, Subscription } from 'rxjs';
 import { map, distinct, tap  } from 'rxjs/operators';
 
+import { ResultsService } from '../../../shared/services/results.service';
+
 import { AppSettings } from '../../../app.settings';
 
 import { Poll, Vote, Choice, Results } from '../../../shared/models/poll.interface';
@@ -34,7 +36,9 @@ import { environment } from '../../../../environments/environment';
             {{ (round === 0) ? 'Final Result' : 'Round ' + round }}
             <span *ngIf="round === getTotalRounds(results)">(Final Result)</span>
           </h2>
-          <p class="mb-1">{{poll.vote_count}} votes in {{poll.results.rounds.length}} rounds to elect {{poll.winner_count}} {{poll.label}}s.</p>
+          <p class="mb-1"></p>
+          <!--<p class="mb-1">{{poll.vote_count}} votes in {{poll.results.rounds.length}} rounds to elect {{poll.winner_count}} {{poll.label}}s.</p>-->
+          <p class="mb-1" *ngIf="shiftedResults$ | async as shiftedResults">{{pollSummaryStatement(shiftedResults, poll.winner_count, poll.vote_count) }}</p>
           
           <hr>
 
@@ -140,6 +144,7 @@ export class ResultsComponent implements OnInit {
     LOCAL_OVERLAY = (environment.production == false) ? true : false;
     poll$: Observable<Poll> = this.store.select('poll');
 
+
     shiftedResults$:Observable<Results> = this.store.select('poll')
     .pipe(
           distinct(),
@@ -153,6 +158,7 @@ export class ResultsComponent implements OnInit {
 
 
   constructor(
+              private resultsService: ResultsService,
               private readonly meta: MetaService,
               private location:Location,
               private http:HttpClient,
@@ -172,7 +178,6 @@ export class ResultsComponent implements OnInit {
 
         this.round = (params.get('round') === 'summary') ? 0 : parseInt(params.get('round'));
 
-        console.log('setting round', this.round);
 
         if(id) {
           this.poll$ = this.voteService.getPoll(id)
@@ -192,6 +197,14 @@ export class ResultsComponent implements OnInit {
         }
        
       });
+  }
+
+  getWinnerString(winnerArray) {
+    return this.resultsService.candidateListString(winnerArray)
+  }
+
+  pollSummaryStatement(results, winner_count, total_votes) {
+    return this.resultsService.pollSummaryStatement(results, winner_count, total_votes);
   }
 
   /**

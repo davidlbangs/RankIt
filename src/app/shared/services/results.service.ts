@@ -9,6 +9,34 @@ export class ResultsService {
 
   constructor() { }
 
+  pollSummaryStatement(results:Results, winner_count:number, total_votes:number) {
+    const total_rounds = results.rounds.length;
+    const wins = (winner_count > 1) ? 'win' : 'wins';
+    const rounds = (total_rounds > 1) ? 'rounds' : 'round';
+    
+    // We are shifting results so the 'last round' count is off in this context.
+    const last_round = total_rounds -1;
+    
+    // hasTie checks to see if there is a tie in the final round.
+    // it returns the round 
+    const hasTie = this.hasTie(last_round, results);
+
+    let electedString:string = this.candidateListString(results.elected);
+
+    if(hasTie > 0) {
+      return this.tieSummaryStatement(hasTie, results);
+    }
+    return `After ${total_rounds} ${rounds} and ${total_votes} votes, ${electedString} ${wins}.`;
+  }
+
+  tieSummaryStatement(winnerVoteCount:number, results:Results) {
+    const total_rounds = results.rounds.length;
+    const rounds = (total_rounds > 1) ? 'rounds' : 'round';
+    let tieParticipants = this.getChoicesByVoteCount(total_rounds, results, winnerVoteCount);
+    let tieString = this.candidateListString(tieParticipants);
+    return `After ${total_rounds} ${rounds}, the poll resulted in a tie between ${tieString} `;
+  }
+
 
   getPercentage(round: number, choice: string, results: Results, rounds:any, winner_count:number, winning_percentage: number, threshold:number) {
     if(winner_count === 1) {
@@ -127,11 +155,18 @@ export class ResultsService {
     * If there is, it returns the count of votes that resulted in the tie.
     */
   hasTie(round:number, results:Results) {
-    const lastRound = results.rounds[round];
-    const counts = Object.values(lastRound);
-    const max = Math.max(...counts);
-    const countOfMax = counts.filter(function(x){ return x === max; }).length
-    return (countOfMax > 1) ? max : 0;
+    // console.log('test', round, results);
+    if(results) {
+      const lastRound = results.rounds[round];
+      const counts = Object.values(lastRound);
+      const max = Math.max(...counts);
+      const countOfMax = counts.filter(function(x){ return x === max; }).length
+      return (countOfMax > 1) ? max : 0;
+    } else {
+      return 0;
+    }
+
+    return 0;
 
   } 
 

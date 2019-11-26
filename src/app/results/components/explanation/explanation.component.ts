@@ -118,23 +118,7 @@ export class ExplanationComponent implements OnInit {
   }
 
   pollSummaryStatement() {
-    const wins = (this.winner_count > 1) ? 'win' : 'wins';
-    const rounds = (this.total_rounds > 1) ? 'rounds' : 'round';
-    const hasTie = this.hasTie(this.total_rounds);
-
-    let electedString:string = this.resultsService.candidateListString(this.results.elected);
-
-    if(hasTie > 0) {
-      return this.tieSummaryStatement(hasTie);
-    }
-    return `After ${this.total_rounds} ${rounds} and ${this.total_votes} votes, ${electedString} ${wins}.`;
-  }
-
-  tieSummaryStatement(winnerVoteCount:number) {
-    const rounds = (this.total_rounds > 1) ? 'rounds' : 'round';
-    let tieParticipants = this.resultsService.getChoicesByVoteCount(this.total_rounds, this.results, winnerVoteCount);
-    let tieString = this.resultsService.candidateListString(tieParticipants);
-    return `After ${this.total_rounds} ${rounds}, the poll resulted in a tie between ${tieString} `;
+    return this.resultsService.pollSummaryStatement(this.results, this.winner_count, this.total_votes);
   }
 
   multiWinnerReductionStatement(round) {
@@ -154,10 +138,6 @@ export class ExplanationComponent implements OnInit {
 
   getLosers(round) {
     return this.resultsService.getEdges(round, this.results, 'min');
-  }
-
-  hasTie(round) {
-    return this.resultsService.hasTie(round, this.results);
   }
 
   isLastRound(round) {

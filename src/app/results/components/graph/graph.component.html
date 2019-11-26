@@ -15,7 +15,7 @@
     [class.is-eliminated]="getPercentage(round, choice) === 0"
     >
       <div class="meta">
-        <div class="percentage">{{getPercentage(round, choice) | percent }}</div>
+        <div class="percentage">{{getPercentage(round, choice) | percent:'1.0-1' }}</div>
         <div class="label">{{choice}}</div>
         
       </div>
