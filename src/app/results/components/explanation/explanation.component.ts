@@ -63,7 +63,7 @@ export class ExplanationComponent implements OnInit {
   roundHasWinner(round) {
     const values = Object.values(this.rounds[round]);
     const largest = Math.max(...values);
-    console.log(round, largest, this.results.threshold);
+    // console.log(round, largest, this.results.threshold);
     return (largest >= this.results.threshold) ? largest : 0;
   }
 
@@ -103,7 +103,7 @@ export class ExplanationComponent implements OnInit {
 
   noWinnerSummaryStatement(round) {
     const winners = this.getWinners(round);
-    console.log('winners', winners);
+    // console.log('winners', winners);
 
     const leaders = this.getLeaders(round);
     const losers = this.getLosers(round);

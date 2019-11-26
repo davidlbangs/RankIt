@@ -28,6 +28,21 @@ export class GraphComponent implements OnInit {
   ngOnInit() {
   }
 
+  get sortedChoices() {
+    let round = this.round;
+
+    // if we start at round 0, it's weird.
+    if(round == 0 ) { round = 1;}
+
+
+    // presently hardcoding to round 1, to avoid resorting after they start going through results.
+    const sorted = this.all_choices.sort((a, b) => (this.results.rounds[1][a] > this.results.rounds[1][b]) ? -1 : 1);
+
+    console.log('running sort', sorted, this.all_choices);
+    return sorted;
+
+  }
+
   //
   // * IF It's the last round, we may need to round up
   // So we skip doing the math.

@@ -9,7 +9,7 @@
 
 <div *ngIf="results">
   <div 
-    *ngFor="let choice of all_choices"
+    *ngFor="let choice of sortedChoices"
     class="result-row"
     [class.is-winner]="declareWinner(round, choice)"
     [class.is-eliminated]="getPercentage(round, choice) === 0"
