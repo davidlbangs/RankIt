@@ -33,19 +33,32 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
             <h2>Choices</h2>
           </div>
           <div class="" formArrayName="choices">
-            <mat-form-field appearance="outline" floatLabel="never" *ngFor="let c of choices.controls; index as i;">
+            <section *ngFor="let c of choices.controls; index as i;">
+            <mat-form-field appearance="outline" floatLabel="never">
                 <input matInput placeholder="" [formControlName]="i" (keydown)="onKeydown($event, i)">
 
-              <button 
-                *ngIf="choices.controls.length > 2"
-                mat-button matSuffix mat-icon-button aria-label="Remove"
-                tabindex="-1" 
-                (click)="removeChoice(i)">
-                <i class="fa fa-times"></i>
-              </button>
+                <button 
+                  *ngIf="choices.controls.length > 2"
+                  mat-button matSuffix mat-icon-button aria-label="Remove"
+                  tabindex="-1" 
+                  (click)="removeChoice(i)">
+                  <i class="fa fa-times"></i>
+                </button>
               
             </mat-form-field>
+            <div *ngIf="c.invalid && (c.dirty || c.touched)" class="alert alert-danger">
+              <div *ngIf="c.errors.required">
+                Choices cannot be left blank.
+              </div>
+            </div>
+            </section>
+            <div *ngIf="choices.invalid && (choices.dirty || choices.touched)" class="alert alert-danger">
+              <div *ngIf="choices.errors && choices.errors.validateUniqueChoices">
+                Choices must be unique.
+              </div>
           </div>
+          </div>
+          
 
 
           <button mat-button color="accent" type="button" class="poll-form__add"
@@ -95,7 +108,7 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
             <div class="option-row__option">
                   <mat-form-field>
                     <mat-select formControlName="winner_count">
-                      <mat-option *ngFor="let choice of choices.controls; let i = index" [value]="i+1">
+                      <mat-option *ngFor="let choice of totalWinners; let i = index;" [value]="i+1">
                         {{i+1}}
                       </mat-option>
                     </mat-select>
@@ -197,9 +210,9 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
       </form>
     </div>
 
-    <!--{{ form.value | json }}
+    {{ form.value | json }}
     <hr />
-    {{ poll | json }}-->
+    {{ poll | json }}
   `
 })
 export class PollFormComponent implements OnInit, OnChanges {
@@ -220,7 +233,7 @@ export class PollFormComponent implements OnInit, OnChanges {
     title: ['', Validators.required],
     keep_open: [''],
     limit_votes: [''],
-    choices: this.fb.array(['']),
+    choices: this.fb.array([''], this.validateUniqueChoices),
     length: this.fb.group({
       end_time: [''],
       display_count: [''],
@@ -242,6 +255,32 @@ export class PollFormComponent implements OnInit, OnChanges {
     public dialog: MatDialog
     ) {}
 
+  validateUniqueChoices(choices: FormArray) {
+    let a:string[] = choices.value;
+
+    let noDuplicates = true;
+    let counts = [];
+
+    if(!a.includes("")) {
+      for(var i = 0; i <= a.length; i++) {
+        if(counts[a[i]] === undefined) {
+          counts[a[i]] = 1;
+        } else {
+          noDuplicates = false;
+        }
+      }
+    }
+
+    // console.log('No Duplicates: ', noDuplicates, a, counts);
+
+    return noDuplicates ? null : {
+      validateUniqueChoices: {
+        valid: false
+      }
+    };
+  }
+
+
   get title() { return this.form.get('title'); }
   get label() { return this.form.get('label'); }
 
@@ -258,12 +297,18 @@ export class PollFormComponent implements OnInit, OnChanges {
     return this.form.get('choices') as FormArray;
   }
 
-  // get choiceControl() {
-  //   return this.fb.group({
-  //     label: [''],
-  //     initial_order: ['']
-  //   });
-  // }
+  // We only allow winners for choices - 1.
+  get totalWinners() {
+    const totalWinners = this.choices.controls.length - 1;
+    return new Array(totalWinners);
+  }
+
+  choicesArray(){
+    let choices = this.form.get('choices');
+    console.log('hey!', choices);
+  }
+
+
 
   get required() {
     return (
@@ -340,11 +385,11 @@ export class PollFormComponent implements OnInit, OnChanges {
 
     if(picker == 'winners') {
       title = 'Multi-Winner Polls';
-      body = 'Some elections (committees, for example) have multiple winners. To see how we calculate multi-winner polls, please check out our example on FairVote.org.';
+      body = 'Some elections (committees, for example) have multiple winners. To see how we calculate multi-winner polls, please check out our <a href="https://www.fairvote.org/multi_winner_rcv_example" target=_blank>example</a>.<br /><br />The maximum possible number of winners is the number of choices you add minus one.';
     }
     if(picker == 'label') {
       title = 'Custom Labels';
-      body = 'When showing how results are calculated, it helps to change the word “choice” to something specific to your poll. The label should always be singular.<br /><br /><strong>Example:</strong> In a poll on NBA players, we would use <strong>player</strong> as the label since “player” describes Michael Jordan, LeBron James, and Tim Duncan.';
+      body = 'When showing how results are calculated, it helps to change the word “choice” to something specific to your poll. The label should always be singular.<br /><br /><strong>Example:</strong> In a poll on NBA players, we would use <strong>player</strong> as the label since “player” describes Michael Jordan, LeBron James, and Tim Duncan.<br /><br /><strong>Irregular Plural:</strong> If your label has an irregular plural (child/children, woman/women) please stick to "choice".';
     }
 
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {

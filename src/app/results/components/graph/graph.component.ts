@@ -38,7 +38,7 @@ export class GraphComponent implements OnInit {
     // presently hardcoding to round 1, to avoid resorting after they start going through results.
     const sorted = this.all_choices.sort((a, b) => (this.results.rounds[1][a] > this.results.rounds[1][b]) ? -1 : 1);
 
-    console.log('running sort', sorted, this.all_choices);
+    // console.log('running sort', sorted, this.all_choices);
     return sorted;
 
   }
@@ -48,7 +48,8 @@ export class GraphComponent implements OnInit {
   // So we skip doing the math.
   // However, if it's not the last round, we'll do the math.
   declareWinner(round:number, choice:string) {
-    if(round == this.total_rounds) {
+    console.log('oh hey', round);
+    if(round == this.total_rounds || round == 0) {
       return this.results.elected.includes(choice);
     } else {
       return this.getPercentage(round, choice) >= this.winning_percentage;

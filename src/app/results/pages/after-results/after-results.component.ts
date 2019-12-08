@@ -18,8 +18,6 @@ import { VoteService } from '../../../shared/services/vote.service';
     <success-card 
       [poll]="poll$ | async"></success-card>
 
-    <footer class="actions" *ngIf="poll$ | async as poll">
-    </footer>
   `
 })
 export class AfterResultsComponent implements OnInit {

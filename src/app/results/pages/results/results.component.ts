@@ -27,10 +27,16 @@ import { environment } from '../../../../environments/environment';
       </header>
 
       <main class="clear-footer" *ngIf="poll.results as results; else noResults">
-          <div class="alert mt-3" *ngIf="poll.vote_count < (poll.choices.length * 2 + 1)">
-            <div>
-              Heads up: this poll doesn't have many votes yet. Results are displayed below, but they will be more meaningful once more people have voted. 
+          <div *ngIf="poll.vote_count < (poll.choices.length * 2 + 1)">
+            <div class="alert mt-3">
+              <div>
+                <h3 class="mb-2 color-white">Heads Up</h3>
+                <p>This poll doesn't have many votes yet. Results are displayed below, but they will be more meaningful once more people have voted. Share the poll to get more voters!</p>
+              </div>
             </div>
+            <share-poll [poll]="poll"></share-poll>
+
+            <hr class="mt-4 mb-4" />
           </div>
           <h2 class="mt-3 mb-1">
             {{ (round === 0) ? 'Final Result' : 'Round ' + round }}
@@ -38,7 +44,9 @@ import { environment } from '../../../../environments/environment';
           </h2>
           <p class="mb-1"></p>
           <!--<p class="mb-1">{{poll.vote_count}} votes in {{poll.results.rounds.length}} rounds to elect {{poll.winner_count}} {{poll.label}}s.</p>-->
-          <p class="mb-1" *ngIf="shiftedResults$ | async as shiftedResults">{{pollSummaryStatement(shiftedResults, poll.winner_count, poll.vote_count) }}</p>
+          <p class="mb-1" *ngIf="shiftedResults$ | async as shiftedResults">
+            {{pollSummaryStatement(shiftedResults, poll.winner_count, poll.vote_count) }}
+          </p>
           
           <hr>
 
@@ -48,7 +56,7 @@ import { environment } from '../../../../environments/environment';
             <hr />
           </div>
 
-          <div class="threshold-container">
+          <div>
           <span class="threshold-explanation">{{ 1/(1 + poll.winner_count) | percent }} TO WIN</span>
           </div>
           
@@ -66,7 +74,8 @@ import { environment } from '../../../../environments/environment';
 
           <h2 class="mt-3 mb-1">{{ round === 0 ? 'Poll' : 'Round'}} Summary</h2>
 
-          <results-explanation 
+          <results-explanation
+              *ngIf="poll.vote_count > (poll.choices.length * 2 + 1)" 
               [results]="shiftedResults$ | async" 
               [all_choices]="poll.choices"
               [round]="round"
@@ -74,6 +83,9 @@ import { environment } from '../../../../environments/environment';
               [total_votes]="poll.vote_count"
               [winner_count]="poll.winner_count"
               [label]="poll.label"></results-explanation> 
+
+
+          <p *ngIf="poll.vote_count < (poll.choices.length * 2 + 1)">There are not yet enough votes to show a meaningful summary.</p>
 
           <div class="mt-3 mb-3">
             <share-poll [poll]="poll"></share-poll>
