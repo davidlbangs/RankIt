@@ -221,7 +221,8 @@ export class ResultsComponent implements OnInit {
   }
 
   checkRound(poll:Poll, currentRound) {
-    if(poll.results.rounds.length < currentRound) {
+
+    if(poll.results && poll.results.rounds.length < currentRound) {
       this.router.navigate(['/results/' + poll.id]);
     }
   }
