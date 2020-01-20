@@ -31,14 +31,24 @@ export class GraphComponent implements OnInit {
   get sortedChoices() {
     let round = this.round;
 
+    let sorted = this.all_choices;
+
+    // hardcoding to round 1, to avoid resorting after they start going through results.
+    let choicesWithVotes = this.results.rounds[1];
+
     // if we start at round 0, it's weird.
     if(round == 0 ) { round = 1;}
 
+    // move items that got zero votes to the bottom
+    for(let x of sorted) {
+      if(!(x in choicesWithVotes)){
+        sorted.push(sorted.splice(sorted.indexOf(x), 1)[0]);
+      }
+    }
+    
+    sorted = this.all_choices.sort((a, b) => (choicesWithVotes[a] > choicesWithVotes[b]) ? -1 : 1);
 
-    // presently hardcoding to round 1, to avoid resorting after they start going through results.
-    const sorted = this.all_choices.sort((a, b) => (this.results.rounds[1][a] > this.results.rounds[1][b]) ? -1 : 1);
-
-    // console.log('running sort', sorted, this.all_choices);
+    // console.log('running sort', sorted, this.results.rounds[1], this.all_choices);
     return sorted;
 
   }
@@ -48,7 +58,6 @@ export class GraphComponent implements OnInit {
   // So we skip doing the math.
   // However, if it's not the last round, we'll do the math.
   declareWinner(round:number, choice:string) {
-    console.log('oh hey', round);
     if(round == this.total_rounds || round == 0) {
       return this.results.elected.includes(choice);
     } else {

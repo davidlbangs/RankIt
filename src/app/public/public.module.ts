@@ -7,6 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { HomeComponent } from './pages/home/home.component';
 import { MetaGuard } from '@ngx-meta/core';
 import { PrivacyComponent } from './pages/privacy/privacy.component';
+import { PublicNotFoundComponent } from './pages/not-found/not-found.component';
 import { DescriptionComponent } from './components/description/description.component';
 
 export const routes:Routes = [
@@ -14,6 +15,13 @@ export const routes:Routes = [
     data: {
           meta: {
             title: 'Privacy Policy'
+          }
+    } 
+  },
+  { path: 'not-found', component: PublicNotFoundComponent, canActivate: [MetaGuard],
+    data: {
+          meta: {
+            title: 'Nothing Found'
           }
     } 
   },
@@ -28,7 +36,7 @@ export const routes:Routes = [
 
 
 @NgModule({
-  declarations: [HomeComponent, PrivacyComponent, DescriptionComponent],
+  declarations: [HomeComponent, PrivacyComponent, DescriptionComponent, PublicNotFoundComponent],
   imports: [
     CommonModule,
     SharedModule,

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
 import { Observable, EMPTY, of } from 'rxjs';
 import { tap, filter, map, first } from 'rxjs/operators';
@@ -17,6 +18,7 @@ export class VoteService {
 
 
   constructor(
+              private router:Router,
               private cookie: CookieService,
               private store:Store,
               private db: AngularFirestore) { }
@@ -28,7 +30,14 @@ export class VoteService {
     .pipe(
           first(),
           tap({
-            next: val => { this.store.set('poll', val); return val; }
+            next: val => { 
+
+              // redirect out if we didn't find anything.
+              if(val === undefined) {
+                this.router.navigate(['/home/not-found']);
+              }
+              this.store.set('poll', val); return val; 
+            }
           })
           );
   }

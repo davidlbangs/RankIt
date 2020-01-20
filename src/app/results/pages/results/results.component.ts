@@ -45,7 +45,7 @@ import { environment } from '../../../../environments/environment';
           <p class="mb-1"></p>
           <!--<p class="mb-1">{{poll.vote_count}} votes in {{poll.results.rounds.length}} rounds to elect {{poll.winner_count}} {{poll.label}}s.</p>-->
           <p class="mb-1" *ngIf="shiftedResults$ | async as shiftedResults">
-            {{pollSummaryStatement(shiftedResults, poll.winner_count, poll.vote_count) }}
+            {{pollSummaryStatement(poll.results, poll.winner_count, poll.vote_count) }}
           </p>
           
           <hr>
@@ -114,7 +114,7 @@ import { environment } from '../../../../environments/environment';
             (click)="toAfterResults(poll)"
             class="d-block button-large p-1"
             *ngIf="round ===poll.results.rounds.length" >
-            Continue
+            Finish
           </button>
         </div>
     </footer>
@@ -216,6 +216,7 @@ export class ResultsComponent implements OnInit {
   }
 
   pollSummaryStatement(results, winner_count, total_votes) {
+    console.log('round count', results.rounds.length, results.rounds);
     return this.resultsService.pollSummaryStatement(results, winner_count, total_votes);
   }
 

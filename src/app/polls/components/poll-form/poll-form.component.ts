@@ -33,6 +33,9 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
             <h2>Choices</h2>
           </div>
           <div class="" formArrayName="choices">
+
+
+
             <section *ngFor="let c of choices.controls; index as i;">
             <mat-form-field appearance="outline" floatLabel="never">
                 <input matInput placeholder="" [formControlName]="i" (keydown)="onKeydown($event, i)">
@@ -56,7 +59,7 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
               <div *ngIf="choices.errors && choices.errors.validateUniqueChoices">
                 Choices must be unique.
               </div>
-          </div>
+            </div>
           </div>
           
 
@@ -114,7 +117,14 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
                     </mat-select>
                   </mat-form-field>
             </div>
+            
           </div>
+          <div *ngIf="winner_count.invalid && (winner_count.dirty || winner_count.touched)" class="alert alert-danger">
+            <div *ngIf="winner_count.errors.required">
+              Please choose the number of winners for this poll.
+            </div>
+          </div>
+
           <div class="option-row">
             <div class="option-row__label">
               Label <span class="explain" (click)="openDialog('label')">?</span>
@@ -129,7 +139,7 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
               <div *ngIf="label.errors.required">
                 A label is required.
               </div>
-            </div>
+          </div>
 
           <div class="cta-section" formGroupName="cta">
             <div class="option-row">
@@ -193,6 +203,7 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
               <div>
                 There are errors that need to be fixed above before this poll can be created.
               </div>
+              <div *ngIf="choices.invalid">The choices are entered incorrectly. Each choice must be unique and no choices can be left blank.</div>
           </div>
 
           <div class="poll-form__delete" *ngIf="exists">
@@ -210,9 +221,6 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
       </form>
     </div>
 
-    {{ form.value | json }}
-    <hr />
-    {{ poll | json }}
   `
 })
 export class PollFormComponent implements OnInit, OnChanges {
@@ -239,7 +247,7 @@ export class PollFormComponent implements OnInit, OnChanges {
       display_count: [''],
       display_units: ['']
     }),
-    winner_count: [''],
+    winner_count: ['', Validators.required],
     randomize_order: [''],
     label: ['', [Validators.required, RxwebValidators.unique()]],
     cta: this.fb.group({
@@ -282,6 +290,7 @@ export class PollFormComponent implements OnInit, OnChanges {
 
 
   get title() { return this.form.get('title'); }
+  get winner_count() { return this.form.get('winner_count'); }
   get label() { return this.form.get('label'); }
 
   get showLength() {
@@ -372,6 +381,14 @@ export class PollFormComponent implements OnInit, OnChanges {
 
   removeChoice(index: number) {
     this.choices.removeAt(index);
+
+    let winner_count = this.form.get('winner_count').value;
+
+    // If there are as many winners as choices, remove the winner count 
+    // this prevents allowing too many winners.
+    if(winner_count >= this.choices.length) {
+      this.form.get('winner_count').patchValue(null);
+    }
   }
 
   toggle() {
