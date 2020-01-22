@@ -3,7 +3,7 @@ import { Store } from 'store';
 
 import { Router } from '@angular/router';
 
-import { AuthService } from '../../../../auth/shared/services/auth/auth.service';
+import { AuthService } from '../../../auth/shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-account',

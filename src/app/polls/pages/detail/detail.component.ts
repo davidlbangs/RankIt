@@ -3,7 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { AuthService } from '../../../../auth/shared/services/auth/auth.service';
+import { AuthService } from '../../../auth/shared/services/auth/auth.service';
 
 import { Poll } from '../../../shared/models/poll.interface';
 import { PollService } from '../../../shared/services/poll.service';

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '../auth/shared/guards/auth.guard';
+import { AuthGuard } from './auth/shared/guards/auth.guard';
 
 export const routes:Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
@@ -10,6 +10,7 @@ export const routes:Routes = [
   { path: 'vote', loadChildren: () => import ('./vote/vote.module').then(m => m.VoteModule) },
   { path: 'results', loadChildren: () => import ('./results/results.module').then(m => m.ResultsModule) },
   { path: 'account', canActivate: [AuthGuard], loadChildren: () => import ('./account/account.module').then(m => m.AccountModule) },
+  { path: 'auth', loadChildren: () => import ('./auth/auth.module').then(m => m.AuthModule)},
   {
     path: '**',
     redirectTo: '/home/not-found'

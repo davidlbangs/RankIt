@@ -19,7 +19,7 @@ import { NgUniversalModule } from '@trilon/ng-universal';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 // AUTH
-import { AuthModule } from '../auth/auth.module';
+import { AuthModule } from './auth/auth.module';
 import { UserResolver } from './shared/services/resolver.service';
 // import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
 

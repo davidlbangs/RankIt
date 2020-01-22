@@ -8,7 +8,7 @@ import { switchMap, map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 
-import { User } from '../../../../app/shared/models/user.interface';
+import { User } from '../../../../shared/models/user.interface';
 
 import { Store } from 'store';
 

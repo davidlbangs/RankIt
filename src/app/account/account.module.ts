@@ -6,7 +6,7 @@ import { AccountComponent } from './pages/account/account.component';
 import { SharedModule } from '../shared/shared.module';
 
 // guards
-import { AuthGuard } from '../../auth/shared/guards/auth.guard';
+import { AuthGuard } from '../auth/shared/guards/auth.guard';
 import { MetaGuard } from '@ngx-meta/core';
 
 export const routes:Routes = [

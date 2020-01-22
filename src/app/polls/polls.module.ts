@@ -11,7 +11,7 @@ import { DetailComponent } from './pages/detail/detail.component';
 import { PollFormComponent, DialogOverviewExampleDialog } from './components/poll-form/poll-form.component';
 
 // guards
-import { AuthGuard } from '../../auth/shared/guards/auth.guard';
+import { AuthGuard } from '../auth/shared/guards/auth.guard';
 import { MetaGuard } from '@ngx-meta/core';
 
 import {  RxReactiveFormsModule } from "@rxweb/reactive-form-validators";

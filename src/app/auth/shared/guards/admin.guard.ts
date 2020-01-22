@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { tap, map, take } from 'rxjs/operators';
 import { AuthService } from '../services/auth/auth.service';
 
-import { User } from '../../../app/shared/models/user.interface';
+import { User } from '../../../shared/models/user.interface';
 
 import { Store } from 'store';
 

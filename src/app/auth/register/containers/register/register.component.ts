@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Router} from '@angular/router';
 import { AuthService } from '../../../shared/services/auth/auth.service';
 import { Observable } from 'rxjs/Observable';
-import { Store } from '../../../../store';
+import { Store } from 'store';
 import { PlatformService } from '@trilon/ng-universal';
 import {AuthProvider} from 'ngx-auth-firebaseui';
 

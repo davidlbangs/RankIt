@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Store } from 'store';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/shared/services/auth/auth.service';
+import { AuthService } from './auth/shared/services/auth/auth.service';
 import { User } from './shared/models/user.interface';
 import { Subscription } from 'rxjs';
 

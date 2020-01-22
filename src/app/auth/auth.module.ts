@@ -15,7 +15,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 export const ROUTES: Routes = [
   {
-    path: 'auth',
+    path: '',
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'login' },
       {path: 'login', loadChildren: () => import ('./login/login.module').then(m => m.LoginModule)},

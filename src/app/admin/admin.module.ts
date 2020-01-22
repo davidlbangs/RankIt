@@ -8,7 +8,7 @@ import { ManagePollsComponent } from './pages/manage-polls/manage-polls.componen
 import { MetaGuard } from '@ngx-meta/core';
 import { UserResolver } from '../shared/services/resolver.service';
 
-import { AdminGuard } from '../../auth/shared/guards/admin.guard';
+import { AdminGuard } from '../auth/shared/guards/admin.guard';
 
 import { ManageUsersComponent } from './pages/manage-users/manage-users.component';
 import { PollsByUserComponent } from './pages/polls-by-user/polls-by-user.component';
