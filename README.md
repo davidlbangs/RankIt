@@ -12,5 +12,6 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 `cd functions` > `npm run build`
 `firebase deploy --only functions`
 
+
 ## Deploy Main app
 `npm run deploy`
