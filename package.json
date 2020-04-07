@@ -32,7 +32,6 @@
     "@angular/router": "^8.2.14",
     "@nguniversal/express-engine": "^8.1.1",
     "@nguniversal/module-map-ngfactory-loader": "8.1.1",
-    "@ngx-meta/core": "^8.0.2",
     "@rxweb/reactive-form-validators": "^1.9.3",
     "core-js": "^3.1.4",
     "express": "^4.15.2",
