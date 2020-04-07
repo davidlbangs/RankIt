@@ -4,7 +4,7 @@ import { Router} from '@angular/router';
 import { AuthService } from '../../../shared/services/auth/auth.service';
 import { Observable } from 'rxjs/Observable';
 import { Store } from 'store';
-import { PlatformService } from '@trilon/ng-universal';
+//import { PlatformService } from '@trilon/ng-universal';
 import {AuthProvider} from 'ngx-auth-firebaseui';
 
 
@@ -48,10 +48,9 @@ export class LoginComponent implements OnInit {
   constructor(
               private store:Store,
               private authService: AuthService,
-              private router: Router,
-              private platformService:PlatformService
+              private router: Router
     ) {
-    this.isBrowser = platformService.isBrowser;
+    this.isBrowser = true; // platformService.isBrowser;
   }
 
   ngOnInit() {

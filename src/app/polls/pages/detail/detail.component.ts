@@ -8,7 +8,7 @@ import { AuthService } from '../../../auth/shared/services/auth/auth.service';
 import { Poll } from '../../../shared/models/poll.interface';
 import { PollService } from '../../../shared/services/poll.service';
 import { Store } from 'store';
-import { MetaService } from '@ngx-meta/core';
+import { MetaService } from 'src/meta';
 
 @Component({
   selector: 'app-detail',

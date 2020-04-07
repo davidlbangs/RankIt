@@ -12,7 +12,7 @@ import { TestComponent } from './pages/test/test.component';
 import { UserResolver } from '../shared/services/resolver.service';
 import { ExplanationComponent } from './components/explanation/explanation.component';
 
-import { MetaGuard } from '@ngx-meta/core';
+import { MetaGuard } from 'src/meta';
 import { AfterResultsComponent } from './pages/after-results/after-results.component';
 
 export const routes:Routes = [

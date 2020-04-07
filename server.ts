@@ -6,7 +6,7 @@ import { enableProdMode } from '@angular/core';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 
-import { createWindowMocks } from '@trilon/ng-universal';
+//import { createWindowMocks } from '@trilon/ng-universal';
 
 import * as express from 'express';
 import { join } from 'path';
@@ -36,7 +36,7 @@ const path = require('path');
 // const template = fs.readFileSync(path.join(__dirname, '.', 'dist', 'index.html')).toString();
 const template = fs.readFileSync(path.join(__dirname, join(DIST_FOLDER, '/index.html'))).toString();
 
-createWindowMocks(template);
+//createWindowMocks(template);
 
 // const win = domino.createWindow(template);
 // global['window'] = win;

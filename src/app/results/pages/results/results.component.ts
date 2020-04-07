@@ -12,7 +12,7 @@ import { AppSettings } from '../../../app.settings';
 
 import { Poll, Vote, Choice, Results } from '../../../shared/models/poll.interface';
 import { VoteService } from '../../../shared/services/vote.service';
-import { MetaService } from '@ngx-meta/core';
+import { MetaService } from 'src/meta';
 import { environment } from '../../../../environments/environment';
 
 

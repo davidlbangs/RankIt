@@ -13,7 +13,7 @@ import { SharedModule } from './shared/shared.module';
 import { Store } from 'store';
 import { CookieService } from 'ngx-cookie-service';
 
-import { NgUniversalModule } from '@trilon/ng-universal';
+//import { NgUniversalModule } from '@trilon/ng-universal';
 
 // Material
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -24,8 +24,8 @@ import { UserResolver } from './shared/services/resolver.service';
 // import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
 
 // META
-import { MetaModule, MetaLoader, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core';
 import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
+import { MetaLoader, MetaStaticLoader, PageTitlePositioning, MetaModule } from 'src/meta';
 
 export function metaFactory(): MetaLoader {
   return new MetaStaticLoader({
@@ -86,7 +86,7 @@ const firebaseAuthConfig = {
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    NgUniversalModule,
+   // NgUniversalModule,
     MetaModule.forRoot({
       provide: MetaLoader,
       useFactory: (metaFactory)
