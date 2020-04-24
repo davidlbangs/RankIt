@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, QueryList, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store } from 'store';
@@ -27,9 +27,11 @@ export class VoteComponent implements OnInit {
   vote:Vote = {"ip_address": null, "choices": Array()}; // local state
   choices: Choice[];
   user$ = this.store.select('user');
+  captchaOkay = false;
+  @ViewChildren('recaptcha') recaptchaElements: QueryList<ElementRef>;
 
   poll$: Observable<Poll> = this.store.select('poll');
-
+  is_open = false;
 
   constructor(
               private cookie:CookieService,
@@ -37,9 +39,19 @@ export class VoteComponent implements OnInit {
               private http:HttpClient,
               private router:Router,
               private voteService:VoteService,
+              private cd: ChangeDetectorRef,
               private route:ActivatedRoute,
               private store:Store) {
                }
+public ngAfterViewInit(): void
+{
+  this.recaptchaElements.changes.subscribe((comps: QueryList<ElementRef>) =>
+  {
+    if (this.is_open) {
+      this.addRecaptchaScript(comps.first);
+    }
+  });
+}
 
   ngOnInit() {
 
@@ -59,7 +71,7 @@ export class VoteComponent implements OnInit {
                 tap(next => this.choices = this.displayChoices(next)),
                 tap(next => this.meta.setTitle('Vote - ' + next.title)),
                 tap(next => {
-                  this.setBackButton(user, next)
+                  this.setBackButton(user, next);
                 })
                 );
 
@@ -69,6 +81,35 @@ export class VoteComponent implements OnInit {
         }
        
       });
+  }
+
+
+  addRecaptchaScript(element) {
+ 
+    window['grecaptchaCallback'] = () => {
+      this.renderReCaptcha(element);
+    }
+   
+    (function(d, s, id, obj){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "https://www.google.com/recaptcha/api.js?onload=grecaptchaCallback&amp;render=explicit";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'recaptcha-jssdk', this));
+   
+  }
+  renderReCaptcha(element) {
+    let self = this;
+    window['grecaptcha'].render(element.nativeElement, {
+      'sitekey' : '6LdzPOwUAAAAALrGEBItRBu9dJ1V3anW0Z3HaoHT',
+      'callback': (response) => {
+          this.http.get<any>("https://us-central1-rankit-vote.cloudfunctions.net/checkRecaptcha?response="+response).subscribe(res => {
+            self.captchaOkay = res.status;
+            self.cd.detectChanges();
+          });
+      }
+    });
   }
 
   displayChoices(poll:Poll) {
@@ -138,6 +179,7 @@ export class VoteComponent implements OnInit {
   limit_vote(poll:Poll, user:User) {
     const alreadyVoted = this.cookie.get('rankit-' + poll.id);
 
+    this.is_open = poll.is_open;
     // decide if they've voted already
     if(
        alreadyVoted &&
@@ -146,6 +188,10 @@ export class VoteComponent implements OnInit {
        ) {
       this.router.navigate(['/vote', poll.id, 'success']);
     }
+    if (poll.is_open == false) {
+      this.router.navigate(['/results', poll.id, 'summary']);
+    }
+    
   }
 
   isPollOwner(uid, poll_owner) {

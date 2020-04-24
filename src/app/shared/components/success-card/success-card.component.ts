@@ -1,6 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import {Poll } from '../../models/poll.interface';
 import { AppSettings } from '../../../app.settings';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'success-card',
@@ -16,11 +17,14 @@ import { AppSettings } from '../../../app.settings';
 
         <p class="mb-2">{{body}}</p>
 
-
+      
         <a 
           mat-button mat-raised-button [color]="'secondary'" 
           class="d-block has-icon dark-icon button-large p-1 mb-2" 
-          href="{{ctaUrl(poll)}}">{{ctaLabel(poll)}}</a>
+          href="{{ctaUrl(poll)}}" *ngIf="poll.cta.custom=='link'">{{ctaLabel(poll)}}</a>
+
+          <div *ngIf="poll.cta.custom=='html'" [innerHtml]="html(poll)"></div>
+
 
          <hr class="mb-2" />
 
@@ -35,7 +39,9 @@ export class SuccessCardComponent {
   @Input() fromVote:boolean = false;
   defaultText = AppSettings.defaultText;
 
-  constructor() { }
+  constructor(private _dom: DomSanitizer) { }
+
+
 
   get heading() {
     return this.defaultText.successTitle;
@@ -43,6 +49,10 @@ export class SuccessCardComponent {
 
   get body() {
     return this.defaultText.successBody;
+  }
+
+  html(poll:Poll) {
+    return this._dom.bypassSecurityTrustHtml(this.poll.cta.html);
   }
 
   ctaLabel(poll:Poll) {

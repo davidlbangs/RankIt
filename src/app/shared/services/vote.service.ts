@@ -46,7 +46,7 @@ export class VoteService {
     // console.log('submit', poll, vote);
 
     if(poll.limit_votes) {
-      this.cookie.set('rankit-' + poll.id, 'voted');
+      this.cookie.set('rankit-' + poll.id, 'voted',365);
     }
 
     vote.id = this.db.createId();

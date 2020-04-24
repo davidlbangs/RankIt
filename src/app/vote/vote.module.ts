@@ -20,11 +20,11 @@ export const routes:Routes = [
   { path: ':id',resolve: { resolverUser: UserResolver}, component: VoteComponent },
   { path: ':id/success', canActivate: [MetaGuard], resolve: { resolverUser: UserResolver}, component: SuccessComponent,
   data: {
-          meta: {
-            title: 'Vote Received!'
-          }
-    },
-   }
+    meta: {
+      title: 'Vote Received!'
+    }
+},
+}
 ];
 
 @NgModule({

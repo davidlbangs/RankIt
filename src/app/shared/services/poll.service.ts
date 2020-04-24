@@ -57,7 +57,7 @@ export class PollService {
   // pollsRef.where('keep_open', '==', 'true').where('length.end_time', '<', Date.now())
 
   getPublicPolls() {
-    return this.db.collection<Poll>('polls', ref => ref.where('is_promoted', '==', true).where('is_open', '==', true).orderBy('date_created')).valueChanges()
+    return this.db.collection<Poll>('polls', ref => ref.where('is_promoted', '==', true).where('is_open', '==', true).where('is_published', '==', true).orderBy('date_created')).valueChanges()
     .pipe(
           tap({
             next: val => this.store.set('publicPolls', val)
@@ -95,12 +95,13 @@ export class PollService {
     return of(initialPoll);
   }
 
-  async addPoll(poll:Poll) {
+  async addPoll(poll:Poll, publish: boolean) {
     // TODO: pull real owner_uid
     poll.owner_uid = this.uid;
     poll.vote_count = 0;
     poll.is_open = true;
     poll.is_promoted = false;
+    poll.is_published = publish;
     poll.date_created = Date.now();
 
     // console.log(poll.owner_uid);
@@ -124,6 +125,9 @@ export class PollService {
 
   togglePollPromoted(id:string, is_promoted) {
     return this.db.doc(`polls/${id}`).update({'is_promoted': !is_promoted});
+  }
+  togglePollPublished(id:string, is_published) {
+    return this.db.doc(`polls/${id}`).update({'is_published': !is_published});
   }
 
   updatePoll(key:string, poll:Poll) {

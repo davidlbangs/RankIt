@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, SimpleChanges, Output, Input, EventEmitter, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, Output, Input, EventEmitter, ChangeDetectionStrategy, Inject, ElementRef, ViewChild } from '@angular/core';
 import { FormArray, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { PollService } from '../../../shared/services/poll.service';
@@ -6,6 +6,7 @@ import { Poll } from '../../../shared/models/poll.interface';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'poll-form',
@@ -141,38 +142,69 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
               </div>
           </div>
 
-          <div class="cta-section" formGroupName="cta">
-            <div class="option-row">
-                <mat-checkbox formControlName="custom" [labelPosition]="'before'">Custom Call to Action</mat-checkbox>
-             </div>
-             <div class="cta-section__setup" *ngIf="showCustomCTA">
-                 <div class="header mt-1 mb-1">
-                   <h3 class="mb-1">Custom Call to Action</h3>
-                   <p>Once a user has finished voting, they’ll be shown a screen that describes Ranked Choice voting. You may show a custom button to direct users back to your website.</p>
-                 </div>
-                 <div class="option-row">
-                    <div class="option-row__label">
-                      <strong>CTA Button Label</strong>
-                    </div>
-                    <div class="option-row__option">
-                          <mat-form-field appearance="outline">
-                            <input matInput formControlName="label" />
-                          </mat-form-field>
-                    </div>
-                  </div> 
-                <div class="option-row mt-0 pt-0">
-                  <div class="option-row__label">
-                    <strong>CTA Link</strong>
-                  </div>
-                  <div class="option-row__option">
-                        <mat-form-field appearance="outline">
-                          <input matInput formControlName="url" />
-                        </mat-form-field>
-                  </div>
-                </div> 
+          <div class="cta-section option-row" formGroupName="cta">
+          <div class="option-row__label">
+           Custom Call to Action
+          </div>
+          <div class="option-row__option">
+                <!--mat-checkbox formControlName="custom" [labelPosition]="'before'">Custom Call to Action</mat-checkbox-->
+                <mat-form-field>
+                <mat-select formControlName="custom">
+                  <mat-option [value]="'link'">
+                    Link
+                  </mat-option>
+                  <mat-option [value]="'html'">
+                    HTML
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+                </div>
+             
             </div>
           </div>
-        </div>
+          <div class="cta-section__setup" *ngIf="showCustomCTA" formGroupName="cta">
+            <div class="header mt-1 mb-1">
+              <h3 class="mb-1">Custom Call to Action</h3>
+              <p>Once a user has finished voting, they’ll be shown a screen that describes Ranked Choice voting. You may show a custom button to direct users back to your website.</p>
+            </div>
+            <div class="option-row">
+              <div class="option-row__label">
+                <strong>CTA Button Label</strong>
+              </div>
+              <div class="option-row__option">
+                    <mat-form-field appearance="outline">
+                      <input matInput formControlName="label" />
+                    </mat-form-field>
+              </div>
+            </div> 
+             <div class="option-row mt-0 pt-0">
+              <div class="option-row__label">
+                <strong>CTA Link</strong>
+              </div>
+              <div class="option-row__option">
+                    <mat-form-field appearance="outline">
+                      <input matInput formControlName="url" />
+                    </mat-form-field>
+              </div>
+            </div> 
+          </div>
+
+          <div class="cta-section__setup" *ngIf="showCustomHTML" formGroupName="cta">
+            <div class="header mt-1 mb-1">
+              <h3 class="mb-1">Custom HTML</h3>
+              <p>Once a user has finished voting, they’ll be shown a screen that describes Ranked Choice voting. You may show a custom HTML snippet to direct users back to your website.</p>
+            </div>
+            <div class="option-row">
+              <div class="option-row__label">
+                <strong>HTML</strong>
+              </div>
+              <div class="option-row__option">
+                    <mat-form-field appearance="outline">
+                      <textarea matInput formControlName="html"></textarea>
+                    </mat-form-field>
+              </div>
+            </div> 
+          </div>
 
         <hr class="mt-3 mb-3" />
 
@@ -181,11 +213,21 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
             <button 
               type="button"
               *ngIf="!exists"
-              [disabled]="form.invalid && (form.dirty || form.touched)"
-              (click)="createPoll()"
+              [disabled]="(form.invalid && (form.dirty || form.touched))"
+              (click)="createPoll(false)"
               mat-raised-button [color]="'primary'" 
               class=" has-icon dark-icon mb-3 mr-1">
-              Create Poll
+              Save Poll
+            </button>
+
+            <button 
+              type="button"
+              *ngIf="!exists"
+              [disabled]="(form.invalid && (form.dirty || form.touched))"
+              (click)="createPoll(true)"
+              mat-raised-button [color]="'primary'" 
+              class=" has-icon dark-icon mb-3 mr-1">
+              Save Poll & Publish
             </button>
 
             <button 
@@ -223,7 +265,7 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
   `
 })
-export class PollFormComponent implements OnInit, OnChanges {
+export class PollFormComponent implements OnChanges {
   toggled = false;
   exists = false;
 
@@ -232,6 +274,8 @@ export class PollFormComponent implements OnInit, OnChanges {
 
   @Output() 
     create = new EventEmitter<Poll>();
+  @Output() 
+    createPublish = new EventEmitter<Poll>();
   @Output() 
     update = new EventEmitter<Poll>();
   @Output() 
@@ -253,14 +297,16 @@ export class PollFormComponent implements OnInit, OnChanges {
     cta: this.fb.group({
       custom: [''],
       label: [''],
-      url: ['']
+      url: [''],
+      html: ['']
     }),
 
   });
 
   constructor(
     private fb: FormBuilder,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public http: HttpClient
     ) {}
 
   validateUniqueChoices(choices: FormArray) {
@@ -287,7 +333,7 @@ export class PollFormComponent implements OnInit, OnChanges {
       }
     };
   }
-
+  
 
   get title() { return this.form.get('title'); }
   get winner_count() { return this.form.get('winner_count'); }
@@ -298,7 +344,12 @@ export class PollFormComponent implements OnInit, OnChanges {
   }
 
   get showCustomCTA() {
-    return this.form.get('cta').get('custom').value;
+    console.log('va: ', this.form.get('cta').get('custom').value);
+    return this.form.get('cta').get('custom').value == "link";
+  }
+
+  get showCustomHTML() {
+    return this.form.get('cta').get('custom').value == "html";
   }
 
 
@@ -326,9 +377,7 @@ export class PollFormComponent implements OnInit, OnChanges {
       );
   }
 
-  ngOnInit() {
-    
-  }
+
 
   ngOnChanges(changes: SimpleChanges) {
      // this is the stream checker for when the poll is populated.

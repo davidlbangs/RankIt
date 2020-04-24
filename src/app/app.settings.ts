@@ -39,7 +39,8 @@ export class AppSettings {
       "cta": {
         "custom": false,
         "label": "Bring RCV to My Community",
-        "url": "https://www.fairvote.org/"
+        "url": "https://www.fairvote.org/",
+        "html": ""
       },
       "is_public": false
      

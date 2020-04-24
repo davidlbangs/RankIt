@@ -68,6 +68,8 @@ import { MetaService } from 'src/meta';
         <share-poll [poll]="poll"></share-poll>
         <embed-poll [poll]="poll"></embed-poll>
         <hr class="mt-3 mb-4" />
+        <button *ngIf="poll.is_published" (click)="togglePublished(poll)" mat-stroked-button color="red" class="has-icon">Unpublish Poll</button>
+        <button *ngIf="!poll.is_published" (click)="togglePublished(poll)" mat-stroked-button color="red" class="has-icon">Publish Poll</button>
         <button (click)="toggleDelete()" mat-stroked-button color="red" class="has-icon"><i class="fa fa-times"></i>Delete Poll</button>
         <div class="confirmDelete" *ngIf="showDelete">
           Are you sure? <button mat-raised-button color="warn" (click)="deletePoll(poll)">Delete</button> <button mat-button (click)="toggleDelete()">Cancel</button>
@@ -124,6 +126,10 @@ export class DetailComponent implements OnInit {
 
   togglePromoted(poll:Poll) {
     this.pollService.togglePollPromoted(poll.id, poll.is_promoted);
+  }
+
+  togglePublished(poll:Poll) {
+    this.pollService.togglePollPublished(poll.id, poll.is_published);
   }
 
   toggleDelete() {

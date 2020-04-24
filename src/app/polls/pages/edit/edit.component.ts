@@ -28,7 +28,8 @@ import { Poll } from '../../../shared/models/poll.interface';
     <div class="" *ngIf="poll$ | async as poll; else loading;">
       <poll-form
         [poll]="poll"
-        (create)="addPoll($event)"
+        (create)="addPoll($event, false)"
+        (createPublish)="addPoll($event, true)"
         (update)="updatePoll($event)"
         (remove)="removePoll($event)">
       </poll-form>
@@ -78,8 +79,8 @@ export class EditComponent implements OnInit, OnDestroy {
      this.subscription.unsubscribe();
   }
 
-  async addPoll(event: Poll) {
-    let newPollID = await this.pollService.addPoll(event);
+  async addPoll(event: Poll, publish: boolean) {
+    let newPollID = await this.pollService.addPoll(event, publish);
 
     console.log('poll added', newPollID);
 

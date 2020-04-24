@@ -6,6 +6,7 @@ export interface Poll {
 
   title: string;
   is_open?: boolean;
+  is_published?: boolean;
   is_promoted?: boolean;
   limit_votes?: boolean;
   date_created: number;
@@ -32,6 +33,7 @@ export interface Poll {
     custom: boolean;
     label: string;
     url: string;
+    html: string;
   };
 
   // hidden option
