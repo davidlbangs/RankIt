@@ -7,6 +7,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { HttpClient } from '@angular/common/http';
+import { User } from '../../../shared/models/user.interface';
 
 @Component({
   selector: 'poll-form',
@@ -71,6 +72,36 @@ import { HttpClient } from '@angular/common/http';
         </div>
 
         <div class="poll-form__options">
+        <div *ngIf="user.roles.admin" formGroupName="customizations">
+          <h2>Customizations</h2>
+
+          <div class="option-row">
+          <div class="option-row__label">
+          <p>Logo URL</p>
+        </div>
+          <mat-form-field appearance="outline" floatLabel="never">
+            <input matInput placeholder="" formControlName="logoUrl">
+          </mat-form-field>
+          </div>
+
+          <div class="option-row">
+          <div class="option-row__label">
+          <p>Bar Color (Hexcode)</p>
+        </div>
+          <mat-form-field appearance="outline" floatLabel="never">
+            <input matInput placeholder="" formControlName="barColor">
+          </mat-form-field>
+          </div>
+
+          <div class="option-row">
+          <div class="option-row__label">
+          <p>Font Color (Hexcode)</p>
+        </div>
+          <mat-form-field appearance="outline" floatLabel="never">
+            <input matInput placeholder="" formControlName="color">
+          </mat-form-field>
+          </div>
+        </div>
           
           <h2>Options</h2>
 
@@ -271,6 +302,8 @@ export class PollFormComponent implements OnChanges {
 
   @Input()
     poll:Poll;
+  @Input()
+    user:User;
 
   @Output() 
     create = new EventEmitter<Poll>();
@@ -293,6 +326,11 @@ export class PollFormComponent implements OnChanges {
     }),
     winner_count: ['', Validators.required],
     randomize_order: [''],
+    customizations: this.fb.group({
+      logoUrl: [''],
+      barColor: [''],
+      color: ['']
+    }),
     label: ['', [Validators.required, RxwebValidators.unique()]],
     cta: this.fb.group({
       custom: [''],

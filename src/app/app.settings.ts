@@ -36,6 +36,11 @@ export class AppSettings {
       },
       "randomize_order": true,
       "label": "choice",
+      "customizations": {
+        "barColor": "",
+        "logoUrl": "",
+        "color": ""
+      },
       "cta": {
         "custom": false,
         "label": "Bring RCV to My Community",

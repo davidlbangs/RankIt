@@ -36,6 +36,12 @@ export interface Poll {
     html: string;
   };
 
+  customizations: {
+    logoUrl: string;
+    barColor: string;
+    color: string;
+  };
+
   // hidden option
   is_public: boolean;
 }

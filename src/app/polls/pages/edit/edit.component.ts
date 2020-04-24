@@ -24,16 +24,18 @@ import { Poll } from '../../../shared/models/poll.interface';
       </h1>
       <hr class="mb-2" />
     </div>
-
-    <div class="" *ngIf="poll$ | async as poll; else loading;">
+    <ng-container *ngIf="user$ | async as user else loading">
+    <div class="" *ngIf="poll$ | async as poll else loading">
       <poll-form
         [poll]="poll"
+        [user]="user"
         (create)="addPoll($event, false)"
         (createPublish)="addPoll($event, true)"
         (update)="updatePoll($event)"
         (remove)="removePoll($event)">
       </poll-form>
     </div>
+    </ng-container>
 
     <ng-template #loading>
       <div class="message">
@@ -48,6 +50,7 @@ import { Poll } from '../../../shared/models/poll.interface';
 export class EditComponent implements OnInit, OnDestroy {
   
   poll$: Observable<Poll | {}>; // should be poll
+  user$: Observable<any>;
   subscription: Subscription;
 
   constructor(
@@ -58,6 +61,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.user$ = this.store.select<any>('user');
     this.store.set('backButton', 'polls');
     this.subscription = this.pollService.getUserPolls().subscribe();
 
