@@ -20,6 +20,11 @@
 button:disabled, button:hover:disabled {
   background-color: rgba(0, 0, 0, 0.12) !important;
 }
+#captcha {
+  width:50%;
+  min-width:50%;
+  text-align:center;
+}
 .vote-list {
   min-height: 80px;
   margin-bottom: 0.25rem;
