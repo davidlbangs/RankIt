@@ -30,10 +30,10 @@ export class ResultsService {
   }
 
   tieSummaryStatement(winnerVoteCount:number, results:Results) {
-    const total_rounds = results.rounds.length - 1;
+    const total_rounds = results.rounds.length;
     const rounds = (total_rounds > 1) ? 'rounds' : 'round';
 
-    let tieParticipants = this.getChoicesByVoteCount(total_rounds, results, winnerVoteCount);
+    let tieParticipants = this.getChoicesByVoteCount((total_rounds-1), results, winnerVoteCount);
     let tieString = this.candidateListString(tieParticipants); 
 
     let statement = `After ${total_rounds} ${rounds}, the poll resulted in a tie between ${tieString}.`;

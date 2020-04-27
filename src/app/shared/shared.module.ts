@@ -21,6 +21,7 @@ import { ShufflePipe } from './pipes/shuffle.pipe';
 import { SharePollComponent } from './components/share-poll/share-poll.component';
 import { EmbedPollComponent } from './components/embed-poll/embed-poll.component';
 import { SuccessCardComponent } from './components/success-card/success-card.component';
+import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 
 @NgModule({
   declarations: [HeaderComponent, ShufflePipe, SharePollComponent, EmbedPollComponent, SuccessCardComponent],
@@ -28,6 +29,7 @@ import { SuccessCardComponent } from './components/success-card/success-card.com
     CommonModule,
     RouterModule,
     AngularFireAuthModule,
+    AngularFireAnalyticsModule,
     MatButtonModule,
     MatCheckboxModule,
     MatListModule,

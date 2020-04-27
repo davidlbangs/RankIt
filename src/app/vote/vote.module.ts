@@ -13,6 +13,7 @@ import { SuccessComponent } from './pages/success/success.component';
 
 import { UserResolver } from '../shared/services/resolver.service';
 import { MetaGuard } from 'src/meta';
+import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 
 export const routes:Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'not-found' },

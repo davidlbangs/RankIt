@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAnalytics, AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { environment } from '../environments/environment';
 
 import { SharedModule } from './shared/shared.module';
@@ -49,7 +50,9 @@ const firebaseAuthConfig = {
                     databaseURL: environment.firebase.databaseURL,
                     projectId: environment.firebase.projectId,
                     storageBucket: environment.firebase.storageBucket,
-                    messagingSenderId: environment.firebase.messagingSenderId
+                    messagingSenderId: environment.firebase.messagingSenderId,
+                    appId: environment.firebase.appId,
+                    measurementId: environment.firebase.measurementId
                 }
 
 
@@ -95,6 +98,7 @@ const firebaseAuthConfig = {
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    AngularFireAnalyticsModule,
     // FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     NgxAuthFirebaseUIModule.forRoot(firebaseAuthConfig),
     BrowserAnimationsModule,

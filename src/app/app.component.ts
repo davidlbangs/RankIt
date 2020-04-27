@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { AuthService } from './auth/shared/services/auth/auth.service';
 import { User } from './shared/models/user.interface';
 import { Subscription } from 'rxjs';
+import { FirebaseAnalytics } from '@angular/fire';
 
 @Component({
   selector: 'app-root',
@@ -47,6 +48,7 @@ export class AppComponent implements OnInit {
               private db: AngularFirestore,
               private router:Router,
               private authService:AuthService,
+             // private analytics: FirebaseAnalytics,
               private store: Store) {
     this.items = db.collection('items').valueChanges();
   }
@@ -54,6 +56,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
      this.subscription = this.authService.user$.subscribe();
      this.user$ = this.store.select('user');
+
   }
 
   checkState() {

@@ -14,6 +14,7 @@ import { User } from '../../../shared/models/user.interface';
 import { VoteService } from '../../../shared/services/vote.service';
 import { MetaService } from 'src/meta';
 import { CookieService } from 'ngx-cookie-service';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class VoteComponent implements OnInit {
               private router:Router,
               private voteService:VoteService,
               private cd: ChangeDetectorRef,
+              private analytics: AngularFireAnalytics,
               private route:ActivatedRoute,
               private store:Store) {
                }
@@ -136,6 +138,10 @@ public ngAfterViewInit(): void
 
   async submitVote(poll:Poll, vote:Vote) {
     await this.voteService.submitVote(poll, vote);
+
+    this.analytics.logEvent('vote', {pollId: poll.id})
+    .then((res: any) => console.log(res))
+    .catch((error: any) => console.error(error));
 
     this.router.navigate(['vote', poll.id, 'success']);
   }

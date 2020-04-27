@@ -53,6 +53,7 @@
 
   <footer class="actions">
     <div style="" #recaptcha id="captcha" *ngIf="poll.is_open"></div>
+    <div style="display:none;">{{captchaOkay}} {{vote.choices.length}}</div>
     <button 
       *ngIf="poll.is_open"
       (click)="submitVote(poll, vote)"
