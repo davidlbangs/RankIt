@@ -17,7 +17,9 @@
     width: 100%;
   }
 }
-
+button:disabled, button:hover:disabled {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
 .vote-list {
   min-height: 80px;
   margin-bottom: 0.25rem;

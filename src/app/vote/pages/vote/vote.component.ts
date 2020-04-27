@@ -144,11 +144,13 @@ public ngAfterViewInit(): void
     // console.log('add', choice);
     this.choices = this.choices.filter(obj => obj !== choice); // Remove from old.
     this.vote.choices.push(choice); // add to new.
+    this.cd.detectChanges();
   }
 
   removeFromVote(choice:Choice) {
     this.vote.choices = this.vote.choices.filter(obj => obj !== choice);
     this.choices.push(choice);
+    this.cd.detectChanges();
   }
 
   moveUp(choice:Choice) {
@@ -156,6 +158,7 @@ public ngAfterViewInit(): void
     if (index > 0) {
       this.vote.choices = this.array_move(this.vote.choices, index, index - 1);
     }
+    this.cd.detectChanges();
   }
 
   moveDown(choice:Choice) {
@@ -163,6 +166,7 @@ public ngAfterViewInit(): void
     if (index < this.vote.choices.length) {
       this.vote.choices = this.array_move(this.vote.choices, index, index + 1);
     }
+    this.cd.detectChanges();
   }
 
   getIPAddress() {
