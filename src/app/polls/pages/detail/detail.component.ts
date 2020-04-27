@@ -43,6 +43,15 @@ import { MetaService } from 'src/meta';
           <p *ngIf="!poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until {{poll.length.end_time | date : 'long'}}</p>
         </mat-card>
 
+        <mat-card class="mb-2">
+          <mat-slide-toggle [checked]="poll.results_public" (click)="toggleResultsPublic(poll)">
+            {{poll.results_public ? 'Show results' : 'Do not show results'}}
+          </mat-slide-toggle>
+
+          <!-- p *ngIf="poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until you close it.</p>
+          <p *ngIf="!poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until {{poll.length.end_time | date : 'long'}}</p-->
+        </mat-card>
+
         <mat-card class="mb-2" *ngIf="canPromotePoll()">
           <mat-slide-toggle [checked]="poll.is_promoted" (click)="togglePromoted(poll)">
             {{poll.is_promoted ? 'Promoted' : 'Not Promoted'}}
@@ -122,6 +131,10 @@ export class DetailComponent implements OnInit {
 
   toggleOpen(poll:Poll) {
     this.pollService.togglePollOpen(poll.id, poll.is_open);
+  }
+
+  toggleResultsPublic(poll:Poll) {
+    this.pollService.togglePollResultsPublic(poll.id, poll.results_public);
   }
 
   togglePromoted(poll:Poll) {

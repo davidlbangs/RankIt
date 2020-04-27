@@ -26,6 +26,7 @@ import { environment } from '../../../../environments/environment';
           <h1 class="">{{poll.title}}</h1>  
       </header>
 
+      <ng-container *ngIf="poll.results_public else noResultsYet">
       <main class="clear-footer" *ngIf="poll.results as results; else noResults">
           <div *ngIf="poll.vote_count < (poll.choices.length * 2 + 1)">
             <div class="alert mt-3">
@@ -118,6 +119,7 @@ import { environment } from '../../../../environments/environment';
           </button>
         </div>
     </footer>
+    </ng-container>
 
         <ng-template #noResults>
            <main>
@@ -131,6 +133,26 @@ import { environment } from '../../../../environments/environment';
 
             <div class="alert" *ngIf="!poll.is_open" class="mt-3 mb-3">
               <p class="mb-2">Hmm...There are no results to display, but this poll is closed. Sorry!</p>
+              <p>
+                <button [routerLink]="['/']"
+                mat-raised-button color="" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-chevron-left"></i>Back to Home Page</button>
+              </p>
+            </div>
+          </main>
+        </ng-template>
+
+        <ng-template #noResultsYet>
+           <main>
+            <div class="alert" *ngIf="poll.is_open" class="mt-3 mb-3">
+              <p class="mb-2">There are no results yet. How about voting?</p>
+              <p>
+                <button [routerLink]="['/vote', poll.id]"
+                mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-pencil"></i>Vote on this Poll</button>
+              </p>
+            </div>
+
+            <div class="alert" *ngIf="!poll.is_open" class="mt-3 mb-3">
+              <p class="mb-2">Hmm...There are no results yet, but this poll is closed. Check back later!</p>
               <p>
                 <button [routerLink]="['/']"
                 mat-raised-button color="" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-chevron-left"></i>Back to Home Page</button>

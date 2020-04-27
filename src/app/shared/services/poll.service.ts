@@ -123,6 +123,10 @@ export class PollService {
     return this.db.doc(`polls/${id}`).update({'is_open': !is_open, 'keep_open': true });
   }
 
+  togglePollResultsPublic(id:string, results_public) {
+    return this.db.doc(`polls/${id}`).update({'results_public': !results_public });
+  }
+
   togglePollPromoted(id:string, is_promoted) {
     return this.db.doc(`polls/${id}`).update({'is_promoted': !is_promoted});
   }
