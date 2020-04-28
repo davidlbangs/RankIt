@@ -144,7 +144,7 @@ export class ExplanationComponent implements OnInit {
   }
 
   isLastRound(round) {
-    return this.resultsService.isLastRound((round-1), this.results);
+    return this.resultsService.isLastRound((round), this.results);
   }
 
 
