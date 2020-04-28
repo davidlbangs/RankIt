@@ -57,7 +57,7 @@ export class HeaderComponent implements OnInit {
     this.backButton$ = this.store.select('backButton');
 
     this.poll$.subscribe(poll => {
-      if (poll && poll.customizations.logoUrl != "") {
+      if (poll && poll.customizations && poll.customizations.logoUrl != "") {
         this.customLogo = true;
         this.logoUrl = poll.customizations.logoUrl;
       }

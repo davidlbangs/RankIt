@@ -61,6 +61,8 @@ export class ExplanationComponent implements OnInit {
   
 
   roundHasWinner(round) {
+    round = round - 1;
+    console.log("rounds: ", this.rounds, round);
     const values = Object.values(this.rounds[round]);
     const largest = Math.max(...values);
     // console.log(round, largest, this.results.threshold);
@@ -70,7 +72,7 @@ export class ExplanationComponent implements OnInit {
   getWinners(round) {
     let winners = {};
     for(let choice of this.all_choices){
-      let pct = this.resultsService.getPercentage(round, 
+      let pct = this.resultsService.getPercentage((round-1), 
                                              choice, 
                                              this.results, 
                                              this.rounds, 
@@ -118,6 +120,7 @@ export class ExplanationComponent implements OnInit {
   }
 
   pollSummaryStatement() {
+    console.log("round audi: ", this.results.rounds);
     return this.resultsService.pollSummaryStatement(this.results, this.winner_count, this.total_votes);
   }
 
@@ -133,15 +136,15 @@ export class ExplanationComponent implements OnInit {
   }
 
   getLeaders(round) {
-    return this.resultsService.getEdges(round, this.results, 'max');
+    return this.resultsService.getEdges((round-1), this.results, 'max');
   }
 
   getLosers(round) {
-    return this.resultsService.getEdges(round, this.results, 'min');
+    return this.resultsService.getEdges((round-1), this.results, 'min');
   }
 
   isLastRound(round) {
-    return this.resultsService.isLastRound(round, this.results);
+    return this.resultsService.isLastRound((round-1), this.results);
   }
 
 

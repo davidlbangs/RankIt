@@ -11,6 +11,7 @@ export class ResultsService {
 
   pollSummaryStatement(results:Results, winner_count:number, total_votes:number) {
     const total_rounds = results.rounds.length;
+    //console.log("rounds: ", total_rounds);
     const wins = (winner_count > 1) ? 'win' : 'wins';
     const rounds = (total_rounds > 1) ? 'rounds' : 'round';
     
