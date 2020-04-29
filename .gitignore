@@ -6,7 +6,7 @@
 /public/*
 /tmp
 /out-tsc
-
+/src/environment
 # dependencies
 /node_modules
 
