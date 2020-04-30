@@ -18,16 +18,20 @@ import { Poll } from '../../models/poll.interface';
       <ng-container *ngIf="poll$ | async as poll else default">
 
       <div class="logo">
-      <img style="max-width:150px;"src="/assets/images/rankit-color.svg" alt="RankIt" [routerLink]="['/']" />
+      <img style="max-width:150px;" src="/assets/images/rankit-color.svg" alt="RankIt" [routerLink]="['/']" />
 </div>
-<div class="logo">
+<div class="logo" style="max-width:200px;">
       <img style="max-width:200px;" *ngIf="customLogo" [src]="logoUrl" />
     </div>
+    
         </ng-container>
         <ng-template #default>
       <div class="logo">
         <img src="/assets/images/rankit-color.svg" alt="RankIt" [routerLink]="['/']" />
       </div>
+      
+      </ng-template>
+
       <div class="action">
       <div class="longMenu">
         <ul>
@@ -68,7 +72,6 @@ import { Poll } from '../../models/poll.interface';
           <a mat-button color="" [routerLink]="['/auth/login']" class="button">Login</a>
         </div>-->
       </div>
-      </ng-template>
     </header>
 
   `,

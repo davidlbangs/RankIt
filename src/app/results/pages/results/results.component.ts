@@ -23,7 +23,11 @@ import { environment } from '../../../../environments/environment';
     
       <div *ngIf="poll$ | async as poll; else loading;">
       <header class="poll-header">
-          <h1 class="">{{poll.title}}</h1>  
+          <h1 class="">{{poll.title}}</h1>
+          <p class="mb-1">
+            {{pollSummaryStatement(poll.results, poll.winner_count, poll.vote_count) }}
+          </p>
+          <share-poll [poll]="poll"></share-poll>
       </header>
 
       <ng-container *ngIf="poll.results_public else noResultsYet">
@@ -45,24 +49,25 @@ import { environment } from '../../../../environments/environment';
           </h2>
           <p class="mb-1"></p>
           <!--<p class="mb-1">{{poll.vote_count}} votes in {{poll.results.rounds.length}} rounds to elect {{poll.winner_count}} {{poll.label}}s.</p>-->
+         
+         <!--
           <p class="mb-1">
             {{pollSummaryStatement(poll.results, poll.winner_count, poll.vote_count) }}
-          </p>
+          </p>  -->
           
-          <hr>
 
-          <div class="mt-3 mb-3" *ngIf="LOCAL_OVERLAY">
+          <!-- <div class="mt-3 mb-3" *ngIf="LOCAL_OVERLAY">
             {{ poll.results | json }}
 
             <hr />
           </div>
-
+        -->
           <div>
-          <span class="threshold-explanation">{{ 1/(1 + poll.winner_count) | percent }} TO WIN</span>
+         <!--  <span class="threshold-explanation">{{ 1/(1 + poll.winner_count) | percent }} TO WIN</span> -->
           </div>
           
 
-          <div class="mb-3 mt-1">
+          <div class="mb-3 mt-1 mobileColumn" >
             <results-graph 
               [results]="shiftedResults$ | async" 
               [all_choices]="poll.choices"
@@ -71,9 +76,7 @@ import { environment } from '../../../../environments/environment';
               [total_rounds]="poll.results.rounds.length"
               [winner_count]="poll.winner_count"></results-graph>
           </div>
-
-          <hr>
-
+          <div class="mobileColumn right">
           <h2 class="mt-3 mb-1">{{ summary ? 'Poll' : 'Round'}} Summary</h2>
 
           <results-explanation
@@ -90,9 +93,8 @@ import { environment } from '../../../../environments/environment';
 
           <p *ngIf="poll.vote_count < (poll.choices.length * 2 + 1)">There are not yet enough votes to show a meaningful summary.</p>
 
-          <div class="mt-3 mb-3">
-            <share-poll [poll]="poll"></share-poll>
           </div>
+          <div class="clear"></div>
 
           <hr class="mb-3" />
       <p class="mb-2 subtle-text small-text">Percentages may not add up to 100 because some ballots get all their choices eliminated.</p>

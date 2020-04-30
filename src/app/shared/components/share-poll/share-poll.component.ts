@@ -9,7 +9,7 @@ import { Poll } from '../../../shared/models/poll.interface';
   selector: 'share-poll',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="flex-grid mb-1">
+    <div class="flex-grid mb-1 sharePoll">
           <button 
               mat-stroked-button color="primary" class="has-icon bg-white"
               (click)="copyVoteLink(voteLink)"><i class="fa fa-link"></i>Copy Link</button>

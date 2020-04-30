@@ -217,6 +217,12 @@ footer.actions {
   .wrapper {
     max-width: 1200px;
   }
+  footer.actions {
+      max-width: 1200px;
+  }
+  .sharePoll {
+    max-width: 600px;
+  }
   .mobileColumn {
     width:47%;
     float:left;

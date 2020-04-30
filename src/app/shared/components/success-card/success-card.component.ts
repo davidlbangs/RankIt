@@ -8,8 +8,8 @@ import { DomSanitizer } from '@angular/platform-browser';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="success-panel" *ngIf="poll">
-      <main class="clear-footer">
-        <h2 class="mt-2 mb-2" *ngIf="fromVote">Thank you for your vote!</h2>
+      <div class="wrap">
+        <h1 class="mt-2 mb-2" *ngIf="fromVote">Thank you for your vote!</h1>
 
         <hr class="mb-2" *ngIf="fromVote" />
 
@@ -29,7 +29,7 @@ import { DomSanitizer } from '@angular/platform-browser';
          <hr class="mb-2" />
 
         <share-poll [poll]="poll"></share-poll>
-      </main> 
+        </div>
     </div>
   `,
   styleUrls: ['./success-card.component.scss']
