@@ -12,10 +12,10 @@ import { ResultsService } from '../../../shared/services/results.service';
     <div *ngIf="results">
       <div *ngIf="isPollSummary(round); else RoundSummary">
         <p class="mb-2">{{ pollSummaryStatement()}}</p>
-        <p *ngIf="!isMultiWinner" class="mb-2">With Ranked Choice Voting (RCV), voters get to rank candidates in order of choice. All ballots are counted in each round and your vote goes to the candidate you ranked highest (among those candidates still in the running).</p>
+        <p *ngIf="true" class="mb-2">With Ranked Choice Voting (RCV), voters get to rank candidates in order of choice. All ballots are counted in each round and your vote goes to the candidate you ranked highest (among those candidates still in the running).</p>
 
         <p *ngIf="isMultiWinner" class="mb-2">In a multi-winner ranked choice voting poll with {{winner_count}} winners, each winner must get at least {{ 1 / (winner_count + 1) | percent }} of the vote or be the last {{label}} standing. The percentage of votes required (threshold) depends on how many seats are being elected - the more seats there are to fill, the lower the percentage needed to win.</p>
-        <p *ngIf="isMultiWinner">Voters rank candidates in order of choice. If no candidate meets the percentage of votes needed to win, the candidate with the lowest number of votes is eliminated and voters who picked that candidate will have their votes count for their next choice. If a candidate does meet the percentage of votes needed, any extra votes count proportionally toward voters’ next choices.</p>
+        <p *ngIf="false">Voters rank candidates in order of choice. If no candidate meets the percentage of votes needed to win, the candidate with the lowest number of votes is eliminated and voters who picked that candidate will have their votes count for their next choice. If a candidate does meet the percentage of votes needed, any extra votes count proportionally toward voters’ next choices.</p>
       </div>
 
       <ng-template #RoundSummary>
