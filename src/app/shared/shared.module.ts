@@ -12,7 +12,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -36,7 +38,9 @@ import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
     MatCardModule,
     MatRadioModule,
     MatFormFieldModule,
+    MatGridListModule,
     MatInputModule,
+    MatMenuModule,
     MatSnackBarModule,
     MatOptionModule,
     MatSelectModule,

@@ -61,13 +61,18 @@ export interface Vote {
   ip_address: string;
   choices?: string[];
 }
-
+export interface EleminatedElement {
+  name: string;
+  round: number;
+  from: number;
+}
 export interface Results {
   elected: string[];
   rounds: {
     [key: string]: number;
   }[];
   threshold: number;
+  eleminated: EleminatedElement[];
 }
 
 export interface Description {

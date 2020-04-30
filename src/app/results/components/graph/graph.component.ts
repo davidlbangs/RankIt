@@ -14,6 +14,7 @@ export class GraphComponent implements OnInit {
   @Input() results: Results;
   @Input() winner_count: number;
   @Input() round: number;
+  @Input() summary: boolean;
   @Input() all_choices: Choice[];
   @Input() total_rounds: number;
 
@@ -26,6 +27,9 @@ export class GraphComponent implements OnInit {
               private resultsService: ResultsService) { }
 
   ngOnInit() {
+    if (this.summary) {
+      this.round = this.results.rounds.length-1;
+    }
   }
 
   get sortedChoices() {
@@ -38,6 +42,7 @@ export class GraphComponent implements OnInit {
 
     // if we start at round 0, it's weird.
     if(round == 0 ) { round = 1;}
+    
 
     // move items that got zero votes to the bottom
     for(let x of sorted) {

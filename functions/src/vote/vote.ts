@@ -16,6 +16,7 @@ function stv(winners, ballots) {
   // results arrays
   const rounds = [];
   const elected = [];
+  const eleminated = [];
 
   // THRESHOLD
   // Threshold is the number of votes that mathematically guarantees that the candidate cannot lose
@@ -72,6 +73,7 @@ function stv(winners, ballots) {
       let mn_keys = Object.entries(name2totals).filter(x=>x[1]===mn).map(x=>x[0]);
       // @ts-ignore
       elim = mn_keys[parseInt((Math.random())*mn_keys.length)];
+      eleminated.push({"round": (rounds.length-1), "name": elim, "from": mn_keys.length});
       factor = 1;
     }
 
@@ -90,7 +92,7 @@ function stv(winners, ballots) {
   if (winners !== 0) {
     Object.keys(name2totals).forEach(x=>elected.push(x));
   }   
-  return {"elected": elected, "rounds": rounds, "threshold": threshold};
+  return {"elected": elected, "rounds": rounds, "threshold": threshold, "eleminated": eleminated};
 } 
 
 

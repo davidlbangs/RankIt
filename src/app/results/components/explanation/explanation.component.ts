@@ -10,7 +10,7 @@ import { ResultsService } from '../../../shared/services/results.service';
   styleUrls: ['./explanation.component.scss'],
   template: `
     <div *ngIf="results">
-      <div *ngIf="isPollSummary(round-1); else RoundSummary">
+      <div *ngIf="isPollSummary(round); else RoundSummary">
         <p class="mb-2">{{ pollSummaryStatement()}}</p>
         <p *ngIf="!isMultiWinner" class="mb-2">With Ranked Choice Voting (RCV), voters get to rank candidates in order of choice. All ballots are counted in each round and your vote goes to the candidate you ranked highest (among those candidates still in the running).</p>
 
@@ -30,6 +30,10 @@ import { ResultsService } from '../../../shared/services/results.service';
         <p class="mb-2" *ngIf="!roundHasWinner(round)">
           {{noWinnerSummaryStatement(round)}}
         </p>
+
+        <p class="mb-2" *ngIf="elemination(round)">
+        {{eleminationStatement(round)}}
+        </p>
       </ng-template>
     </div>
      
@@ -38,6 +42,7 @@ import { ResultsService } from '../../../shared/services/results.service';
 export class ExplanationComponent implements OnInit {
   @Input() results: Results;
   @Input() winner_count: number;
+  @Input() summary: boolean;
   @Input() round: number;
   @Input() all_choices: Choice[];
   @Input() total_rounds: number;
@@ -57,11 +62,10 @@ export class ExplanationComponent implements OnInit {
     console.log('results', this.results);
   }
 
-  isPollSummary(round) { return this.isLastRound(round);}
+  isPollSummary(round) { return this.summary || this.isLastRound(round);}
   
 
   roundHasWinner(round) {
-    round = round - 1;
     console.log("rounds: ", this.rounds, round);
     const values = Object.values(this.rounds[round]);
     const largest = Math.max(...values);
@@ -69,10 +73,34 @@ export class ExplanationComponent implements OnInit {
     return (largest >= this.results.threshold) ? largest : 0;
   }
 
+  elemination(round) {
+    for (let el of this.results.eleminated) {
+      if (el.round == (round+1) && el.from > 1) {
+        return true;
+      }
+      if (el.round == (round) && el.from > 1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  eleminationStatement(round) {
+    for (let el of this.results.eleminated) {
+      if (el.round == (round+1) && el.from > 1) {
+        return "We have a tie between results, a random choice will be removed in the next round.";
+      }
+      if (el.round == (round) && el.from > 1) {
+        return "Last round we move "+el.name+" from the choices by random selection.";
+      }
+    }
+    return "";
+  }
+
   getWinners(round) {
     let winners = {};
     for(let choice of this.all_choices){
-      let pct = this.resultsService.getPercentage((round-1), 
+      let pct = this.resultsService.getPercentage((round), 
                                              choice, 
                                              this.results, 
                                              this.rounds, 
@@ -120,7 +148,6 @@ export class ExplanationComponent implements OnInit {
   }
 
   pollSummaryStatement() {
-    console.log("round audi: ", this.results.rounds);
     return this.resultsService.pollSummaryStatement(this.results, this.winner_count, this.total_votes);
   }
 
@@ -136,11 +163,11 @@ export class ExplanationComponent implements OnInit {
   }
 
   getLeaders(round) {
-    return this.resultsService.getEdges((round-1), this.results, 'max');
+    return this.resultsService.getEdges((round), this.results, 'max');
   }
 
   getLosers(round) {
-    return this.resultsService.getEdges((round-1), this.results, 'min');
+    return this.resultsService.getEdges((round), this.results, 'min');
   }
 
   isLastRound(round) {

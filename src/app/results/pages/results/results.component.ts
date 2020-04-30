@@ -40,8 +40,8 @@ import { environment } from '../../../../environments/environment';
             <hr class="mt-4 mb-4" />
           </div>
           <h2 class="mt-3 mb-1">
-            {{ (round === 0) ? 'Final Result' : 'Round ' + round }}
-            <span *ngIf="round === getTotalRounds(results)">(Final Result)</span>
+            {{ (summary) ? 'Final Result' : 'Round ' + round }}
+            <span *ngIf="round === getTotalRounds(results) && !summary">(Final Result)</span>
           </h2>
           <p class="mb-1"></p>
           <!--<p class="mb-1">{{poll.vote_count}} votes in {{poll.results.rounds.length}} rounds to elect {{poll.winner_count}} {{poll.label}}s.</p>-->
@@ -66,20 +66,22 @@ import { environment } from '../../../../environments/environment';
             <results-graph 
               [results]="shiftedResults$ | async" 
               [all_choices]="poll.choices"
-              [round]="round"
+              [round]="summary ? poll.results.rounds.length : round"
+              [summary]="summary"
               [total_rounds]="poll.results.rounds.length"
               [winner_count]="poll.winner_count"></results-graph>
           </div>
 
           <hr>
 
-          <h2 class="mt-3 mb-1">{{ round === 0 ? 'Poll' : 'Round'}} Summary</h2>
+          <h2 class="mt-3 mb-1">{{ summary ? 'Poll' : 'Round'}} Summary</h2>
 
           <results-explanation
               *ngIf="poll.vote_count > (poll.choices.length * 2 + 1)" 
               [results]="poll.results" 
               [all_choices]="poll.choices"
-              [round]="round"
+              [round]="round-1"
+              [summary]="summary"
               [total_rounds]="poll.results.rounds.length"
               [total_votes]="poll.vote_count"
               [winner_count]="poll.winner_count"
@@ -99,10 +101,11 @@ import { environment } from '../../../../environments/environment';
       <footer class="actions" *ngIf="poll.results as results;">
         <div class="half">
           <button
-            *ngIf="round !== 0" 
+            *ngIf="round !== 0 && !summary" 
             (click)="toRound(lastRound, poll)"
             mat-button mat-raised-button [color]="'white'" 
             class="d-block button-large p-1">Back</button>
+            
         </div>
         <div class="half">
           <button
@@ -186,7 +189,10 @@ export class ResultsComponent implements OnInit {
 
     // Local state :)
     round: number;
+    summary: boolean = false;
+
     shiftedResults: Results;
+
 
     // subscription: Subscription;
 
@@ -210,7 +216,14 @@ export class ResultsComponent implements OnInit {
       .subscribe((params:ParamMap) => {
         let id = params.get('id');
 
-        this.round = (params.get('round') === 'summary') ? 0 : parseInt(params.get('round'));
+        this.round = parseInt(params.get('round'));
+
+        console.log("round: ", this.round);
+
+        this.summary = params.get('round') === 'summary';
+        if (this.summary) {
+          this.round = 1;
+        }
 
 
         if(id) {
@@ -271,12 +284,24 @@ export class ResultsComponent implements OnInit {
   }
 
   toRound(destination:number, poll:Poll) {
-
+    if (destination <= 0) {
+      destination = 1;
+      this.summary = true;
+    }
+    else {
+      this.summary = false;
+    }
+    console.log("setting round: ", destination);
     // update local state
     this.round = destination;
 
-    // tell the router about the change.
-    this.updateLocation(destination, poll.id);
+    
+    if (this.summary) {
+      this.updateLocation('summary', poll.id);
+    }
+    else {
+      this.updateLocation(destination, poll.id);
+    }
   }
 
   toAfterResults(poll:Poll){
@@ -289,6 +314,9 @@ export class ResultsComponent implements OnInit {
   }
 
   get nextRound() {
+    if (this.summary) {
+      return 1;
+    }
     return this.round + 1;
   }
   get lastRound() {

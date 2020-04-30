@@ -177,7 +177,7 @@ export class ResultsService {
 
 
   isLastRound(round:number, results:Results) {
-    return (results.rounds.length - 1) === round || round === 0;
+    return (results.rounds.length - 1) === round; //  || round === 0;
   }
 
   /**
