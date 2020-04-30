@@ -23,7 +23,7 @@ import { Store } from 'store';
     class="d-block has-icon dark-icon button-large mb-3"><i class="fa fa-user-plus"></i>Sign Up to Create a Poll</button>
 </div>
     <main>
-   
+   <div class="clear"></div>
       <div class="mobileColumn">
    <h1 class="mb-2 mt-2">Featured Polls</h1>
       <hr class="mb-2" />
@@ -55,12 +55,11 @@ import { Store } from 'store';
   </div>
   <a  [routerLink]="['/polls']">See all My Polls</a>
     </div>
-    <div class="mobileColumn">
-    <div *ngIf="description$ | async as description">
-      <home-description [content]="description"></home-description>
+    <div class="mobileColumn right" *ngIf="description$ | async as description">
+        <home-description [content]="description"></home-description>
+    
     </div>
-
-    </div>
+    <div class="clear"></div>
     <ng-template #loading>
       <div class="message">
         <img src="/assets/images/loading.svg" alt="" />

@@ -169,6 +169,7 @@ footer.actions {
   width:100%;
 }
 .longMenu {
+  display:none;
   height:50px;
 
   ul {
@@ -206,13 +207,22 @@ footer.actions {
     margin-right:auto;
   }
 }
+.clear {
+  clear: both;
+}
 @media (min-width:1200px) {
+  .longMenu {
+    display:inherit;
+  }
   .wrapper {
     max-width: 1200px;
   }
   .mobileColumn {
-    width:50%;
+    width:47%;
     float:left;
+  }
+  .mobileColumn.right {
+    margin-left:5%;
   }
   .burgerMenu {
     display:none !important;
