@@ -22,6 +22,7 @@ import { environment } from '../../../../environments/environment';
   template: `
     
       <div *ngIf="poll$ | async as poll; else loading;">
+      <div *ngIf="poll.is_published">
       <header class="poll-header">
           <h1 class="">{{poll.title}}</h1>
           <p class="mb-1">
@@ -39,7 +40,6 @@ import { environment } from '../../../../environments/environment';
                 <p>This poll doesn't have many votes yet. Results are displayed below, but they will be more meaningful once more people have voted. Share the poll to get more voters!</p>
               </div>
             </div>
-            <share-poll [poll]="poll"></share-poll>
 
             <hr class="mt-4 mb-4" />
           </div>
@@ -167,7 +167,10 @@ import { environment } from '../../../../environments/environment';
         </ng-template>
      </div>
 
-
+    <div *ngIf="!poll.is_published">
+    Poll not found.
+  </div>
+    </div>
       <ng-template #loading>
           <div class="message">
             <img src="/assets/images/loading.svg" alt="" />
@@ -219,8 +222,7 @@ export class ResultsComponent implements OnInit {
         let id = params.get('id');
 
         this.round = parseInt(params.get('round'));
-
-        console.log("round: ", this.round);
+        
 
         this.summary = params.get('round') === 'summary';
         if (this.summary) {
@@ -232,7 +234,12 @@ export class ResultsComponent implements OnInit {
           this.poll$ = this.voteService.getPoll(id)
           .pipe(
                 tap(next => this.meta.setTitle('Results - ' + next.title)),
-                tap(next => this.checkRound(next, params.get('round')))
+                tap(next => this.checkRound(next, params.get('round'))),
+                tap(next => {
+                  if (next.owner_uid == user.uid && next.is_published == false) {
+                    next.is_published = true;
+                  }
+                })
           );
 
           if(user) {

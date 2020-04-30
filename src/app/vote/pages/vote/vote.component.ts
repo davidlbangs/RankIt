@@ -74,6 +74,10 @@ public ngAfterViewInit(): void
                 tap(next => this.meta.setTitle('Vote - ' + next.title)),
                 tap(next => {
                   this.setBackButton(user, next);
+                  if (next.owner_uid == user.uid && next.is_published == false) {
+                      next.is_published = true;
+                    }
+                  
                 })
                 );
 
@@ -189,7 +193,7 @@ public ngAfterViewInit(): void
   limit_vote(poll:Poll, user:User) {
     const alreadyVoted = this.cookie.get('rankit-' + poll.id);
 
-    this.is_open = poll.is_open;
+    this.is_open = poll.is_open && poll.is_published;
     // decide if they've voted already
     if(
        alreadyVoted &&
