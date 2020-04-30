@@ -33,6 +33,19 @@ export class PollService {
           })
           );
   }
+  getRecentUserPolls(uid: string = this.uid) {
+    // if(!uid) {
+    //   console.log('hi', this.uid);
+    //   let uid = this.uid;
+    // }
+
+    return this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', uid).limit(3)).valueChanges()
+    .pipe(
+          tap({
+            next: val => this.store.set('recentPolls', val)
+          })
+          );
+  }
 
   getAdminPolls() {
     return this.db.collection<Poll>('polls').valueChanges()
