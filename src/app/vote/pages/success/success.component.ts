@@ -20,7 +20,7 @@ import { VoteService } from '../../../shared/services/vote.service';
       [fromVote]="'true'"></success-card>
 
     <footer class="actions" *ngIf="poll$ | async as poll">
-        <button
+        <button *ngIf="poll.results_public"
           [routerLink]="['/results', poll.id, 'summary']" 
           mat-button mat-raised-button [color]="'accent'" 
           class="d-block has-icon dark-icon button-large p-1">View Results</button>

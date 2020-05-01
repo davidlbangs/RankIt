@@ -6,6 +6,10 @@ export const checkRecaptcha = functions.https.onRequest((req, res) => {
   res.set('Access-Control-Allow-Origin', "*")
   res.set('Access-Control-Allow-Methods', 'GET, POST')
   res.set('Content-Type', 'application/json')
+    if (req.query.stayalive) {
+        res.send("{\"status\":false}")
+        return;
+    }
     const response = req.query.response
     console.log("recaptcha response", response)
     rp({

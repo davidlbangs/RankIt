@@ -8,6 +8,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../../shared/models/user.interface';
+import { publish } from 'rxjs/operators';
 
 @Component({
   selector: 'poll-form',
@@ -447,9 +448,16 @@ export class PollFormComponent implements OnChanges {
     }
   }
 
-  createPoll() {
+  createPoll(published) {
     if (this.form.valid) {
-      this.create.emit(this.form.value);
+      if (published) {
+        if (confirm('Are you sure? Once you publish a poll others will be able to see it and vote on it until you close the poll.')) {
+          this.createPublish.emit(this.form.value);
+        }
+      }
+      else {
+        this.create.emit(this.form.value);
+      }
     }
   }
 
@@ -507,6 +515,10 @@ export class PollFormComponent implements OnChanges {
   }
 
   onKeydown(event, counter) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      return
+    }
     if (event.key === "Tab") {
       counter = counter + 1;
       let totalChoices = this.choices.controls.length;

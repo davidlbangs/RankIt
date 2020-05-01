@@ -39,6 +39,7 @@ import { Store } from 'store';
       </mat-card>
         
     </div>
+    <div  *ngIf="loggedIn">
     <h1 class="mb-2 mt-2">My Recent Polls</h1>
     <hr class="mb-2" />
   <div *ngIf="myPolls$ | async as polls; else loading;">
@@ -54,6 +55,7 @@ import { Store } from 'store';
       
   </div>
   <a  [routerLink]="['/polls']">See all My Polls</a>
+  </div>
     </div>
     <div class="mobileColumn right" *ngIf="description$ | async as description">
         <home-description [content]="description"></home-description>
@@ -77,8 +79,9 @@ export class HomeComponent implements OnInit {
   description$: Observable<Description>;
 
   user$: Observable<any>;
+  loggedIn: boolean = false;
   subscription: Subscription;
-  subscription2: Subscription;
+  subscription2: Subscription = null;
   constructor(
               private store: Store, 
               private db: AngularFirestore, 
@@ -93,7 +96,10 @@ export class HomeComponent implements OnInit {
     this.user$ = this.store.select<any>('user');
     this.user$.subscribe(user => {
       if (user) {
-        this.subscription2 = this.pollService.getRecentUserPolls().subscribe();
+        if (this.subscription2 == null) {
+          this.subscription2 = this.pollService.getRecentUserPolls().subscribe();
+        }
+        this.loggedIn = true;
       }
     });
     this.subscription = this.pollService.getPublicPolls().subscribe(); // returns subscription
@@ -103,7 +109,9 @@ export class HomeComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.subscription2.unsubscribe();
+    if (this.subscription2) {
+      this.subscription2.unsubscribe();
+    }
   }
 
 }

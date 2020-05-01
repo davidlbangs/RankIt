@@ -33,6 +33,7 @@ export class VoteComponent implements OnInit {
 
   poll$: Observable<Poll> = this.store.select('poll');
   is_open = false;
+  stillHere = false;
 
   constructor(
               private cookie:CookieService,
@@ -55,7 +56,15 @@ public ngAfterViewInit(): void
   });
 }
 
+
+ngOnDestroy() {
+  this.stillHere = false;
+}
+
   ngOnInit() {
+
+    this.stillHere = true;
+    this.thread();
 
     this.getIPAddress();
 
@@ -186,6 +195,17 @@ public ngAfterViewInit(): void
       })
   }
 
+  thread() {
+    if (this.stillHere) {
+      let self = this;
+      this.http.get<any>("https://us-central1-rankit-vote.cloudfunctions.net/checkRecaptcha?stayalive=true").subscribe(res => {
+            setTimeout(function(){
+              self.thread();
+            },5000);
+          });
+    }
+  }
+
   showVote() {
     console.log('vote', this.vote);
   }
@@ -197,8 +217,8 @@ public ngAfterViewInit(): void
     // decide if they've voted already
     if(
        alreadyVoted &&
-       poll.limit_votes &&
-       (!user || !this.isPollOwner(user.uid, poll.owner_uid))
+       poll.limit_votes/* &&
+       (!user || !this.isPollOwner(user.uid, poll.owner_uid))*/
        ) {
       this.router.navigate(['/vote', poll.id, 'success']);
     }

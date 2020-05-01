@@ -65,7 +65,7 @@ import { MetaService } from 'src/meta';
         </div>
 
       <div class="mobileColumn right" style="padding-top:25px;">
-        <button 
+        <button [disabled]="!poll.results_public"
           [routerLink]="['/results', poll.id, 'summary']" 
           mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-signal"></i>View Results</button>
         <button [routerLink]="['/vote', poll.id]"
@@ -73,9 +73,9 @@ import { MetaService } from 'src/meta';
         mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-pencil"></i>Vote on this Poll</button>
         <hr class="mt-3 mb-4" />
         <h1 class="mb-1">Promote Poll</h1>
-
-        <share-poll [poll]="poll"></share-poll>
-        <embed-poll [poll]="poll"></embed-poll>
+        <p *ngIf="!poll.is_published">This poll cannot be shared until it is published.</p>
+        <share-poll *ngIf="poll.is_published" [poll]="poll"></share-poll>
+        <embed-poll *ngIf="poll.is_published" [poll]="poll"></embed-poll>
         
         </div>
         <div class="clear"></div>
@@ -84,8 +84,8 @@ import { MetaService } from 'src/meta';
       <hr class="mb-3" />
 
       <main class="pb-3">
-      <button *ngIf="poll.is_published" (click)="togglePublished(poll)" mat-stroked-button color="red" class="has-icon">Unpublish Poll</button>
-      <button *ngIf="!poll.is_published" (click)="togglePublished(poll)" mat-stroked-button color="red" class="has-icon">Publish Poll</button>
+      <!-- <button *ngIf="poll.is_published" (click)="togglePublished(poll)" mat-stroked-button color="red" class="has-icon">Unpublish Poll</button> -->
+      <button style="margin-right:15px;" *ngIf="!poll.is_published" (click)="togglePublished(poll)" mat-stroked-button color="red" class="has-icon">Publish Poll</button>
      
       <button (click)="toggleDelete()" mat-stroked-button color="red" class="has-icon"><i class="fa fa-times"></i>Delete Poll</button>
       <div class="confirmDelete" *ngIf="showDelete">
@@ -150,7 +150,9 @@ export class DetailComponent implements OnInit {
   }
 
   togglePublished(poll:Poll) {
-    this.pollService.togglePollPublished(poll.id, poll.is_published);
+    if (confirm('Are you sure? Once you publish a poll others will be able to see it and vote on it until you close the poll.')) {
+      this.pollService.togglePollPublished(poll.id, poll.is_published);
+    }
   }
 
   toggleDelete() {

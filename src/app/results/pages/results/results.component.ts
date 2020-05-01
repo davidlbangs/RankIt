@@ -149,11 +149,9 @@ import { environment } from '../../../../environments/environment';
         <ng-template #noResultsYet>
            <main>
             <div class="alert" *ngIf="poll.is_open" class="mt-3 mb-3">
-              <p class="mb-2">There are no results yet. How about voting?</p>
-              <p>
-                <button [routerLink]="['/vote', poll.id]"
-                mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-pencil"></i>Vote on this Poll</button>
-              </p>
+              <p class="mb-2">The creator of this poll is currently holding the results. Please check back later.</p>
+              
+                <share-poll [poll]="poll"></share-poll>
             </div>
 
             <div class="alert" *ngIf="!poll.is_open" class="mt-3 mb-3">

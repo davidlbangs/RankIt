@@ -42,7 +42,9 @@ export class PollService {
     return this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', uid).limit(3)).valueChanges()
     .pipe(
           tap({
-            next: val => this.store.set('recentPolls', val)
+            next: val => {
+              this.store.set('recentPolls', val);
+            }
           })
           );
   }
@@ -112,7 +114,8 @@ export class PollService {
     // TODO: pull real owner_uid
     poll.owner_uid = this.uid;
     poll.vote_count = 0;
-    poll.is_open = true;
+    poll.is_open = publish;
+    poll.results_public = false;
     poll.is_promoted = false;
     poll.is_published = publish;
     poll.date_created = Date.now();
