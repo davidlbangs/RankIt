@@ -23,9 +23,9 @@ import { environment } from '../../../../environments/environment';
     
       <div *ngIf="poll$ | async as poll; else loading;">
       <div *ngIf="poll.is_published">
-      <header class="poll-header">
-          <h1 class="">{{poll.title}}</h1>
-          <p class="mb-1">
+      <header class="poll-header" [ngStyle]="{'background': poll.customizations?.barColor != '' ? poll.customizations?.barColor : '#EAEDF0', 'color': poll.customizations?.color != '' ? poll.customizations?.color : '#69757C'}">
+        <h1 [ngStyle]="{'color': poll.customizations?.color != '' ? poll.customizations?.color : '#283136;'}" class="">{{poll.title}}</h1>
+          <p class="mb-1" *ngIf="poll.results_public">
             {{pollSummaryStatement(poll.results, poll.winner_count, poll.vote_count) }}
           </p>
           <share-poll [poll]="poll"></share-poll>
@@ -155,7 +155,7 @@ import { environment } from '../../../../environments/environment';
             </div>
 
             <div class="alert" *ngIf="!poll.is_open" class="mt-3 mb-3">
-              <p class="mb-2">Hmm...There are no results yet, but this poll is closed. Check back later!</p>
+              <p class="mb-2">The creator of this poll is currently holding the results. Please check back later.</p>
               <p>
                 <button [routerLink]="['/']"
                 mat-raised-button color="" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-chevron-left"></i>Back to Home Page</button>
@@ -236,6 +236,10 @@ export class ResultsComponent implements OnInit {
                 tap(next => {
                   if (next.owner_uid == user.uid && next.is_published == false) {
                     next.is_published = true;
+                    next.results_public = true;
+                  }
+                  if (next.owner_uid == user.uid && next.results_public == false) {
+                    next.results_public = true;
                   }
                 })
           );

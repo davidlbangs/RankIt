@@ -46,7 +46,7 @@ import { MetaService } from 'src/meta';
 
         <mat-card class="mb-2">
           <mat-slide-toggle [checked]="poll.results_public" (click)="toggleResultsPublic(poll)">
-            {{poll.results_public ? 'Show results' : 'Do not show results'}}
+            {{poll.results_public ? 'Show results publicly' : 'Do not show results publicly'}}
           </mat-slide-toggle>
 
           <!-- p *ngIf="poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until you close it.</p>
@@ -65,7 +65,10 @@ import { MetaService } from 'src/meta';
         </div>
 
       <div class="mobileColumn right" style="padding-top:25px;">
-        <button [disabled]="!poll.results_public"
+        <button *ngIf="!poll.results_public"
+          [routerLink]="['/results', poll.id, 'summary']" 
+          mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-signal"></i>View Results (only visible to you)</button>
+        <button *ngIf="poll.results_public"
           [routerLink]="['/results', poll.id, 'summary']" 
           mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-signal"></i>View Results</button>
         <button [routerLink]="['/vote', poll.id]"

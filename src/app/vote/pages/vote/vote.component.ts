@@ -100,11 +100,13 @@ ngOnDestroy() {
 
 
   addRecaptchaScript(element) {
- 
+    if (window['grecaptcha']) {
+      this.renderReCaptcha(element);
+    }
     window['grecaptchaCallback'] = () => {
       this.renderReCaptcha(element);
     }
-   
+
     (function(d, s, id, obj){
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) { return;}
