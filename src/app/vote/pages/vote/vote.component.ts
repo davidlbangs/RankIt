@@ -83,7 +83,7 @@ ngOnDestroy() {
                 tap(next => this.meta.setTitle('Vote - ' + next.title)),
                 tap(next => {
                   this.setBackButton(user, next);
-                  if (next.owner_uid == user.uid && next.is_published == false) {
+                  if (next.owner_uid == user?.uid && next.is_published == false) {
                       next.is_published = true;
                     }
                   

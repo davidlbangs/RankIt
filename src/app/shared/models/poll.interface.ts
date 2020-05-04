@@ -41,6 +41,8 @@ export interface Poll {
     logoUrl: string;
     barColor: string;
     color: string;
+    buttonColor1: string;
+    buttonColor2: string;
   };
 
   // hidden option

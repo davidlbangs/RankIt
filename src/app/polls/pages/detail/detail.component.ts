@@ -5,10 +5,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthService } from '../../../auth/shared/services/auth/auth.service';
 
-import { Poll } from '../../../shared/models/poll.interface';
+import { Poll, Vote } from '../../../shared/models/poll.interface';
 import { PollService } from '../../../shared/services/poll.service';
 import { Store } from 'store';
 import { MetaService } from 'src/meta';
+import { query } from '@angular/animations';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-detail',
@@ -74,6 +76,9 @@ import { MetaService } from 'src/meta';
         <button [routerLink]="['/vote', poll.id]"
           [disabled]="!poll.is_open"
         mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-pencil"></i>Vote on this Poll</button>
+        <button (click)="csv()"
+          [disabled]="poll.is_open"
+        mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-pencil"></i>Download Results (CSV)</button>
         <hr class="mt-3 mb-4" />
         <h1 class="mb-1">Promote Poll</h1>
         <p *ngIf="!poll.is_published">This poll cannot be shared until it is published.</p>
@@ -105,7 +110,7 @@ export class DetailComponent implements OnInit {
 
   poll$: Observable<any>; // should be poll
   subscription: Subscription;
-
+  currentPoll: Poll;
   showDelete:boolean = false;
 
   constructor(
@@ -114,6 +119,7 @@ export class DetailComponent implements OnInit {
               private pollService: PollService,
               private router:Router,
               private store:Store,
+              private db: AngularFirestore, 
               private route:ActivatedRoute) {}
 
 
@@ -127,7 +133,8 @@ export class DetailComponent implements OnInit {
             const poll = this.pollService.getPoll(param.id);
             return poll;
           }),
-          tap(next => this.meta.setTitle(next.title))
+          tap(next => this.meta.setTitle(next.title)),
+          tap(next => this.currentPoll = next )
           );
   }
   ngOnDestroy() {
@@ -156,6 +163,87 @@ export class DetailComponent implements OnInit {
     if (confirm('Are you sure? Once you publish a poll others will be able to see it and vote on it until you close the poll.')) {
       this.pollService.togglePollPublished(poll.id, poll.is_published);
     }
+  }
+
+
+ConvertToCSV(objArray, headerList) { 
+  let array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray; 
+  let str = ''; 
+  let row = ''; 
+  for (let index in headerList) { 
+      row += headerList[index] + ','; 
+  } 
+  row = row.slice(0, -1); 
+  str += row + '\r\n'; 
+  for (let i = 0; i < array.length; i++) { 
+      let line = ""; 
+      for (let index in headerList) { 
+          //let head = headerList[index]; 
+          line += ", " + array[i][index]; 
+      } 
+      line = line.slice(2);
+      str += line + "\r\n"; 
+  } 
+  return str; 
+} 
+
+
+  csv() {
+    let pollID = this.currentPoll.id;
+    const votesRef = this.db.collection(`polls/${pollID}/votes`).valueChanges();
+    let headlines = [];
+    let l = this.currentPoll.choices.length;
+    for (var i = 0; i < l; i++) {
+      headlines.push("Choice " + (i+1));
+    }
+    headlines.push("createdAt");
+    // 1. Get Poll
+    // 2. get All Votes
+   votesRef.subscribe((data2:Vote[]) => {
+    let data = [];
+    for (let d of data2) {
+      console.log("this: ", d);
+      var e = [];
+      for (var i = 0; i < l; i++) {
+        if (d.choices[i]) {
+          e.push(d.choices[i]);
+        }
+        else {
+          e.push("");
+        }
+      }
+      e.push(d.date_created);
+      data.push(e);
+    }
+          
+console.log("data: ", data);
+  
+
+    let filename = "results";
+    console.log("csv: ", this.currentPoll.votes);
+    let csvData = this.ConvertToCSV(data, headlines); 
+    console.log(csvData) 
+    let blob = new Blob(['\ufeff' + csvData], { 
+        type: 'text/csv;charset=utf-8;'
+    }); 
+    let dwldLink = document.createElement("a"); 
+    let url = URL.createObjectURL(blob); 
+    let isSafariBrowser = navigator.userAgent.indexOf( 
+      'Safari') != -1 &&
+    navigator.userAgent.indexOf('Chrome') == -1; 
+    
+    //if Safari open in new window to save file with random filename. 
+    if (isSafariBrowser) {  
+        dwldLink.setAttribute("target", "_blank"); 
+    } 
+    dwldLink.setAttribute("href", url); 
+    dwldLink.setAttribute("download", filename + ".csv"); 
+    dwldLink.style.visibility = "hidden"; 
+    document.body.appendChild(dwldLink); 
+    dwldLink.click(); 
+    document.body.removeChild(dwldLink); 
+    console.log("qu: ", data);
+  });
   }
 
   toggleDelete() {

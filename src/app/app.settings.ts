@@ -39,7 +39,9 @@ export class AppSettings {
       "customizations": {
         "barColor": "",
         "logoUrl": "",
-        "color": ""
+        "color": "",
+        "buttonColor1": "",
+        "buttonColor2": ""
       },
       "cta": {
         "custom": false,

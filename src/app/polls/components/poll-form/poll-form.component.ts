@@ -102,6 +102,24 @@ import { publish } from 'rxjs/operators';
             <input matInput placeholder="" formControlName="color">
           </mat-form-field>
           </div>
+
+        <div class="option-row">
+          <div class="option-row__label">
+          <p>Button Color 1 (Hexcode)</p>
+        </div>
+          <mat-form-field appearance="outline" floatLabel="never">
+            <input matInput placeholder="" formControlName="buttonColor1">
+          </mat-form-field>
+          </div>
+       
+        <div class="option-row">
+          <div class="option-row__label">
+          <p>Button Color 2 (Hexcode)</p>
+        </div>
+          <mat-form-field appearance="outline" floatLabel="never">
+            <input matInput placeholder="" formControlName="buttonColor2">
+          </mat-form-field>
+          </div>
         </div>
           
           <h2>Options</h2>
@@ -330,7 +348,9 @@ export class PollFormComponent implements OnChanges {
     customizations: this.fb.group({
       logoUrl: [''],
       barColor: [''],
-      color: ['']
+      color: [''],
+      buttonColor1: [''],
+      buttonColor2: ['']
     }),
     label: ['', [Validators.required, RxwebValidators.unique()]],
     cta: this.fb.group({

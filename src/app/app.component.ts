@@ -8,6 +8,7 @@ import { AuthService } from './auth/shared/services/auth/auth.service';
 import { User } from './shared/models/user.interface';
 import { Subscription } from 'rxjs';
 import { FirebaseAnalytics } from '@angular/fire';
+import { Poll } from './shared/models/poll.interface';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,9 @@ import { FirebaseAnalytics } from '@angular/fire';
 
 
     <footer class="app-footer">
+    <div class="logo" *ngIf="customLogo">
+      <img style="max-width:150px;" src="/assets/images/rankit-color.svg" alt="RankIt" [routerLink]="['/']" />
+</div>
       Powered by <a href="https://www.fairvote.org">FairVote</a>.<br />Problems with the app? Email <a href="mailto:rankit@fairvote.org">rankit@fairvote.org</a>.
     </footer>
 
@@ -40,7 +44,7 @@ export class AppComponent implements OnInit {
   SILLY_OVERLAY = (environment.production == false) ? true : false;
   user$: Observable<User>;
   subscription: Subscription;
-  
+  customLogo: boolean = false;
 
   
   items: Observable<any[]>;
@@ -56,7 +60,11 @@ export class AppComponent implements OnInit {
   ngOnInit() {
      this.subscription = this.authService.user$.subscribe();
      this.user$ = this.store.select('user');
-
+     this.store.select('poll').subscribe((poll:Poll) => {
+       if (poll?.customizations?.logoUrl != "") {
+         //this.customLogo = true;
+       }
+     })
   }
 
   checkState() {

@@ -234,11 +234,11 @@ export class ResultsComponent implements OnInit {
                 tap(next => this.meta.setTitle('Results - ' + next.title)),
                 tap(next => this.checkRound(next, params.get('round'))),
                 tap(next => {
-                  if (next.owner_uid == user.uid && next.is_published == false) {
+                  if (next.owner_uid == user?.uid && next.is_published == false) {
                     next.is_published = true;
                     next.results_public = true;
                   }
-                  if (next.owner_uid == user.uid && next.results_public == false) {
+                  if (next.owner_uid == user?.uid && next.results_public == false) {
                     next.results_public = true;
                   }
                 })
