@@ -147,7 +147,7 @@ export class PollService {
     return this.db.doc(`polls/${id}`).update({'is_promoted': !is_promoted});
   }
   togglePollPublished(id:string, is_published) {
-    return this.db.doc(`polls/${id}`).update({'is_published': !is_published});
+    return this.db.doc(`polls/${id}`).update({'is_published': !is_published, 'is_open': !is_published});
   }
 
   updatePoll(key:string, poll:Poll) {
