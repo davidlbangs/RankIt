@@ -48,8 +48,33 @@ button:disabled, button:hover:disabled {
     margin: 1.5% 5%;
   }
 }
+footer {
+  height:140px;
+  display:block;
+  #captcha {
+    width:100%;
+  }
+  button {
+    width:100%;
+    height:50px;
+    max-height:50px;
+    min-height:50px;
+  }
+}
 
-@media (min-width: 600px) {
+
+@media (min-width: 700px) {
+  footer {
+    height:70px;
+    display:flex;
+    #captcha {
+      width:auto;
+    }
+    button {
+      min-height:100%;
+
+    }
+  }
   .choice-list {
     > * {
       flex: 0 auto;

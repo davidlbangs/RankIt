@@ -54,10 +54,9 @@
 
   <footer class="actions">
     <div style="" #recaptcha id="captcha" *ngIf="poll.is_open"></div>
-    <div style="display:none;">{{captchaOkay}} {{vote.choices.length}}</div>
     <button 
       *ngIf="poll.is_open"
-      (click)="submitVote(poll, vote)"
+      (click)="submitVote(poll, vote)" [ngStyle]="{'backgroundColor': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#673ab7;'}" 
       [disabled]="!vote.choices.length || !captchaOkay"
       mat-button mat-raised-button [color]="'primary'" 
       class="d-block has-icon dark-icon button-large p-1"><i class="fa fa-chevron-right"></i>Submit My Vote</button>

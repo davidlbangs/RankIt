@@ -12,7 +12,7 @@ import { Poll } from '../../models/poll.interface';
     <header>
       <div class="nav">
         <div *ngIf="backButton$ | async as backButton">
-         <a mat-mini-fab color="accent" [routerLink]="backButton" class="backButton"><i class="fa fa-chevron-left"></i></a>  
+         <a mat-mini-fab color="accent" [ngStyle]="{'backgroundColor': buttonColor != '' ? buttonColor : '#ff4081;'}" [routerLink]="backButton" class="backButton"><i class="fa fa-chevron-left"></i></a>  
         </div>
       </div>
       <ng-container *ngIf="poll$ | async as poll else default">
@@ -20,6 +20,8 @@ import { Poll } from '../../models/poll.interface';
       
 <div class="logo" style="max-width:200px;">
       <img style="max-width:200px;" *ngIf="customLogo" [src]="logoUrl" />
+      <img style="max-width:150px;" *ngIf="!customLogo" src="/assets/images/rankit-color.svg" alt="RankIt" [routerLink]="['/']" />
+
     </div>
     
         </ng-container>
@@ -81,6 +83,7 @@ export class HeaderComponent implements OnInit {
   poll$:Observable<Poll>;
   backButton$:Observable<string>;
   customLogo = false;
+  buttonColor = "";
   logoUrl = "";
   constructor(
               private store:Store) { }
@@ -93,6 +96,7 @@ export class HeaderComponent implements OnInit {
       if (poll && poll.customizations && poll.customizations.logoUrl != "") {
         this.customLogo = true;
         this.logoUrl = poll.customizations.logoUrl;
+        this.buttonColor = poll.customizations.buttonColor1;
       }
     });
   }
