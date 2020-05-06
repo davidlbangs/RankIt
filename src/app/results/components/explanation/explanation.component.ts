@@ -86,6 +86,7 @@ export class ExplanationComponent implements OnInit {
   }
 
   eleminationStatement(round) {
+    return ""; /*
     for (let el of this.results.eleminated) {
       if (el.round == (round+1) && el.from > 1) {
         return "We have a tie between results, a random choice will be removed in the next round.";
@@ -94,7 +95,7 @@ export class ExplanationComponent implements OnInit {
         return "Last round we move "+el.name+" from the choices by random selection.";
       }
     }
-    return "";
+    return "";*/
   }
 
   getWinners(round) {

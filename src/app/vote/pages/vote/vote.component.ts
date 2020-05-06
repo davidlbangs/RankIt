@@ -217,7 +217,7 @@ ngOnDestroy() {
 
     this.is_open = poll.is_open && poll.is_published;
 
-    if (poll.is_open == this.isPollOwner(user.uid, poll.owner_uid)) {
+    if (poll.is_open == false && this.isPollOwner(user?.uid, poll.owner_uid)) {
       this.is_open = true;
     }
     // decide if they've voted already

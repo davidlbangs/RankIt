@@ -45,6 +45,42 @@ export class ManagePollsComponent implements OnInit {
   ngOnInit() {
     this.store.set('backButton', 'account');
     this.polls$ = this.store.select<Poll[]>('polls');
+/*
+    var b1 = 0;
+    var b2 = 0;
+    var up = 0;
+    var d = 0;
+    this.db.collection<Poll>('polls').valueChanges().subscribe(polls => {
+      if (polls) {
+      for (var i = 0; i < polls.length; i++) {
+        let poll = polls[i];
+
+        if (poll.results_public === undefined) {
+          b1++;
+        }
+        if (poll.results_public === undefined && up < 1000) {
+          this.db.doc(`polls/${poll.id}`).update({'results_public': true}).then(f => {
+           d++;
+           console.log("done: ", d);
+           if (d>=up) {
+             console.log("all done");
+              b1 = 0;
+              b2 = 0;
+              up = 0;
+              d = 0;
+           }
+          });
+          up++;
+        }
+        /*if (poll.results_public === undefined) {
+          b2++;
+          this.db.doc(`polls/${poll.id}`).update({'results_public': true});
+        }*
+      }
+      console.log("res: ", b1,b2, up, polls.length);
+    }
+    })
+    */
     this.subscription = this.pollService.getAdminPolls().subscribe();
   }
 

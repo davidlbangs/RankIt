@@ -22,8 +22,8 @@ import { Poll } from './shared/models/poll.interface';
     <router-outlet></router-outlet>
 
 
-    <footer class="app-footer">
-    <div class="logo" *ngIf="customLogo">
+    <footer [ngClass]="{'app-footer': true, 'space': footerSpace}">
+    <div class="logo" *ngIf="customLogo" style="width:100px;float:left;padding:0;margin-right:15px;">
       <img style="max-width:150px;" src="/assets/images/rankit-color.svg" alt="RankIt" [routerLink]="['/']" />
 </div>
       Powered by <a href="https://www.fairvote.org">FairVote</a>.<br />Problems with the app? Email <a href="mailto:rankit@fairvote.org">rankit@fairvote.org</a>.
@@ -45,6 +45,7 @@ export class AppComponent implements OnInit {
   user$: Observable<User>;
   subscription: Subscription;
   customLogo: boolean = false;
+  footerSpace = false;
 
   
   items: Observable<any[]>;
@@ -61,8 +62,11 @@ export class AppComponent implements OnInit {
      this.subscription = this.authService.user$.subscribe();
      this.user$ = this.store.select('user');
      this.store.select('poll').subscribe((poll:Poll) => {
-       if (poll?.customizations?.logoUrl != "") {
-         //this.customLogo = true;
+       if (poll && poll.customizations && poll?.customizations?.logoUrl != "") {
+         this.customLogo = true;
+       }
+       if (poll) {
+         this.footerSpace = true;
        }
      })
   }

@@ -69,7 +69,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
       <div class="mobileColumn right" style="padding-top:25px;">
         <button *ngIf="!poll.results_public"
           [routerLink]="['/results', poll.id, 'summary']" 
-          mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-signal"></i>View Results (only visible to you)</button>
+          mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large">View Results (only you can view)</button>
         <button *ngIf="poll.results_public"
           [routerLink]="['/results', poll.id, 'summary']" 
           mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-signal"></i>View Results</button>
@@ -77,8 +77,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
           [disabled]="!poll.is_open"
         mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-pencil"></i>Vote on this Poll</button>
         <button (click)="csv()"
-          [disabled]="poll.is_open"
-        mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-pencil"></i>Download Results (CSV)</button>
+          [disabled]="poll.is_open || poll.vote_count == 0"
+        mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-table"></i>Download Results (CSV)</button>
         <hr class="mt-3 mb-4" />
         <h1 class="mb-1">Promote Poll</h1>
         <p *ngIf="!poll.is_published">This poll cannot be shared until it is published.</p>
