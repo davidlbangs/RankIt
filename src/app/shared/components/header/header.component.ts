@@ -10,7 +10,7 @@ import { Poll } from '../../models/poll.interface';
   template: `
     
     <header>
-      <div class="nav">
+      <div class="nav" style="flex-grow:initial;margin-right:10px;">
         <div *ngIf="backButton$ | async as backButton">
          <a mat-mini-fab color="accent" [ngStyle]="{'backgroundColor': buttonColor != '' ? buttonColor : '#ff4081;'}" [routerLink]="backButton" class="backButton"><i class="fa fa-chevron-left"></i></a>  
         </div>
@@ -19,7 +19,7 @@ import { Poll } from '../../models/poll.interface';
 
       
 <div class="logo" style="max-width:200px;">
-      <img style="max-width:200px;" *ngIf="customLogo" [src]="logoUrl" />
+      <img style="max-width:200px;max-height:70px;" *ngIf="customLogo" [src]="logoUrl" />
       <img style="max-width:150px;" *ngIf="!customLogo" src="/assets/images/rankit-color.svg" alt="RankIt" [routerLink]="['/']" />
 
     </div>

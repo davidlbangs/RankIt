@@ -25,4 +25,9 @@ export class AdminService {
     // That way you can revive expired polls, if you want.
     return this.db.doc(`users/${uid}`).update({'roles.admin': adminRights });
   }
+  toggleUserSuper(uid, adminRights) {
+    // Change if the poll is open, but keep it open once they've switched.
+    // That way you can revive expired polls, if you want.
+    return this.db.doc(`users/${uid}`).update({'roles.super': adminRights });
+  }
 }

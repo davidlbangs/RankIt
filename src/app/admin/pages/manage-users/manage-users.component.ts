@@ -22,7 +22,9 @@ import { Store } from 'store';
         <mat-card-subtitle>
         <a [routerLink]="['/admin/polls-by-user/', user.uid]">See User polls</a> |
         <a (click)="toggleUserAdmin(user.uid, false)" *ngIf="user.roles.admin">Remove Admin Rights</a>
-        <a (click)="toggleUserAdmin(user.uid, true)" *ngIf="!user.roles.admin">Give Admin Rights</a>
+        <a (click)="toggleUserAdmin(user.uid, true)" *ngIf="!user.roles.admin">Give Admin Rights</a> |
+        <a (click)="toggleUserSuper(user.uid, false)" *ngIf="user.roles.super">Remove Super User Rights</a>
+        <a (click)="toggleUserSuper(user.uid, true)" *ngIf="!user.roles.super">Give Super User Rights</a>
         </mat-card-subtitle>
      
 
@@ -129,6 +131,9 @@ emails() {
 
   toggleUserAdmin(uid, adminRights) {
     this.adminService.toggleUserAdmin(uid, adminRights);
+  }
+  toggleUserSuper(uid, adminRights) {
+    this.adminService.toggleUserSuper(uid, adminRights);
   }
 
   ngOnDestroy() {

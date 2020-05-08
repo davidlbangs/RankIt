@@ -35,7 +35,7 @@ import { environment } from '../../../../environments/environment';
       <main class="clear-footer" *ngIf="poll.results as results; else noResults">
           <div *ngIf="poll.vote_count < (poll.choices.length * 2 + 1)">
             <div class="alert mt-3">
-              <div>
+              <div [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
                 <h3 class="mb-2 color-white">Heads Up</h3>
                 <p>This poll doesn't have many votes yet. Results are displayed below, but they will be more meaningful once more people have voted. Share the poll to get more voters!</p>
               </div>
@@ -112,11 +112,11 @@ import { environment } from '../../../../environments/environment';
         <div class="half">
           <button
             *ngIf="round < poll.results.rounds.length" 
-            (click)="toRound(nextRound, poll)"
+            (click)="toRound(nextRound, poll)" [ngStyle]="{'background': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#673ab7'}"
             mat-button mat-raised-button [color]="'primary'" 
             class="d-block button-large p-1">See Round {{ nextRound }}</button>
           <button
-            mat-button mat-raised-button [color]="'primary'"
+            mat-button mat-raised-button [color]="'primary'" [ngStyle]="{'background': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#673ab7'}"
             (click)="toAfterResults(poll)"
             class="d-block button-large p-1"
             *ngIf="round ===poll.results.rounds.length" >
@@ -128,7 +128,7 @@ import { environment } from '../../../../environments/environment';
 
         <ng-template #noResults>
            <main>
-            <div class="alert" *ngIf="poll.is_open" class="mt-3 mb-3">
+            <div class="alert" *ngIf="poll.is_open" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
               <p class="mb-2">There are no results yet. How about voting?</p>
               <p>
                 <button [routerLink]="['/vote', poll.id]"
@@ -136,7 +136,7 @@ import { environment } from '../../../../environments/environment';
               </p>
             </div>
 
-            <div class="alert" *ngIf="!poll.is_open" class="mt-3 mb-3">
+            <div class="alert" *ngIf="!poll.is_open" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
               <p class="mb-2">Hmm...There are no results to display, but this poll is closed. Sorry!</p>
               <p>
                 <button [routerLink]="['/']"
@@ -148,13 +148,13 @@ import { environment } from '../../../../environments/environment';
 
         <ng-template #noResultsYet>
            <main>
-            <div class="alert" *ngIf="poll.is_open" class="mt-3 mb-3">
+            <div class="alert" *ngIf="poll.is_open" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
               <p class="mb-2">The creator of this poll is currently holding the results. Please check back later.</p>
               
                 <share-poll [poll]="poll"></share-poll>
             </div>
 
-            <div class="alert" *ngIf="!poll.is_open" class="mt-3 mb-3">
+            <div class="alert" *ngIf="!poll.is_open" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
               <p class="mb-2">The creator of this poll is currently holding the results. Please check back later.</p>
               <p>
                 <button [routerLink]="['/']"

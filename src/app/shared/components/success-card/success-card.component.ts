@@ -8,7 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="success-panel" *ngIf="poll">
-      <div class="wrap">
+      <div class="wrap" style="margin-bottom:100px;">
         <h1 class="mt-2 mb-2" *ngIf="fromVote">Thank you for your vote!</h1>
 
         <hr class="mb-2" *ngIf="fromVote" />
@@ -19,7 +19,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
       
         <a 
-          mat-button mat-raised-button [color]="'secondary'" 
+          mat-button mat-raised-button [color]="'secondary'" [ngStyle]="{'backgroundColor': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#ff4081;'}" 
           class="d-block has-icon dark-icon button-large p-1 mb-2" 
           href="{{ctaUrl(poll)}}" *ngIf="poll.cta.custom=='link'">{{ctaLabel(poll)}}</a>
 

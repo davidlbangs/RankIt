@@ -12,7 +12,7 @@ export const importUser = functions.auth.user().onCreate((user) => {
         uid: uid,
         email: email,
         displayName: displayName,
-        roles: { user: true, admin: false}
+        roles: { user: true, admin: false, super: false}
     })
 });
 

@@ -73,7 +73,7 @@ import { publish } from 'rxjs/operators';
         </div>
 
         <div class="poll-form__options">
-        <div *ngIf="user.roles.admin" formGroupName="customizations">
+        <div *ngIf="user.roles?.super || user.roles?.admin" formGroupName="customizations">
           <h2>Customizations</h2>
 
           <div class="option-row">
