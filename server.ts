@@ -26,7 +26,7 @@ const DIST_FOLDER = join(process.cwd(), 'dist/browser');
 const APP_NAME = 'rankit'; // TODO: replace me!
 
 // was ${APP_NAME}-server
-const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require(`./dist/server/main`);
+const { AppServerModule, LAZY_MODULE_MAP } = require(`./dist/server/main`);
 
 // index.html template
 // const template = readFileSync(join(DIST_FOLDER, APP_NAME, 'index.html')).toString();
@@ -43,7 +43,7 @@ const template = fs.readFileSync(path.join(__dirname, join(DIST_FOLDER, '/index.
 // global['document'] = win.document;
 
 app.engine('html', ngExpressEngine({
-  bootstrap: AppServerModuleNgFactory,
+  bootstrap: AppServerModule,
   providers: [
     provideModuleMap(LAZY_MODULE_MAP)
   ]

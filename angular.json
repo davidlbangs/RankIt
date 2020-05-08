@@ -116,7 +116,13 @@
           "options": {
             "outputPath": "dist/server",
             "main": "src/main.server.ts",
-            "tsConfig": "src/tsconfig.server.json"
+            "tsConfig": "src/tsconfig.server.json",
+            "externalDependencies": [
+              "grpc",
+              "@grpc/proto-loader",
+              "@angular/fire/firestore",
+              "firebase/firestore"
+            ]
           },
           "configurations": {
             "production": {
@@ -129,7 +135,7 @@
               "sourceMap": false,
               "optimization": {
                 "scripts": false,
-                "styles": true
+                "styles": false
               }
             }
           }
