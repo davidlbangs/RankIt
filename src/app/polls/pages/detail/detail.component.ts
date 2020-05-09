@@ -8,7 +8,7 @@ import { AuthService } from '../../../auth/shared/services/auth/auth.service';
 import { Poll, Vote } from '../../../shared/models/poll.interface';
 import { PollService } from '../../../shared/services/poll.service';
 import { Store } from 'store';
-import { MetaService } from 'src/meta';
+import { MetaService } from 'meta';
 import { query } from '@angular/animations';
 import { AngularFirestore } from '@angular/fire/firestore';
 

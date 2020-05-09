@@ -7,7 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Poll } from '../../../shared/models/poll.interface';
 import { PollService } from '../../../shared/services/poll.service';
 import { Store } from 'store';
-import { MetaService } from 'src/meta';
+import { MetaService } from 'meta';
 
 @Component({
   selector: 'polls-by-user',

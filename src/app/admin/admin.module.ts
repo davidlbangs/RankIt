@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 import { ManagePollsComponent } from './pages/manage-polls/manage-polls.component';
 
-import { MetaGuard } from 'src/meta';
+import { MetaGuard } from 'meta';
 import { UserResolver } from '../shared/services/resolver.service';
 
 import { AdminGuard } from '../auth/shared/guards/admin.guard';

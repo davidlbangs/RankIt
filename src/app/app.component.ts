@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { AuthService } from './auth/shared/services/auth/auth.service';
 import { User } from './shared/models/user.interface';
 import { Subscription } from 'rxjs';
-import { FirebaseAnalytics } from '@angular/fire';
 import { Poll } from './shared/models/poll.interface';
 
 @Component({

@@ -53,12 +53,12 @@ export class AuthService {
   }
 
   get user() {
-    return this.afAuth.auth.currentUser;
+    return this.afAuth.currentUser;
   }
 
   async googleSignin() {
     const provider = new firebase.auth.GoogleAuthProvider();
-    const credential = await this.afAuth.auth.signInWithPopup(provider);
+    const credential = await this.afAuth.signInWithPopup(provider);
     return this.updateUserData(credential.user);
   }
 
@@ -114,17 +114,17 @@ export class AuthService {
   // returns a promise.
   // can call `.then` or async await
   createUser(email: string, password: string) {
-     return this.afAuth.auth
+     return this.afAuth
        .createUserWithEmailAndPassword(email, password);
   }
 
   loginUser(email: string, password: string) {
-    return this.afAuth.auth
+    return this.afAuth
       .signInWithEmailAndPassword(email, password);
   }
 
   async signOut() {
-    await this.afAuth.auth.signOut();
+    await this.afAuth.signOut();
     this.store.unset();
     this.router.navigate(['/']);
   }

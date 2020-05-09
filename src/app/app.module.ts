@@ -26,7 +26,7 @@ import { UserResolver } from './shared/services/resolver.service';
 
 // META
 import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
-import { MetaLoader, MetaStaticLoader, PageTitlePositioning, MetaModule } from 'src/meta';
+import { MetaLoader, MetaStaticLoader, PageTitlePositioning, MetaModule } from 'meta';
 
 export function metaFactory(): MetaLoader {
   return new MetaStaticLoader({

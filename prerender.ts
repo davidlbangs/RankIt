@@ -1,60 +1,105 @@
+import { environment } from './src/environments/environment';
+
+// for debug
+require('source-map-support').install();
+
+const domino = require('domino');
+const fs = require('fs');
+const path = require('path');
+const template = fs.readFileSync(path.join(__dirname, '.', 'dist', 'index.html')).toString();
+const win = domino.createWindow(template);
+const files = fs.readdirSync(`${process.cwd()}/dist-server`);
+
+global['window'] = win;
+Object.defineProperty(win.document.body.style, 'transform', {
+  value: () => {
+    return {
+      enumerable: true,
+      configurable: true,
+    };
+  },
+});
+global['document'] = win.document;
+global['CSS'] = null;
+// global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
+global['Prism'] = null;
+
 // Load zone.js for the server.
 import 'zone.js/dist/zone-node';
 import 'reflect-metadata';
-
-import { join, resolve } from 'path';
-(global as any).WebSocket = require('ws');
-(global as any).XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import { join } from 'path';
 
 import { enableProdMode } from '@angular/core';
+// Faster server renders w/ Prod mode (dev mode never needed)
+enableProdMode();
 
+// Express Engine
+import { ngExpressEngine } from '@nguniversal/express-engine';
 // Import module map for lazy loading
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import { renderModuleFactory } from '@angular/platform-server';
+import { ROUTES } from './static.paths';
 
-import * as fs from 'fs-extra';
+// * NOTE :: leave this as require() since this file is built Dynamically from webpack
+const mainFiles = files.filter((file) => file.startsWith('main'));
+const hash = mainFiles[0].split('.')[1];
+const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require(`./dist-server/main.${hash}`);
+import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
+import { NgxRequest, NgxResponce } from '@gorniv/ngx-universal';
 
-// Add routes manually that you need rendered
-const ROUTES = [
-  '/',
-  '/login',
-  '/vote/5kn8mufneVMRqXimgO78'
-];
+const BROWSER_FOLDER = join(process.cwd(), 'static');
 
-const APP_NAME = 'rankit';
+// Load the index.html file containing referances to your application bundle.
+const index = readFileSync(join('dist', 'index.html'), 'utf8');
 
-// leave this as require(), imported via webpack
-const {
-  AppServerModuleNgFactory,
-  LAZY_MODULE_MAP
-} = require(`./dist/${APP_NAME}-server/main`);
+let previousRender = Promise.resolve();
 
-enableProdMode();
+// Iterate each route path
+ROUTES.forEach((route) => {
+  const fullPath = join(BROWSER_FOLDER, route);
 
-
-async function prerender() {
-  // Get the app index
-  const browserBuild = `dist/${APP_NAME}`;
-  const index = await fs.readFile(join(browserBuild, 'index.html'), 'utf8');
-
-
-  // Loop over each route
-  for (const route of ROUTES) {
-    const pageDir = join(browserBuild, route);
-    await fs.ensureDir(pageDir);
-
-    // Render with Universal
-    const html = await renderModuleFactory(AppServerModuleNgFactory, {
-      document: index,
-      url: route,
-      extraProviders: [provideModuleMap(LAZY_MODULE_MAP)]
+  // Make sure the directory structure is there
+  if (!existsSync(fullPath)) {
+    let syncpath = BROWSER_FOLDER;
+    route.split('/').forEach((element) => {
+      syncpath = join(syncpath, element);
+      if (!existsSync(syncpath)) {
+        mkdirSync(syncpath);
+      }
     });
-
-    await fs.writeFile(join(pageDir, 'index.html'), html);
   }
 
-  console.log('done rendering :)');
-  process.exit();
-}
-
-prerender();
+  // Writes rendered HTML to index.html, replacing the file if it already exists.
+  previousRender = previousRender
+    .then((_) =>
+      renderModuleFactory(AppServerModuleNgFactory, {
+        document: index,
+        url: route,
+        extraProviders: [
+          provideModuleMap(LAZY_MODULE_MAP),
+          {
+            provide: REQUEST,
+            useValue: { cookie: '', headers: {} },
+          },
+          {
+            provide: RESPONSE,
+            useValue: {},
+          },
+          {
+            provide: NgxRequest,
+            useValue: { cookie: '', headers: {} },
+          },
+          {
+            provide: NgxResponce,
+            useValue: {},
+          },
+          {
+            provide: 'ORIGIN_URL',
+            useValue: environment.host,
+          },
+        ],
+      }),
+    )
+    .then((html) => writeFileSync(join(fullPath, 'index.html'), html));
+});

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from 'store';
-import { MetaService } from 'src/meta';
+import { MetaService } from 'meta';
 
 @Component({
   selector: 'app-privacy',

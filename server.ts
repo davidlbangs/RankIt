@@ -1,76 +1,189 @@
-// These are important and needed before anything else
 import 'zone.js/dist/zone-node';
-import 'reflect-metadata';
 
-import { enableProdMode } from '@angular/core';
 import { ngExpressEngine } from '@nguniversal/express-engine';
-import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
-
-//import { createWindowMocks } from '@trilon/ng-universal';
-
 import * as express from 'express';
 import { join } from 'path';
-import { readFileSync } from 'fs';
 
-// Polyfills required for Firebase
-(global as any).WebSocket = require('ws');
-(global as any).XMLHttpRequest = require('xhr2');
+import { AppServerModule } from './src/main.server';
+import { APP_BASE_HREF } from '@angular/common';
+import { existsSync } from 'fs';
+import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
+import { NgxRequest, NgxResponse } from '@gorniv/ngx-universal';
+import * as compression from 'compression';
+import * as cookieparser from 'cookie-parser';
+import { exit } from 'process';
+// for debug
+require('source-map-support').install();
 
-// Faster renders in prod mode
-enableProdMode();
+// for tests
+const test = process.env['TEST'] === 'true';
 
-// Export our express server
-export const app = express();
-
-const DIST_FOLDER = join(process.cwd(), 'dist/browser');
-const APP_NAME = 'rankit'; // TODO: replace me!
-
-// was ${APP_NAME}-server
-const { AppServerModule, LAZY_MODULE_MAP } = require(`./dist/server/main`);
-
-// index.html template
-// const template = readFileSync(join(DIST_FOLDER, APP_NAME, 'index.html')).toString();
+// ssr DOM
 const domino = require('domino');
 const fs = require('fs');
 const path = require('path');
-// const template = fs.readFileSync(path.join(__dirname, '.', 'dist', 'index.html')).toString();
-const template = fs.readFileSync(path.join(__dirname, join(DIST_FOLDER, '/index.html'))).toString();
-
-//createWindowMocks(template);
-
-// const win = domino.createWindow(template);
-// global['window'] = win;
-// global['document'] = win.document;
-
-app.engine('html', ngExpressEngine({
-  bootstrap: AppServerModule,
-  providers: [
-    provideModuleMap(LAZY_MODULE_MAP)
-  ]
-}));
-
-app.set('view engine', 'html');
-// app.set('views', join(DIST_FOLDER, APP_NAME));
-app.set('views', DIST_FOLDER);
-
-// Serve static files 
-app.get('*.*', express.static(DIST_FOLDER, {
-  maxAge: '1y'
-}));
-
-app.use(require('prerender-node').set('prerenderToken', 'Dmq9oEPFIqRzSjxKGFhf'));
-
-// All regular routes use the Universal engine
-// was DIST_FOLDER, APP_NAME
-// res.render(join(DIST_FOLDER, APP_NAME + '-webpack', 'index.html'), { req });
-app.get('*', (req, res) => {
-     res.render('index', { req });
+// index from browser build!
+const template = fs.readFileSync(path.join('.', 'dist', 'index.html')).toString();
+// for mock global window by domino
+const win = domino.createWindow(template);
+// from server build
+const files = fs.readdirSync(`${process.cwd()}/dist-server`);
+// mock
+global['window'] = win;
+// not implemented property and functions
+Object.defineProperty(win.document.body.style, 'transform', {
+  value: () => {
+    return {
+      enumerable: true,
+      configurable: true,
+    };
+  },
 });
+// mock documnet
+global['document'] = win.document;
+// othres mock
+global['CSS'] = null;
+// global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
+global['Prism'] = null;
 
-// If we're not in the Cloud Functions environment, spin up a Node server
-if (!process.env.FUNCTION_NAME) {
-  const PORT = process.env.PORT || 4000;
-  app.listen(PORT, () => {
-    console.log(`Node server listening on http://localhost:${PORT}`);
+// The Express app is exported so that it can be used by serverless Functions.
+export function app() {
+  const server = express();
+  const distFolder = join(process.cwd(), 'dist');
+  const indexHtml = existsSync(join(distFolder, 'index.original.html'))
+    ? 'index.original.html'
+    : 'index';
+
+  // redirects!
+  const redirectowww = false;
+  const redirectohttps = false;
+  const wwwredirecto = true;
+  server.use((req, res, next) => {
+    // for domain/index.html
+    if (req.url === '/index.html') {
+      res.redirect(301, 'https://' + req.hostname);
+    }
+
+    // check if it is a secure (https) request
+    // if not redirect to the equivalent https url
+    if (
+      redirectohttps &&
+      req.headers['x-forwarded-proto'] !== 'https' &&
+      req.hostname !== 'localhost'
+    ) {
+      // special for robots.txt
+      if (req.url === '/robots.txt') {
+        next();
+        return;
+      }
+      res.redirect(301, 'https://' + req.hostname + req.url);
+    }
+
+    // www or not
+    if (redirectowww && !req.hostname.startsWith('www.')) {
+      res.redirect(301, 'https://www.' + req.hostname + req.url);
+    }
+
+    // www or not
+    if (wwwredirecto && req.hostname.startsWith('www.')) {
+      const host = req.hostname.slice(4, req.hostname.length);
+      res.redirect(301, 'https://' + host + req.url);
+    }
+
+    // for test
+    if (test && req.url === '/test/exit') {
+      res.send('exit');
+      exit(0);
+      return;
+    }
+
+    next();
+  });
+  // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
+  server.engine(
+    'html',
+    ngExpressEngine({
+      bootstrap: AppServerModule,
+    }),
+  );
+
+  server.set('view engine', 'html');
+  server.set('views', distFolder);
+
+  // Example Express Rest API endpoints
+  // app.get('/api/**', (req, res) => { });
+  // Serve static files from /browser
+  server.get(
+    '*.*',
+    express.static(distFolder, {
+      maxAge: '1y',
+    }),
+  );
+
+  // All regular routes use the Universal engine
+  server.get('*', (req, res) => {
+    global['navigator'] = req['headers']['user-agent'];
+    const http =
+      req.headers['x-forwarded-proto'] === undefined ? 'http' : req.headers['x-forwarded-proto'];
+
+    res.render(indexHtml, {
+      req,
+      providers: [
+        { provide: APP_BASE_HREF, useValue: req.baseUrl },
+
+        // for http and cookies
+        {
+          provide: REQUEST,
+          useValue: req,
+        },
+        {
+          provide: RESPONSE,
+          useValue: res,
+        },
+        /// for cookie
+        {
+          provide: NgxRequest,
+          useValue: req,
+        },
+        {
+          provide: NgxResponse,
+          useValue: res,
+        },
+        // for absolute path
+        {
+          provide: 'ORIGIN_URL',
+          useValue: `${http}://${req.headers.host}`,
+        },
+      ],
+    });
+  });
+
+  return server;
+}
+
+function run() {
+  const port = process.env.PORT || 4000;
+
+  // Start up the Node server
+  const server = app();
+  // gzip
+  server.use(compression());
+  // cokies
+  server.use(cookieparser());
+
+  server.listen(port, () => {
+    console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
+
+// Webpack will replace 'require' with '__webpack_require__'
+// '__non_webpack_require__' is a proxy to Node 'require'
+// The below code is to ensure that the server is run only when not requiring the bundle.
+declare const __non_webpack_require__: NodeRequire;
+const mainModule = __non_webpack_require__.main;
+const moduleFilename = (mainModule && mainModule.filename) || '';
+if (moduleFilename === __filename || moduleFilename.includes('iisnode')) {
+  run();
+}
+
+export * from './src/main.server';

@@ -12,7 +12,7 @@ import { PollFormComponent, DialogOverviewExampleDialog } from './components/pol
 
 // guards
 import { AuthGuard } from '../auth/shared/guards/auth.guard';
-import { MetaGuard } from 'src/meta';
+import { MetaGuard } from 'meta';
 
 import {  RxReactiveFormsModule } from "@rxweb/reactive-form-validators";
 

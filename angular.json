@@ -7,43 +7,39 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "app",
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
-      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/browser",
+            "aot": true,
+            "outputPath": "dist",
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "main": "src/main.browser.ts",
             "tsConfig": "src/tsconfig.app.json",
+            "polyfills": "src/polyfills.ts",
             "assets": [
-              "src/favicon.ico",
               "src/assets",
-              {
-                "glob": "**/*",
-                "input": "node_modules/ngx-auth-firebaseui/assets/",
-                "output": "./assets/"
-              }
+              "src/favicon.ico",
+              "src/robots.txt",
+              "src/manifest.json"
             ],
-            "styles": [
-              "src/assets/scss/app.scss"
-            ],
-            "scripts": [
-              "src/app/shared/scripts/stv.js"
-            ]
+            "styles": ["src/assets/scss/app.scss"],
+            "scripts": ["src/app/shared/scripts/stv.js"]
           },
           "configurations": {
-            "production": {
-              "fileReplacements": [
+            "dev": {
+              "budgets": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ]
+            },
+            "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ],
               "optimization": true,
@@ -55,13 +51,13 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "budgets": [
+              "fileReplacements": [
                 {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
                 }
-              ]
+              ],
+              "serviceWorker": true
             }
           }
         },
@@ -71,6 +67,9 @@
             "browserTarget": "rankit:build"
           },
           "configurations": {
+            "dev": {
+              "browserTarget": "rankit:build:dev"
+            },
             "production": {
               "browserTarget": "rankit:build:production"
             }
@@ -86,16 +85,16 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
+            "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
-            "styles": [
-              "src/styles.scss"
-            ],
             "scripts": [],
+            "styles": [],
             "assets": [
+              "src/assets",
               "src/favicon.ico",
-              "src/assets"
+              "src/robots.txt",
+              "src/manifest.json"
             ]
           }
         },
@@ -114,55 +113,82 @@
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
-            "outputPath": "dist/server",
-            "main": "src/main.server.ts",
+            "outputPath": "dist-server",
+            "main": "server.ts",
             "tsConfig": "src/tsconfig.server.json",
-            "externalDependencies": [
-              "grpc",
-              "@grpc/proto-loader",
-              "@angular/fire/firestore",
-              "firebase/firestore"
-            ]
+            "externalDependencies": ["@firebase/firestore"]
           },
           "configurations": {
+            "dev": {
+              
+              "optimization": true
+            },
             "production": {
+              "optimization": true,
+              "outputHashing": "none",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
-              ],
-              "sourceMap": false,
-              "optimization": {
-                "scripts": false,
-                "styles": false
-              }
+              ]
             }
+          }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "rankit:build",
+            "serverTarget": "rankit:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "rankit:build:production",
+              "serverTarget": "rankit:server:production"
+            },
+            "dev": {
+              "browserTarget": "rankit:build:dev",
+              "serverTarget": "rankit:server:dev"
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "rankit:build:production",
+            "serverTarget": "rankit:server:production",
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {}
           }
         }
       }
     },
     "rankit-e2e": {
-      "root": "e2e/",
+      "root": "",
+      "sourceRoot": "",
       "projectType": "application",
-      "prefix": "",
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
+            "protractorConfig": "./protractor.conf.js",
             "devServerTarget": "rankit:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "rankit:serve:production"
-            }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
+            "tsConfig": [
+              "e2e/tsconfig.e2e.json"
+            ],
             "exclude": [
               "**/node_modules/**"
             ]
@@ -171,5 +197,17 @@
       }
     }
   },
-  "defaultProject": "rankit"
+  "defaultProject": "rankit",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "app",
+      "styleext": "scss"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "app"
+    }
+  },
+  "cli": {
+    "analytics": "64925903-0f96-433a-83be-7a3fb8485063"
+  }
 }
