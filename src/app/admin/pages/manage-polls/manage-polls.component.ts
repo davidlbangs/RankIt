@@ -44,7 +44,7 @@ export class ManagePollsComponent implements OnInit {
 
   ngOnInit() {
     this.store.set('backButton', 'account');
-    this.polls$ = this.store.select<Poll[]>('polls');
+    this.polls$ = this.store.select<Poll[]>('adminPolls');
 /*
     var b1 = 0;
     var b2 = 0;

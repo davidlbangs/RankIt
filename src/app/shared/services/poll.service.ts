@@ -29,7 +29,7 @@ export class PollService {
     return this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', uid)).valueChanges()
     .pipe(
           tap({
-            next: val => this.store.set('polls', val)
+            next: val => this.store.set('userPolls'+uid, val)
           })
           );
   }
@@ -53,7 +53,7 @@ export class PollService {
     return this.db.collection<Poll>('polls').valueChanges()
     .pipe(
           tap({
-            next: val => this.store.set('polls', val)
+            next: val => this.store.set('adminPolls', val)
           })
           );
   }

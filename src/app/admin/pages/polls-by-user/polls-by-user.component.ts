@@ -58,7 +58,7 @@ export class PollsByUserComponent implements OnInit {
     .pipe(
           switchMap(param => {
             this.subscription = this.pollService.getUserPolls(param.id).subscribe();
-            return this.store.select<Poll[]>('polls');
+            return this.store.select<Poll[]>('userPolls'+param.id);
             // return poll;
           })
           );

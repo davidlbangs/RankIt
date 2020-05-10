@@ -52,7 +52,7 @@ export class ViewComponent implements OnInit {
 
   ngOnInit() {
     this.store.set('backButton', 'home');
-    this.polls$ = this.store.select<Poll[]>('polls');
+    this.polls$ = this.store.select<Poll[]>('userPolls'+this.pollService.uid);
     // this.subscription = this.pollService.polls$.subscribe(); // returns subscription
     this.subscription = this.pollService.getUserPolls().subscribe();
   }

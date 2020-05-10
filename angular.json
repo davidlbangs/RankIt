@@ -21,7 +21,12 @@
               "src/assets",
               "src/favicon.ico",
               "src/robots.txt",
-              "src/manifest.json"
+              "src/manifest.json",
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-auth-firebaseui/assets/",
+                "output": "./assets/"
+              }
             ],
             "styles": ["src/assets/scss/app.scss"],
             "scripts": ["src/app/shared/scripts/stv.js"]
