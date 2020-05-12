@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, QueryList, ViewChildren, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, QueryList, ViewChildren, ChangeDetectorRef, PLATFORM_ID, Inject, NgZone } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store } from 'store';
@@ -15,6 +15,7 @@ import { VoteService } from '../../../shared/services/vote.service';
 import { MetaService } from 'meta';
 import { CookieService } from 'ngx-cookie-service';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
+import { isPlatformBrowser } from '@angular/common';
 
 
 @Component({
@@ -29,11 +30,13 @@ export class VoteComponent implements OnInit {
   choices: Choice[];
   user$ = this.store.select('user');
   captchaOkay = false;
+  server = false;
   @ViewChildren('recaptcha') recaptchaElements: QueryList<ElementRef>;
 
   poll$: Observable<Poll> = this.store.select('poll');
   is_open = false;
   stillHere = false;
+  id = "";
 
   constructor(
               private cookie:CookieService,
@@ -41,16 +44,23 @@ export class VoteComponent implements OnInit {
               private http:HttpClient,
               private router:Router,
               private voteService:VoteService,
+              @Inject(PLATFORM_ID) private platformId: Object,
               private cd: ChangeDetectorRef,
               private analytics: AngularFireAnalytics,
               private route:ActivatedRoute,
+              private ngZone: NgZone,
               private store:Store) {
                }
 public ngAfterViewInit(): void
 {
+  console.log("after init");
   this.recaptchaElements.changes.subscribe((comps: QueryList<ElementRef>) =>
   {
+    console.log("check to make captcha work1");
+    console.log("we have: ", this.id);
     if (this.is_open) {
+
+      console.log("we are open");
       this.addRecaptchaScript(comps.first);
     }
   });
@@ -62,18 +72,26 @@ ngOnDestroy() {
 }
 
   ngOnInit() {
-
+    //window['angularComponentReference'] = { component: this, zone: this.ngZone, addRecaptchaScript: (element) => this.addRecaptchaScript(element), };
+    console.log("on init!");
     this.stillHere = true;
-    this.thread();
+    if (isPlatformBrowser(this.platformId)) {
+      console.log("starting the thread");
+      this.thread();
+    }
+    else {
+      this.server = true;
+    }
 
     this.getIPAddress();
 
     let user = this.route.snapshot.data.resolverUser;
 
-
+    let self = this;
     this.route.paramMap
       .subscribe((params:ParamMap) => {
         let id = params.get('id');
+        self.id = id;
 
         if(id) {
           this.poll$ = this.voteService.getPoll(id)
@@ -100,6 +118,7 @@ ngOnDestroy() {
 
 
   addRecaptchaScript(element) {
+    console.log("add google captcha!");
     if (window['grecaptcha']) {
       this.renderReCaptcha(element);
     }
@@ -214,12 +233,13 @@ ngOnDestroy() {
 
   limit_vote(poll:Poll, user:User) {
     const alreadyVoted = this.cookie.get('rankit-' + poll.id);
-
     this.is_open = poll.is_open && poll.is_published;
 
-    if (poll.is_open == false && this.isPollOwner(user?.uid, poll.owner_uid)) {
+    if (this.is_open == false && this.isPollOwner(user?.uid, poll.owner_uid)) {
       this.is_open = true;
     }
+    console.log("open2: ", this.is_open);
+
     // decide if they've voted already
     if(
        alreadyVoted &&

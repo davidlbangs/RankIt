@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+// import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 
 import { VoteComponent } from './pages/vote/vote.component';
@@ -17,6 +17,7 @@ import { MetaGuard } from 'meta';
 export const routes:Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'not-found' },
   { path: 'not-found', pathMatch: 'full', component: NotFoundComponent },
+  { path: 'test', component: VoteComponent },
   { path: ':id',resolve: { resolverUser: UserResolver}, component: VoteComponent },
   { path: ':id/success', canActivate: [MetaGuard], resolve: { resolverUser: UserResolver}, component: SuccessComponent,
   data: {
@@ -32,7 +33,7 @@ export const routes:Routes = [
   imports: [
     CommonModule,
     SharedModule,
-    HttpClientModule,
+//    HttpClientModule,
     RouterModule.forChild(routes),
     DragDropModule
   ]

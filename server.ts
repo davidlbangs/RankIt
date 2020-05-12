@@ -59,8 +59,10 @@ export function app() {
   const redirectohttps = false;
   const wwwredirecto = true;
   server.use((req, res, next) => {
+    console.log("url: ", req.url);
     // for domain/index.html
     if (req.url === '/index.html') {
+      console.log('redirect1');
       res.redirect(301, 'https://' + req.hostname);
     }
 
@@ -73,25 +75,30 @@ export function app() {
     ) {
       // special for robots.txt
       if (req.url === '/robots.txt') {
+        console.log('robots');
         next();
         return;
       }
+      console.log('redirect2');
       res.redirect(301, 'https://' + req.hostname + req.url);
     }
 
     // www or not
     if (redirectowww && !req.hostname.startsWith('www.')) {
+      console.log('redirect3');
       res.redirect(301, 'https://www.' + req.hostname + req.url);
     }
 
     // www or not
     if (wwwredirecto && req.hostname.startsWith('www.')) {
+      console.log('redirect4');
       const host = req.hostname.slice(4, req.hostname.length);
       res.redirect(301, 'https://' + host + req.url);
     }
 
     // for test
     if (test && req.url === '/test/exit') {
+      console.log('kill');
       res.send('exit');
       exit(0);
       return;
@@ -125,7 +132,8 @@ export function app() {
     global['navigator'] = req['headers']['user-agent'];
     const http =
       req.headers['x-forwarded-proto'] === undefined ? 'http' : req.headers['x-forwarded-proto'];
-
+      console.log("normal render: ", req.url);
+    
     res.render(indexHtml, {
       req,
       providers: [
@@ -172,7 +180,7 @@ function run() {
   server.use(cookieparser());
 
   server.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
+    console.log(`Node Express1 server listening on http://localhost:${port}`);
   });
 }
 

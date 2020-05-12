@@ -84,12 +84,12 @@ export class PollService {
     return this.db.doc<Description>('admin/settings').valueChanges();
   }
 
-  getPoll(key:string) {
+  getPoll(key:string, uid: string = this.uid) {
     if (!key) {
       return EMPTY; // no key? return an empty observable.
     } 
 
-    return this.store.select<Poll[]>('polls')
+    return this.store.select<Poll[]>('userPolls'+uid)
     .pipe(
           filter(Boolean),
           map((polls:Poll[]) =>  polls.find((poll: Poll) => poll.id === key))
