@@ -22,9 +22,9 @@ export class UserResolver implements Resolve<any> {
     private store:Store
     ) { }
 
-  resolve(): Observable<any> {
-    console.log("checking for user");
-    console.log("Auth: ", this.auth);
+  resolve() {
+    console.log("checking for user2");
+    //console.log("Auth: ", this.auth);
     
     if (isPlatformBrowser(this.platformId)) {
       let r = this.auth.authState.pipe(first());
@@ -32,6 +32,9 @@ export class UserResolver implements Resolve<any> {
       return r;
     }
     else {
+      console.log("returning null");
+      return null;
+      /*
       console.log("returning empty");
       const observable = Observable.create(observer => {
 
@@ -39,7 +42,7 @@ export class UserResolver implements Resolve<any> {
         observer.complete();
       });
     
-      return observable;
+      return observable;*/
 //      return Observable.empty();
     }
     

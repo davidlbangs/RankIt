@@ -133,7 +133,7 @@ export function app() {
     const http =
       req.headers['x-forwarded-proto'] === undefined ? 'http' : req.headers['x-forwarded-proto'];
       console.log("normal render: ", req.url);
-    
+    console.log('start render');
     res.render(indexHtml, {
       req,
       providers: [
@@ -164,6 +164,7 @@ export function app() {
         },
       ],
     });
+    console.log('stop render');
   });
 
   return server;

@@ -28,6 +28,7 @@ import { UserResolver } from './shared/services/resolver.service';
 import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
 import { MetaLoader, MetaStaticLoader, PageTitlePositioning, MetaModule } from 'meta';
 import { HttpClientModule } from '@angular/common/http';
+import { FakeUserResolver } from '@shared/services/fakeresolver.service';
 
 export function metaFactory(): MetaLoader {
   return new MetaStaticLoader({
@@ -107,7 +108,7 @@ const firebaseAuthConfig = {
     HttpClientModule,
     SharedModule
   ],
-  providers: [Store, UserResolver, CookieService],
+  providers: [Store, UserResolver, FakeUserResolver, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

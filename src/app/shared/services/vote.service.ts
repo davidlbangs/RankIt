@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
@@ -10,6 +10,7 @@ import { AppSettings } from '../../app.settings';
 
 import { Store } from 'store';
 import { CookieService } from 'ngx-cookie-service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -21,22 +22,32 @@ export class VoteService {
               private router:Router,
               private cookie: CookieService,
               private store:Store,
+              @Inject(PLATFORM_ID) private platformId: Object,
               private db: AngularFirestore) { }
 
 
 
   getPoll(id:string):Observable<Poll> {
+    console.log('we are asking for the poll now');
     return this.db.doc<Poll>(`polls/${id}`).valueChanges()
     .pipe(
           first(),
           tap({
             next: val => { 
-
+              console.log('we have a poll now!!', val);
               // redirect out if we didn't find anything.
               if(val === undefined) {
                 this.router.navigate(['/home/not-found']);
               }
-              this.store.set('poll', val); return val; 
+              this.store.set('poll', val);
+              console.group("now setting the poll and returning the observer");
+              if (isPlatformBrowser(this.platformId)) {
+              }
+              else {
+            this.db.firestore.disableNetwork();
+              }
+              
+              return val; 
             }
           })
           );

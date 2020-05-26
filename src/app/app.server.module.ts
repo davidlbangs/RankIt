@@ -15,7 +15,7 @@ import {FlexLayoutServerModule} from '@angular/flex-layout/server';
   ],
   bootstrap: [AppComponent],
   providers: [
-    { provide: PlatformLocation, useClass: ExpressRedirectPlatformLocation },
+  //  { provide: PlatformLocation, useClass: ExpressRedirectPlatformLocation },
   ],
 })
 export class AppServerModule {}

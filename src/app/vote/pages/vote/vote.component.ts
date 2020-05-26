@@ -34,6 +34,7 @@ export class VoteComponent implements OnInit {
   @ViewChildren('recaptcha') recaptchaElements: QueryList<ElementRef>;
 
   poll$: Observable<Poll> = this.store.select('poll');
+  poll: Poll;
   is_open = false;
   stillHere = false;
   id = "";
@@ -53,6 +54,9 @@ export class VoteComponent implements OnInit {
                }
 public ngAfterViewInit(): void
 {
+  if (this.server) {
+    return;
+  }
   console.log("after init");
   this.recaptchaElements.changes.subscribe((comps: QueryList<ElementRef>) =>
   {
@@ -104,10 +108,10 @@ ngOnDestroy() {
                   if (next.owner_uid == user?.uid && next.is_published == false) {
                       next.is_published = true;
                     }
-                  
                 })
                 );
-
+              
+              console.log('subscription created');
         } else {
           this.router.navigate(['/vote/not-found']);
           

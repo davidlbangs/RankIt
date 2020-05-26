@@ -1,3 +1,4 @@
+
 <div *ngIf="poll$ | async as poll; else loading;">
   <div *ngIf="poll.is_published">
   <header class="poll-header" [ngStyle]="{'background': poll.customizations?.barColor != '' ? poll.customizations?.barColor : '#EAEDF0', 'color': poll.customizations?.color != '' ? poll.customizations?.color : '#69757C'}">
