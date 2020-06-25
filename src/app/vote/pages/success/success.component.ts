@@ -15,20 +15,21 @@ import { VoteService } from '../../../shared/services/vote.service';
   styleUrls: ['./success.component.scss'],
   template: `
 
-    <success-card 
-      [poll]="poll$ | async"
-      [fromVote]="'true'"></success-card>
-<ng-container *ngIf="poll$ | async as poll">
-    <footer class="actions" *ngIf="poll.results_public">
-        <button *ngIf="poll.results_public"  [ngStyle]="{'backgroundColor': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#ff4081;'}"
-          [routerLink]="['/results', poll.id, 'summary']" 
-          mat-button mat-raised-button [color]="'accent'" 
-          class="d-block has-icon dark-icon button-large p-1">View Results</button>
-    </footer></ng-container>
+  <ng-container *ngIf="poll">
+  <success-card 
+  [poll]="poll"
+  [fromVote]="'true'"></success-card>
+<footer class="actions" *ngIf="poll.results_public">
+    <button *ngIf="poll.results_public"  [ngStyle]="{'backgroundColor': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#ff4081;'}"
+      [routerLink]="['/results', poll.id, 'summary']" 
+      mat-button mat-raised-button [color]="'accent'" 
+      class="d-block has-icon dark-icon button-large p-1">View Results</button>
+</footer></ng-container>
   `
 })
 export class SuccessComponent implements OnInit {
   poll$:Observable<Poll> = this.store.select('poll');
+  poll: Poll = null;
 
   constructor(
               private route:ActivatedRoute,
@@ -39,11 +40,16 @@ export class SuccessComponent implements OnInit {
   ngOnInit() {
     let user = this.route.snapshot.data.resolverUser;
     
+
+    
     this.route.paramMap
       .subscribe((params:ParamMap) => {
         let id = params.get('id');
         if(id) {
           this.poll$ = this.voteService.getPoll(id);
+          this.poll$.subscribe(res => {
+            this.poll = res;
+          });
 
           if(user) {
             this.store.set('backButton', ['/polls/', id]);

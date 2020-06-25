@@ -19,8 +19,8 @@ export const routes:Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'not-found' },
   { path: 'not-found', pathMatch: 'full', component: NotFoundComponent },
   { path: 'test', component: VoteComponent },
-  { path: ':id',resolve: { resolverUser: FakeUserResolver}, component: VoteComponent },
-  { path: ':id/success', canActivate: [MetaGuard], resolve: { resolverUser: FakeUserResolver}, component: SuccessComponent,
+  { path: ':id',resolve: { resolverUser: UserResolver}, component: VoteComponent },
+  { path: ':id/success', canActivate: [MetaGuard], resolve: { resolverUser: UserResolver}, component: SuccessComponent,
   data: {
     meta: {
       title: 'Vote Received!'

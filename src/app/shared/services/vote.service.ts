@@ -29,6 +29,7 @@ export class VoteService {
 
   getPoll(id:string):Observable<Poll> {
     console.log('we are asking for the poll now');
+    this.db.firestore.enableNetwork();
     return this.db.doc<Poll>(`polls/${id}`).valueChanges()
     .pipe(
           first(),

@@ -5,24 +5,32 @@ import { AuthService } from '../services/auth/auth.service';
 
 import { map, switchMap, take } from 'rxjs/operators';
 import { isPlatformServer } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private router:Router,
     private authService:AuthService,
-   // @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: Object,
     //@Inject('httpResponseData') private httpResponseData: any
     ) {}
 
   canActivate(
               next: ActivatedRouteSnapshot,
               state: RouterStateSnapshot) {
+                if (isPlatformServer(this.platformId)) {
+                  return new Observable<boolean>(observer => {
+                    observer.next(false);
+                    observer.complete();
+                });
+                }
     return this.authService.authState
     .pipe(
           map(user => {
               if (!user) {
-                console.log('hier');
+                
+                
                 this.router.navigate(['/auth/login']);
                 /*
                 this.router.navigate(['/auth/login']);

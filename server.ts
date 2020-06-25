@@ -132,9 +132,7 @@ export function app() {
     global['navigator'] = req['headers']['user-agent'];
     const http =
       req.headers['x-forwarded-proto'] === undefined ? 'http' : req.headers['x-forwarded-proto'];
-      console.log("normal render: ", req.url);
-    console.log('start render');
-    res.render(indexHtml, {
+     res.render(indexHtml, {
       req,
       providers: [
         { provide: APP_BASE_HREF, useValue: req.baseUrl },
@@ -164,7 +162,6 @@ export function app() {
         },
       ],
     });
-    console.log('stop render');
   });
 
   return server;

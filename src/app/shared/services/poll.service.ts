@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 import { Observable, EMPTY, of } from 'rxjs';
@@ -9,6 +9,7 @@ import { AppSettings } from '../../app.settings';
 import { User } from '../models/user.interface';
 
 import { Store } from 'store';
+import { isPlatformBrowser } from '@angular/common';
 
 
 @Injectable({
@@ -18,6 +19,7 @@ export class PollService {
 
   constructor(
     private store:Store,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private db: AngularFirestore) { }
 
   getUserPolls(uid: string = this.uid) {
@@ -25,11 +27,19 @@ export class PollService {
     //   console.log('hi', this.uid);
     //   let uid = this.uid;
     // }
+    this.db.firestore.enableNetwork();
 
     return this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', uid)).valueChanges()
     .pipe(
           tap({
-            next: val => this.store.set('userPolls'+uid, val)
+            next: val => {
+              this.store.set('userPolls'+uid, val);
+              if (isPlatformBrowser(this.platformId)) {
+              }
+              else {
+            this.db.firestore.disableNetwork();
+              }
+            }
           })
           );
   }
