@@ -79,6 +79,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
         <button (click)="csv()"
           [disabled]="poll.is_open || poll.vote_count == 0"
         mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-table"></i>Download Results (CSV)</button>
+        <button (click)="json()"
+        [disabled]="poll.is_open || poll.vote_count == 0"
+      mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-table"></i>Download Results (JSON)</button>
+      
         <hr class="mt-3 mb-4" />
         <h1 class="mb-1">Promote Poll</h1>
         <p *ngIf="!poll.is_published">This poll cannot be shared until it is published.</p>
@@ -106,6 +110,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 
   `
 })
+
 export class DetailComponent implements OnInit {
 
   poll$: Observable<any>; // should be poll
@@ -187,7 +192,66 @@ ConvertToCSV(objArray, headerList) {
   return str; 
 } 
 
+json() {
+  console.log("a: ", this.currentPoll);
+  let pollID = this.currentPoll.id;
+    const votesRef = this.db.collection(`polls/${pollID}/votes`).valueChanges();
+    let l = this.currentPoll.choices.length;
+    votesRef.subscribe((data2:Vote[]) => {
+      var date = new Date(this.currentPoll.date_created * 1000);
 
+var year = date.getFullYear();
+var month = date.getMonth() + 1;
+var day = date.getDate();
+      let rounds = [];
+      for (var i = 0; i < this.currentPoll.results.elected.length; i++) {
+        let roundData = this.currentPoll.results.rounds[i];
+        let tallyResults = {};
+        tallyResults["elected"] = this.currentPoll.results.elected[i];
+        for (let elim of this.currentPoll.results.eleminated) {
+          if (elim.round == (i+1)) {
+            tallyResults["eliminated"] = [elim.name];
+          }
+        }
+        let round = {
+          "round" : (i+1),
+          "tally" : roundData,
+          "tallyResults" : [tallyResults]
+        };
+        rounds.push(round);
+      }
+        let ret = {
+          "config" : {
+            "contest" : this.currentPoll.title,
+            "date" : year + "-" + month + "-" + day,
+            "jurisdiction" : "",
+            "office" : "",
+            "threshold" : this.currentPoll.results.threshold
+          },
+          "results": rounds
+        };
+        let filename = "results";
+    let blob = new Blob(['\ufeff' + JSON.stringify(ret)], { 
+        type: 'application/json;charset=utf-8;'
+    }); 
+    let dwldLink = document.createElement("a"); 
+    let url = URL.createObjectURL(blob); 
+    let isSafariBrowser = navigator.userAgent.indexOf( 
+      'Safari') != -1 &&
+    navigator.userAgent.indexOf('Chrome') == -1; 
+    
+    //if Safari open in new window to save file with random filename. 
+    if (isSafariBrowser) {  
+        dwldLink.setAttribute("target", "_blank"); 
+    } 
+    dwldLink.setAttribute("href", url); 
+    dwldLink.setAttribute("download", filename + ".json"); 
+    dwldLink.style.visibility = "hidden"; 
+    document.body.appendChild(dwldLink); 
+    dwldLink.click(); 
+    document.body.removeChild(dwldLink);
+    });
+}
   csv() {
     let pollID = this.currentPoll.id;
     const votesRef = this.db.collection(`polls/${pollID}/votes`).valueChanges();

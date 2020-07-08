@@ -59,7 +59,7 @@ export class RegisterComponent implements OnInit {
 
   successCallback(signInSuccessData: any) {
     // console.log('signed in', signInSuccessData);
-    this.router.navigate(['/polls']);
+    //this.router.navigate(['/polls']);
   }
 
   errorCallback(errorData: any) {
