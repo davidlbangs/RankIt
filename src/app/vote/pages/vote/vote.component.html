@@ -3,6 +3,7 @@
   <div *ngIf="poll.is_published">
   <header class="poll-header" [ngStyle]="{'background': poll.customizations?.barColor != '' ? poll.customizations?.barColor : '#EAEDF0', 'color': poll.customizations?.color != '' ? poll.customizations?.color : '#69757C'}">
     <h1 class="mb-0 pb-1" [ngStyle]="{'color': poll.customizations?.color != '' ? poll.customizations?.color : '#283136;'}">{{poll.title}}</h1>
+    <p class="subtitle">({{poll.winner_count}} winners)</p>
     <p class="subtitle" *ngIf="poll.is_open">{{defaultText.votingSubtitle}}</p>    
   </header>
   <main *ngIf="poll.is_open; else closed" class="clear-footer">

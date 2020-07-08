@@ -11,6 +11,7 @@ import { Store } from 'store';
 import { MetaService } from 'meta';
 import { query } from '@angular/animations';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { User } from '@shared/models/user.interface';
 
 @Component({
   selector: 'app-detail',
@@ -98,6 +99,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
       <main class="pb-3">
       <!-- <button *ngIf="poll.is_published" (click)="togglePublished(poll)" mat-stroked-button color="red" class="has-icon">Unpublish Poll</button> -->
       <button style="margin-right:15px;" *ngIf="!poll.is_published" (click)="togglePublished(poll)" mat-stroked-button color="red" class="has-icon">Publish Poll</button>
+      <button style="margin-right:15px;" *ngIf="!poll.is_published" (click)="editPoll(poll)" mat-stroked-button color="red" class="has-icon">Edit Poll</button>
      
       <button (click)="toggleDelete()" mat-stroked-button color="red" class="has-icon"><i class="fa fa-times"></i>Delete Poll</button>
       <div class="confirmDelete" *ngIf="showDelete">
@@ -130,20 +132,50 @@ export class DetailComponent implements OnInit {
 
   ngOnInit() {
     this.store.set('backButton', 'polls');
-    this.subscription = this.pollService.getUserPolls().subscribe();
+    this.store.select<User>("user").subscribe(user => {
+      if (user.roles.admin) {
+        this.subscription = this.pollService.getAdminPolls().subscribe();
+        this.poll$ = this.route.params
+        .pipe(
+              switchMap(param => {
+                const poll = this.pollService.getAdminPoll(param.id);
+                return poll;
+              }),
+              tap(next => {
+                if (next) {
+                this.meta.setTitle(next.title);
+                this.currentPoll = next;
+                }
+              })
+              );
+      }
+      else {
+        this.subscription = this.pollService.getUserPolls().subscribe();
+        this.poll$ = this.route.params
+      .pipe(
+            switchMap(param => {
+              const poll = this.pollService.getPoll(param.id);
+              return poll;
+            }),
+            tap(next => {
+              if (next) {
+              this.meta.setTitle(next.title);
+              this.currentPoll = next;
+              }
+            })
+            );
+      }
+    });
     
-    this.poll$ = this.route.params
-    .pipe(
-          switchMap(param => {
-            const poll = this.pollService.getPoll(param.id);
-            return poll;
-          }),
-          tap(next => this.meta.setTitle(next.title)),
-          tap(next => this.currentPoll = next )
-          );
+    
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  editPoll(poll: Poll) {
+
+    this.router.navigate(['/polls', poll.id, 'edit']);
   }
 
   async deletePoll(poll:Poll) {

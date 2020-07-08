@@ -105,6 +105,17 @@ export class PollService {
           map((polls:Poll[]) =>  polls.find((poll: Poll) => poll.id === key))
           );
   }
+  getAdminPoll(key:string) {
+    if (!key) {
+      return EMPTY; // no key? return an empty observable.
+    } 
+
+    return this.store.select<Poll[]>('adminPolls')
+    .pipe(
+          filter(Boolean),
+          map((polls:Poll[]) =>  polls.find((poll: Poll) => poll.id === key))
+          );
+  }
 
   get uid() {
     // console.log('getting uid', this.store.value);
