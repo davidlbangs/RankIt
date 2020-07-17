@@ -18,13 +18,13 @@ import { Store } from 'store';
     <div *ngIf="users$ | async as users; else loading;" class="pb-4">
 
         <mat-card *ngFor="let user of users" class="mb-1 linked-card">
-        <mat-card-title>{{user.email}} {{ user.roles.admin ? ' (Admin)' : ''}}</mat-card-title>
+        <mat-card-title>{{user.email}} {{ user.roles?.admin ? ' (Admin)' : ''}}</mat-card-title>
         <mat-card-subtitle>
         <a [routerLink]="['/admin/polls-by-user/', user.uid]">See User polls</a> |
-        <a (click)="toggleUserAdmin(user.uid, false)" *ngIf="user.roles.admin">Remove Admin Rights</a>
-        <a (click)="toggleUserAdmin(user.uid, true)" *ngIf="!user.roles.admin">Give Admin Rights</a> |
-        <a (click)="toggleUserSuper(user.uid, false)" *ngIf="user.roles.super">Remove Super User Rights</a>
-        <a (click)="toggleUserSuper(user.uid, true)" *ngIf="!user.roles.super">Give Super User Rights</a>
+        <a (click)="toggleUserAdmin(user.uid, false)" *ngIf="user.roles?.admin">Remove Admin Rights</a>
+        <a (click)="toggleUserAdmin(user.uid, true)" *ngIf="!user.roles?.admin">Give Admin Rights</a> |
+        <a (click)="toggleUserSuper(user.uid, false)" *ngIf="user.roles?.super">Remove Super User Rights</a>
+        <a (click)="toggleUserSuper(user.uid, true)" *ngIf="!user.roles?.super">Give Super User Rights</a>
         </mat-card-subtitle>
      
 

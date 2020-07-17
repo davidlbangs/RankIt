@@ -171,7 +171,8 @@ export class PollService {
     return this.db.doc(`polls/${id}`).update({'is_published': !is_published, 'is_open': !is_published});
   }
 
-  updatePoll(key:string, poll:Poll) {
+  updatePoll(key:string, poll:Poll, publish) {
+    poll.is_published = publish;
     return this.db.doc(`polls/${key}`).update(poll);
   }
 

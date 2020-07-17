@@ -32,6 +32,22 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
+  <style>
+
+@media(max-width: 630px) {
+    .mat-button {
+        white-space: pre-wrap;
+        max-width: 280px;
+
+        
+    }
+    .mat-button span {
+            word-wrap: break-word;
+            max-width: 280px;
+            display:block;
+        }
+}
+  </style>
   <!--
   <div onclick="this.style.display='none';" style="z-index:9999;text-align:center;padding-top:5px;position:absolute;top:0;left:0;height:40px;right:0;background:white;cursor: pointer;">
     <i class="fa fa-exclamation-triangle"></i>  Some users are experiencing periodic difficulties voting and viewing results. We apologize for the inconvenience and will be releasing a fix shortly. X

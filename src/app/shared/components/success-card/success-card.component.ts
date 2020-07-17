@@ -19,7 +19,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
       
         <a 
-          mat-button mat-raised-button [color]="'secondary'" [ngStyle]="{'backgroundColor': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#ff4081;'}" 
+          mat-button mat-raised-button [color]="'accent'" [ngStyle]="{'backgroundColor': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#ff4081;'}" 
           class="d-block has-icon dark-icon button-large p-1 mb-2" 
           href="{{ctaUrl(poll)}}" *ngIf="poll.cta.custom!='html'">{{ctaLabel(poll)}}</a>
 

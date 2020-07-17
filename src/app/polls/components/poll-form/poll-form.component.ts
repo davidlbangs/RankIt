@@ -284,9 +284,19 @@ import { publish } from 'rxjs/operators';
               type="button"
               *ngIf="exists"
               mat-raised-button [color]="'primary'"
-              (click)="updatePoll()">
+              (click)="updatePoll(false)">
               Save Poll
             </button>
+
+            <button 
+            type="button" style="margin-left:10px;"
+            *ngIf="exists"
+            [disabled]="(form.invalid && (form.dirty || form.touched))"
+            (click)="updatePoll(true)"
+            mat-raised-button [color]="'primary'" 
+            class=" has-icon dark-icon mb-3 mr-1">
+            Save Poll & Publish
+          </button>
             <!-- ../ takes back to previously came from -->
             <a mat-button [routerLink]="['../']" class="button button--cancel">Cancel</a>
           </div>
@@ -328,6 +338,8 @@ export class PollFormComponent implements OnChanges {
     create = new EventEmitter<Poll>();
   @Output() 
     createPublish = new EventEmitter<Poll>();
+  @Output() 
+    updatePublish = new EventEmitter<Poll>();
   @Output() 
     update = new EventEmitter<Poll>();
   @Output() 
@@ -481,9 +493,14 @@ export class PollFormComponent implements OnChanges {
     }
   }
 
-  updatePoll() {
+  updatePoll(pub) {
     if (this.form.valid) {
-      this.update.emit(this.form.value);
+      if (pub) {
+        this.updatePublish.emit(this.form.value);
+      }
+      else {
+        this.update.emit(this.form.value);
+      }
     }
   }
   removePoll() {

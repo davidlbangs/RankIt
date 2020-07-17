@@ -31,7 +31,8 @@ import { Poll } from '../../../shared/models/poll.interface';
         [user]="user"
         (create)="addPoll($event, false)"
         (createPublish)="addPoll($event, true)"
-        (update)="updatePoll($event)"
+        (updatePublish)="updatePoll($event, true)"
+        (update)="updatePoll($event, false)"
         (remove)="removePoll($event)">
       </poll-form>
     </div>
@@ -92,12 +93,13 @@ export class EditComponent implements OnInit, OnDestroy {
 
   }
 
-  async updatePoll(event: Poll) {
+  async updatePoll(event: Poll, publish) {
     // snapshot takes out of stream.
     // id is used to get, above.
     // CANT use event.$key because it's the form value, and there's no key.
     const key = this.route.snapshot.params.id;
-    await this.pollService.updatePoll(key, event);
+    await this.pollService.updatePoll(key, event, publish);
+    this.router.navigate(['polls', key]);
   }
 
   async removePoll(event: Poll) {
