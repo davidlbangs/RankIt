@@ -28,20 +28,29 @@ export class PollService {
     //   let uid = this.uid;
     // }
     this.db.firestore.enableNetwork();
-
     return this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', uid)).valueChanges()
-    .pipe(
-          tap({
-            next: val => {
-              this.store.set('userPolls'+uid, val);
-              if (isPlatformBrowser(this.platformId)) {
+      .pipe(
+            tap({
+              next: val => {
+                console.log("we got polls! ", val.length);
+                this.store.set('userPolls'+uid, val);
+
+                if (isPlatformBrowser(this.platformId)) {
+                  
+                }
+                else {
+                  console.log("server only!");
+              this.db.firestore.disableNetwork().then (a2 => {
+               
+              });
+                }
               }
-              else {
-            this.db.firestore.disableNetwork();
-              }
-            }
-          })
-          );
+            })
+            );
+  
+    
+
+    
   }
   getRecentUserPolls(uid: string = this.uid) {
     // if(!uid) {

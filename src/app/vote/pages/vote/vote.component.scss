@@ -62,8 +62,13 @@ footer {
   }
 }
 
-
+.choice-container {
+  width:90%;
+}
 @media (min-width: 700px) {
+  .choice-container {
+    width:100%;
+  }
   footer {
     height:70px;
     display:flex;

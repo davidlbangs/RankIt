@@ -23,49 +23,14 @@ export class UserResolver implements Resolve<any> {
     ) { }
 
   resolve() {
-    console.log("checking for user2");
-    //console.log("Auth: ", this.auth);
     
     if (isPlatformBrowser(this.platformId)) {
       let r = this.auth.authState.pipe(first());
-      console.log("Res: ", r);
       return r;
     }
     else {
-      console.log("returning null");
       return null;
-      /*
-      console.log("returning empty");
-      const observable = Observable.create(observer => {
-
-        observer.next(null);
-        observer.complete();
-      });
-    
-      return observable;*/
-//      return Observable.empty();
+     
     }
-    
-    // let state = return this.afAuth.authState.pipe(first());
-    // console.log('state is ', state);
-
-    // return of(true);
-    // return this.db.doc<UserMeta>(`users/${this.uid}`).valueChanges().do(next => {
-    //   console.log('made it here', next);
-    //   this.store.set('userMeta', next);
-    //   this.store.set('tenet', next.tenets[0]);
-    // });
-
-
-
-    // return this.db.doc<UserMeta>(`users/${this.uid}`).valueChanges().pipe(
-    //     take(1),
-    //     tap(next => {
-    //         this.store.set('userMeta', next);
-    //         this.store.set('tenet', next.tenets[0]);
-    //       }
-    //   )
-    // );
-
   }
 }

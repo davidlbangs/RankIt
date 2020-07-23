@@ -101,7 +101,7 @@ import { environment } from '../../../../environments/environment';
       </main>
 
       <footer class="actions" *ngIf="poll.results as results;">
-        <div class="half">
+        <div class="half first">
           <button
             *ngIf="round !== 0 && !summary" 
             (click)="toRound(lastRound, poll)"

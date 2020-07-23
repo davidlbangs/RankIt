@@ -41,11 +41,11 @@ export class VoteService {
                 this.router.navigate(['/home/not-found']);
               }
               this.store.set('poll', val);
-              console.group("now setting the poll and returning the observer");
               if (isPlatformBrowser(this.platformId)) {
               }
               else {
-            this.db.firestore.disableNetwork();
+                console.log("SERVER ONLY!! disable network on the server only");
+                this.db.firestore.disableNetwork();
               }
               
               return val; 

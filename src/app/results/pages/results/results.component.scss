@@ -19,3 +19,30 @@
   padding: 0.25rem;
 
 }
+@media only screen and (min-width: 900px) {
+  footer {
+    display:block;
+    .half {
+      min-width:210px;
+      width:210px;
+      float:left;
+      text-align:right;
+      display:block;
+    }
+    .half.first {
+      width:80%;
+    }
+  button {
+    margin-right:30px;
+    margin-top: 15px;
+    width: 200px;
+    min-height: 10%;
+    height: 67px;
+    border-radius: 30px;
+    min-width: 200px;
+    float:right;
+    margin-right:10px;
+  }
+}
+
+}
