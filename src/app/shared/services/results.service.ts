@@ -68,9 +68,9 @@ export class ResultsService {
   /* END NEW */
 
 
-  getPercentage(round: number, choice: string, results: Results, rounds:any, winner_count:number, winning_percentage: number, threshold:number) {
+  getPercentage(round: number, choice: string, results: Results, rounds:any, winner_count:number, winning_percentage: number, threshold:number, total_votes:number) {
     if(winner_count === 1) {
-      return this.calculatePercentage(round, choice, results, rounds, winner_count, threshold);
+      return this.calculatePercentage(round, choice, results, total_votes);
     }
 
     // if the choice is elected in a previous round
@@ -84,12 +84,13 @@ export class ResultsService {
     }
 
     // not a special case.
-    return this.calculatePercentage(round, choice, results, rounds, winner_count, threshold);
+    return this.calculatePercentage(round, choice, results, total_votes);
   }
 
-  private calculatePercentage(round:number, choice:string, results:Results, rounds:any, winner_count, threshold) {
-    let numerator = rounds[round][choice];
-    let denominator = this.getTotalVotes(round, winner_count, results.elected, rounds, threshold);
+  private calculatePercentage(round:number, choice:string, results:Results, total_votes:number) {
+    let numerator = results.rounds[round][choice];
+    // let denominator = this.getTotalVotes(round, winner_count, results.elected, rounds, threshold);
+    let denominator = total_votes;
 
     return (numerator / denominator) || 0;
   }

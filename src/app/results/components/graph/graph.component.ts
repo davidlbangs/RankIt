@@ -87,7 +87,8 @@ export class GraphComponent implements OnInit {
                                              this.rounds, 
                                              this.winner_count, 
                                              this.winning_percentage, 
-                                             this.threshold);
+                                             this.threshold,
+                                             this.total_votes);
   }
 
   getCount(round: number, choice:Choice) {
