@@ -26,6 +26,17 @@
         class="bar"
         [style.width.%]="getWidth(getPercentage(round, choice))"></div>
 
+      <div
+        *ngIf="showChange(round, choice) > 0" 
+        class="bar increase"
+        [style.left.%]="getWidth(getPercentage(round, choice)-showChange(round,choice))"
+        [style.width.%]="getWidth(showChange(round, choice))"></div>
+      <div
+        *ngIf="showChange(round, choice) < 0" 
+        class="bar decrease"
+        [style.left.%]="getWidth(getPercentage(round, choice))"
+        [style.width.%]="getWidth(-showChange(round, choice))"></div>
+
   </div>
   <div class="result-row exhausted-results">
     <div class="meta">

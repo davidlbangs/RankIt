@@ -96,7 +96,28 @@ export class GraphComponent implements OnInit {
                                              choice, 
                                              this.results);
   }
-  
+
+  showChange(round:number, choice:Choice) {
+    let previousRound = round - 1;
+    let currentPercentage = this.getPercentage(round, choice);
+    let previousPercentage = this.getPercentage(previousRound, choice);
+    let isWinner = this.declareWinner(round, choice);
+
+    // don't show in first round or if it's a winner
+    if(round == 1 || isWinner) {
+      return false;
+    }
+      console.log(currentPercentage, previousPercentage);
+
+    // if different, calculate percentage difference.
+    if(previousPercentage && (currentPercentage != previousPercentage)){
+      return currentPercentage - previousPercentage;
+    }
+
+    // Otherwise return false
+    return false;
+  }
+
 
   getWidth(percentage:number) {
     let width = percentage/this.winning_percentage * 100;
