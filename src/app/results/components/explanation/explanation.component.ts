@@ -107,7 +107,8 @@ export class ExplanationComponent implements OnInit {
                                              this.rounds, 
                                              this.winner_count, 
                                              this.winning_percentage, 
-                                             this.threshold);
+                                             this.threshold,
+                                             this.total_votes);
       if(pct > this.winning_percentage) {
         winners[choice] = pct;
       }
