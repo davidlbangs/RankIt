@@ -19,3 +19,17 @@
   padding: 0.25rem;
 
 }
+
+a.count-link {
+
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.8em;
+  font-weight: 400;
+  color: #6043B1;
+  &:hover {
+    color: darken(#6043B1, 15%);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}

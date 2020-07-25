@@ -17,6 +17,8 @@ export class GraphComponent implements OnInit {
   @Input() summary: boolean;
   @Input() all_choices: Choice[];
   @Input() total_rounds: number;
+  @Input() total_votes: number;
+  @Input() display_count:boolean;
 
   get rounds() { return this.results.rounds; }
   get elected() { return this.results.elected; }
@@ -70,6 +72,14 @@ export class GraphComponent implements OnInit {
     }
   }
 
+  getExhaustedVoteCount(round:number){
+    return this.resultsService.getExhaustedVoteCount(round, this.results, this.total_votes);
+  }
+
+  getExhaustedVotePercentage(round:number){
+    return this.resultsService.getExhaustedVotePercentage(round, this.results, this.total_votes);
+  }
+
   getPercentage(round: number, choice:Choice) {
     return this.resultsService.getPercentage(round, 
                                              choice, 
@@ -78,6 +88,12 @@ export class GraphComponent implements OnInit {
                                              this.winner_count, 
                                              this.winning_percentage, 
                                              this.threshold);
+  }
+
+  getCount(round: number, choice:Choice) {
+    return this.resultsService.getCount(round, 
+                                             choice, 
+                                             this.results);
   }
   
 

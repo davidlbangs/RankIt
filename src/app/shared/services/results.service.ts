@@ -42,6 +42,31 @@ export class ResultsService {
     return statement;
   }
 
+  /* NEW from Stephen, 7/20*/
+
+  getCount(round:number, choice:string, results: Results) {
+    return results.rounds[round][choice];
+  }
+
+  getExhaustedVoteCount(round:number, results:Results, total_votes) {
+    let current_votes:number = this.countVotes(results.rounds[round]);
+    return (total_votes - current_votes);
+  }
+  getExhaustedVotePercentage(round:number, results:Results, total_votes) {
+    let current_votes:number = this.countVotes(results.rounds[round]);
+    return (1-current_votes/total_votes);
+  }
+
+  countVotes(roundObj: {[key:string]:number}){
+    if (roundObj == null) {
+        return 0;
+    }
+    return Object.values(roundObj).reduce((t, n) => t + n);
+  }
+
+
+  /* END NEW */
+
 
   getPercentage(round: number, choice: string, results: Results, rounds:any, winner_count:number, winning_percentage: number, threshold:number) {
     if(winner_count === 1) {
@@ -62,8 +87,11 @@ export class ResultsService {
     return this.calculatePercentage(round, choice, results, rounds, winner_count, threshold);
   }
 
-  calculatePercentage(round:number, choice:string, results:Results, rounds:any, winner_count, threshold) {
-    return (rounds[round][choice] / this.getTotalVotes(round, winner_count, results.elected, rounds, threshold)) || 0;
+  private calculatePercentage(round:number, choice:string, results:Results, rounds:any, winner_count, threshold) {
+    let numerator = rounds[round][choice];
+    let denominator = this.getTotalVotes(round, winner_count, results.elected, rounds, threshold);
+
+    return (numerator / denominator) || 0;
   }
 
   /**
@@ -85,11 +113,8 @@ export class ResultsService {
           pastWinners++;
         }
       }
-      // let totalChoices = this.all_choices.length;
-      // let currentChoices = Object.keys(this.rounds[round]).length;
       voteAdjustment = pastWinners * threshold;
     }
-
     return this.sum(rounds[round]) + voteAdjustment;
   }
 

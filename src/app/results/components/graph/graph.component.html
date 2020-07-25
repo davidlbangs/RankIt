@@ -15,7 +15,8 @@
     [class.is-eliminated]="getPercentage(round, choice) === 0"
     >
       <div class="meta">
-        <div class="percentage">{{getPercentage(round, choice) | percent:'1.0-1' }}</div>
+        <div class="count" *ngIf="display_count">{{getCount(round,choice) }}</div>
+        <div class="percentage" *ngIf="!display_count">{{getPercentage(round, choice) | percent:'1.0-1' }}</div>
         <div class="label">{{choice}}</div>
         
       </div>
@@ -26,4 +27,13 @@
         [style.width.%]="getWidth(getPercentage(round, choice))"></div>
 
   </div>
+  <div class="result-row exhausted-results">
+    <div class="meta">
+      <div class="count" *ngIf="display_count">{{getExhaustedVoteCount(round)}}</div>
+        <div class="percentage" *ngIf="!display_count">{{getExhaustedVotePercentage(round) | percent:'1.0-1'}}</div>
+        <div class="label">Inactive Votes</div>
+    </div>
+  </div>
+
+  
 </div>
