@@ -33,7 +33,7 @@
     left: 5px;
     align-items: center;
   }
-  .percentage {
+  .percentage, .count {
     width: 50px;
     text-align: right;
     font-weight: bold;
@@ -63,8 +63,22 @@
     position: absolute;
     background: #EAEDF0;
     border-radius: 6px;
-
     transition: width 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  .bar.increase {
+    background: #61E786;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+  }
+  .bar.decrease {
+    background: #EF8F57;
+  }
+
+  .bar.increase, .bar.decrease {
+    // transition: opacity 0.5s ease-in-out;
+    animation: fadein 0.5s;
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
 
   .threshold {
@@ -75,4 +89,14 @@
     top: -6px;
     right: 0;
   }
+}
+
+.exhausted-results {
+  color: #777;
+}
+
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }

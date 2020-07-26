@@ -17,6 +17,8 @@ export class GraphComponent implements OnInit {
   @Input() summary: boolean;
   @Input() all_choices: Choice[];
   @Input() total_rounds: number;
+  @Input() total_votes: number;
+  @Input() display_count:boolean;
 
   get rounds() { return this.results.rounds; }
   get elected() { return this.results.elected; }
@@ -70,6 +72,14 @@ export class GraphComponent implements OnInit {
     }
   }
 
+  getExhaustedVoteCount(round:number){
+    return this.resultsService.getExhaustedVoteCount(round, this.results, this.total_votes);
+  }
+
+  getExhaustedVotePercentage(round:number){
+    return this.resultsService.getExhaustedVotePercentage(round, this.results, this.total_votes);
+  }
+
   getPercentage(round: number, choice:Choice) {
     return this.resultsService.getPercentage(round, 
                                              choice, 
@@ -77,9 +87,37 @@ export class GraphComponent implements OnInit {
                                              this.rounds, 
                                              this.winner_count, 
                                              this.winning_percentage, 
-                                             this.threshold);
+                                             this.threshold,
+                                             this.total_votes);
   }
-  
+
+  getCount(round: number, choice:Choice) {
+    return this.resultsService.getCount(round, 
+                                             choice, 
+                                             this.results);
+  }
+
+  showChange(round:number, choice:Choice) {
+    let previousRound = round - 1;
+    let currentPercentage = this.getPercentage(round, choice);
+    let previousPercentage = this.getPercentage(previousRound, choice);
+    let isWinner = this.declareWinner(round, choice);
+
+    // don't show in first round or if it's a winner
+    if(round == 1 || isWinner) {
+      return false;
+    }
+      console.log(currentPercentage, previousPercentage);
+
+    // if different, calculate percentage difference.
+    if(previousPercentage && (currentPercentage != previousPercentage)){
+      return currentPercentage - previousPercentage;
+    }
+
+    // Otherwise return false
+    return false;
+  }
+
 
   getWidth(percentage:number) {
     let width = percentage/this.winning_percentage * 100;

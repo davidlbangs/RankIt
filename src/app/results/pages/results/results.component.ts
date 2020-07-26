@@ -44,8 +44,9 @@ import { environment } from '../../../../environments/environment';
             <hr class="mt-4 mb-4" />
           </div>
           <h2 class="mt-3 mb-1">
-            {{ (summary) ? 'Final Result' : 'Round ' + round }}
+            {{ (summary) ? 'Final Result' : 'Round ' + round }} 
             <span *ngIf="round === getTotalRounds(results) && !summary">(Final Result)</span>
+            <a (click)="toggleDisplayStyle()" class="count-link">Show {{(LOCAL_DISPLAY_COUNT) ? 'Vote Percentage' : 'Vote Count' }}</a>
           </h2>
           <p class="mb-1"></p>
           <!--<p class="mb-1">{{poll.vote_count}} votes in {{poll.results.rounds.length}} rounds to elect {{poll.winner_count}} {{poll.label}}s.</p>-->
@@ -69,6 +70,8 @@ import { environment } from '../../../../environments/environment';
 
           <div class="mb-3 mt-1 mobileColumn" >
             <results-graph 
+              [display_count]="LOCAL_DISPLAY_COUNT"
+              [total_votes]="poll.vote_count"
               [results]="shiftedResults$ | async" 
               [all_choices]="poll.choices"
               [round]="summary ? poll.results.rounds.length : round"
@@ -97,7 +100,7 @@ import { environment } from '../../../../environments/environment';
           <div class="clear"></div>
 
           <hr class="mb-3" />
-      <p class="mb-2 subtle-text small-text">Percentages may not add up to 100 because some ballots get all their choices eliminated.</p>
+      <p class="mb-2 subtle-text small-text">A vote becomes "inactive" when all their choices are eliminated.</p>
       </main>
 
       <footer class="actions" *ngIf="poll.results as results;">
@@ -181,6 +184,7 @@ import { environment } from '../../../../environments/environment';
   `
 })
 export class ResultsComponent implements OnInit {
+    LOCAL_DISPLAY_COUNT:boolean = false;
     LOCAL_OVERLAY = (environment.production == false) ? true : false;
     poll$: Observable<Poll> = this.store.select('poll');
 
@@ -255,6 +259,10 @@ export class ResultsComponent implements OnInit {
         }
        
       });
+  }
+
+  toggleDisplayStyle() {
+    this.LOCAL_DISPLAY_COUNT = !this.LOCAL_DISPLAY_COUNT;
   }
 
   getWinnerString(winnerArray) {
