@@ -74,6 +74,16 @@
   .bar.decrease {
     background: #EF8F57;
   }
+  .bar.is-winner.at-threshold {
+    max-width: 3%;
+  }
+  .bar.decrease.is-winner.at-threshold {
+    outline: 2px dotted #EF8F57;
+    outline-offset: -2px; 
+    background: transparent;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
 
   .bar.increase, .bar.decrease {
     // transition: opacity 0.5s ease-in-out;
