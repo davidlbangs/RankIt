@@ -22,6 +22,12 @@ import { Store } from 'store';
       <mat-card *ngIf="polls.length == 0">
         <mat-card-title>No polls yet! How about making one?</mat-card-title>
       </mat-card>
+      <button *ngIf="more"  
+      mat-button 
+      class="d-block has-icon dark-icon button-large p-1" (click)="moreResults()">More Results</button>
+      <button *ngIf="more"  
+      mat-button 
+      class="d-block has-icon dark-icon button-large p-1" (click)="reset()">Reset</button>
     </div>
 
     <ng-template #loading>
@@ -36,7 +42,9 @@ import { Store } from 'store';
 })
 export class ManagePollsComponent implements OnInit {
   polls$: Observable<Poll[]>;
+  more = false;
   subscription: Subscription;
+  subscription2: Subscription;
   constructor(
               private store: Store, 
               private db: AngularFirestore, 
@@ -45,6 +53,9 @@ export class ManagePollsComponent implements OnInit {
   ngOnInit() {
     this.store.set('backButton', 'account');
     this.polls$ = this.store.select<Poll[]>('adminPolls');
+    this.subscription2 = this.store.select<boolean>('adminPollsMore').subscribe(res => {
+      this.more = res;
+    });
 /*
     var b1 = 0;
     var b2 = 0;
@@ -81,9 +92,24 @@ export class ManagePollsComponent implements OnInit {
     }
     })
     */
-    this.subscription = this.pollService.getAdminPolls().subscribe();
+    this.subscription = this.pollService.getAdminPolls().subscribe(res => {
+      console.log("res: ", res.docs);
+    })// .subscribe();
   }
+  moreResults() {
 
+    this.subscription.unsubscribe();
+    this.subscription = this.pollService.getAdminPolls().subscribe(res => {
+      console.log("res: ", res);
+    }); // .subscribe();
+  }
+  reset() {
+
+    this.subscription.unsubscribe();
+    this.subscription = this.pollService.getAdminPollsReset().subscribe(res => {
+      console.log("res: ", res);
+    })// .subscribe();
+  }
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

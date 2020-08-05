@@ -6,6 +6,7 @@ import { User } from '../../../shared/models/user.interface';
 import { PollService } from '../../../shared/services/poll.service';
 import { AdminService } from '../../../shared/services/admin.service';
 import { Store } from 'store';
+import { tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-manage-users',
@@ -32,7 +33,12 @@ import { Store } from 'store';
           <mat-card-title>No users yet! How about making one?</mat-card-title>
         </mat-card>
       </mat-card>
-        
+      <button *ngIf="more"  
+      mat-button 
+      class="d-block has-icon dark-icon button-large p-1" (click)="load()()">More Results</button>
+      <button *ngIf="more"  
+      mat-button 
+      class="d-block has-icon dark-icon button-large p-1" (click)="reset()">Reset</button>
     </div>
 
     <ng-template #loading>
@@ -48,6 +54,8 @@ import { Store } from 'store';
 export class ManageUsersComponent implements OnInit {
   
   users$: Observable<User[]>;
+  more = false;
+  lastResponse;
   userList = [];
   // subscription: Subscription;
   constructor(
@@ -58,13 +66,40 @@ export class ManageUsersComponent implements OnInit {
 
   ngOnInit() {
     this.store.set('backButton', 'account');
-    this.users$ = this.db.collection<User>('users').valueChanges();
+    this.load();
     
     this.users$.subscribe(userList => {
       this.userList = userList;
     });
   }
+  reset() {
+    this.lastResponse = false;
+    this.load();
+  }
+  load() {
+    this.users$ = this.db.collection('users', ref => {
+      let r = ref.limit(50);
+      if (this.lastResponse) {
+        r = r.startAfter(this.lastResponse);
+      }
+      return r;
+    }).get().pipe(map(
+      val => {
+       
+       if (val.docs.length>0) {
+         this.lastResponse = val.docs[val.docs.length-1];
+       }
+       if (val.docs.length<50) {
 
+         this.more = false;
+       }
+       else {
+         this.more = true;
+       }
+       return val.docs.map(r => r.data()) as User[];
+     }
+   ));
+  }
 
 ConvertToCSV(objArray, headerList) { 
   let array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray; 

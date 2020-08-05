@@ -16,7 +16,7 @@ import { isPlatformBrowser } from '@angular/common';
   providedIn: 'root'
 })
 export class PollService {
-
+  public lastAdminResponse = null;
   constructor(
     private store:Store,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -84,11 +84,34 @@ export class PollService {
           })
           );
   }
+  getAdminPollsReset() {
+    this.lastAdminResponse = false;
+    return this.getAdminPolls();
+  }
   getAdminPolls() {
-    return this.db.collection<Poll>('polls').valueChanges()
-    .pipe(
+    return this.db.collection('polls', ref => {
+      let r = ref.limit(50).orderBy('date_created', 'desc');
+      if (this.lastAdminResponse) {
+        r = r.startAfter(this.lastAdminResponse);
+      }
+      return r;
+    }).get().pipe(
           tap({
-            next: val => this.store.set('adminPolls', val)
+            next: val => {
+              
+              if (val.docs.length>0) {
+                this.lastAdminResponse = val.docs[val.docs.length-1];
+              }
+              this.store.set('adminPolls', val.docs.map(r => r.data()));
+              if (val.docs.length<50) {
+
+                this.store.set('adminPollsMore', false);
+              }
+              else {
+
+              this.store.set('adminPollsMore', true);
+              }
+            }
           })
           );
   }
