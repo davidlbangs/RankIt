@@ -1,4 +1,11 @@
-
+.thresholdLabel {
+  position:absolute;
+  right:-25px;
+  width:50px;
+  text-align:center;
+  font-size: 1.33rem;
+  top:-35px;
+}
 
 .result-row {
   height: 50px;
@@ -80,7 +87,7 @@
     animation: fadein 0.5s;
     animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
-
+  
   .threshold {
     border-right: 2px dotted rgba(112, 120, 124, .30);
     position: absolute;
