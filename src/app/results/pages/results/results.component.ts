@@ -102,7 +102,7 @@ import { environment } from '../../../../environments/environment';
           <hr class="mb-3" />
       <p class="mb-2 subtle-text small-text">A vote becomes "inactive" when all their choices are eliminated.</p>
       </main>
-
+<div style="footerWrapper">
       <footer class="actions" *ngIf="poll.results as results;">
         <div class="half first">
           <button
@@ -134,6 +134,7 @@ import { environment } from '../../../../environments/environment';
           </button>
         </div>
     </footer>
+    </div>
     </ng-container>
 
         <ng-template #noResults>

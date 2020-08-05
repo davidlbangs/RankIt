@@ -89,16 +89,15 @@ export class ExplanationComponent implements OnInit {
   }
 
   eleminationStatement(round) {
-    return ""; /*
     for (let el of this.results.eleminated) {
-      if (el.round == (round+1) && el.from > 1) {
+      /*if (el.round == (round+1) && el.from > 1) {
         return "We have a tie between results, a random choice will be removed in the next round.";
-      }
+      }*/
       if (el.round == (round) && el.from > 1) {
-        return "Last round we move "+el.name+" from the choices by random selection.";
+        return ""+el.name+" has been eliminated and their votes redistributed to the remaining ${this.label}s.";
       }
     }
-    return "";*/
+    return "";
   }
 
   getWinners(round) {
@@ -143,13 +142,20 @@ export class ExplanationComponent implements OnInit {
     const leaders = this.getLeaders(round);
     const losers = this.getLosers(round);
 
+    
+
     // language
     const isLeading = (leaders.count > 1) ? 'are leading': 'is leading';
     const losingCandidate = (losers.count > 1) ? this.label + 's' : this.label;
     const oneAtaTime = (losers.count > 1) ? ' one at a time' : '';
     const remaining = (this.winner_count > 1) ? 'remaining ' : '';
-
-    return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. So, the ${losingCandidate} with the fewest votes, ${losers.string}, will be eliminated${oneAtaTime}. Voters who chose ${losers.string} will have their votes redistributed to the remaining ${this.label}s based on their next preferences.`;
+    if (losers.count > 1) {
+      return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. Because there is a tie for last place, one of the losing ${losingCandidate} will be randomly eliminated. Their votes will be redistributed to the voters' next-favorite ${this.label}.`;
+    }
+    else {
+      return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. So, the ${losingCandidate} with the fewest votes, ${losers.string}, will be eliminated${oneAtaTime}. Voters who chose ${losers.string} will have their votes redistributed to the remaining ${this.label}s based on their next preferences.`;
+    }
+    //return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. So, the ${losingCandidate} with the fewest votes, ${losers.string}, will be eliminated${oneAtaTime}. Voters who chose ${losers.string} will have their votes redistributed to the remaining ${this.label}s based on their next preferences.`;
   }
 
   pollSummaryStatement() {

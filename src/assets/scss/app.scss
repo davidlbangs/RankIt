@@ -140,6 +140,11 @@ footer.actions {
     display: block!important;
     height: 100%;
     min-height: 100%;
+    max-width:100%;
+    span {
+      max-width:100%;
+      line-height:22px !important;
+    }
     // position: absolute;
   }
 }

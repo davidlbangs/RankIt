@@ -24,3 +24,31 @@
 // hr {
 //   border-top-color: rgba(0,0,0,0.1);
 // }
+@media only screen and (min-width: 900px) {
+    footer {
+      display:block;
+      /*padding-left:25px;*/
+      .half {
+        min-width:280px;
+        width:280px;
+        float:left;
+        text-align:right;
+        display:block;
+      }
+      .half.first {
+        width:75%;
+        min-height:25px;
+      }
+    button {
+      margin-right:30px;
+      margin-top: 15px;
+      width: 270px;
+      min-height: 10%;
+      height: 67px;
+      border-radius: 30px;
+      min-width: 200px;
+      float:right;
+      margin-right:10px;
+    }
+  }
+  }

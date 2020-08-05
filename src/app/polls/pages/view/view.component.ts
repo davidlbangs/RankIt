@@ -15,7 +15,7 @@ import { Store } from 'store';
     <button 
       [routerLink]="['create']"
       mat-button mat-raised-button [color]="'primary'" 
-      class="d-block has-icon dark-icon button-large mb-3"><i class="fa fa-plus-square"></i>Create Poll</button>
+      class="d-block newPoll has-icon dark-icon button-large mb-3"><i class="fa fa-plus-square"></i>Create Poll</button>
 
    <h1 class="mb-2 mt-2">My Polls</h1>
       <hr class="mb-2" />
