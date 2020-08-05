@@ -6,8 +6,8 @@ const admin = require('firebase-admin');
 // https://firebase.google.com/docs/functions/typescript
 
 
-function stv(winners, ballots) {
-  
+function stv(winners, ballots, choices) {
+
   // helper objects
   let name2totals = {};
   let name2ballots = {};
@@ -24,21 +24,26 @@ function stv(winners, ballots) {
   // In a 2 winner race with 327 ballots, a candidate with 110 votes is guaranteed victory.
   const threshold = Math.floor(ballots.length/(winners+1))+1;
 
+  //
+  choices.forEach(choice => name2totals[choice] = 0);
+  choices.forEach(choice => name2ballots[choice] = []);
+  choices.forEach(choice => name2weights[choice] = []);
+
   // Factor
-  // 
+  //
   let factor = 1;
   let elim;
   let cans;
 
   // do...while the winner count is less than the "can win" count.
   do {
-    
+
     // ITERATE OVER EACH BALLOT
     ballots.forEach(function(ballot, i) {
       while (ballot.length) {
-        
+
         // grab the name of the vote and remove from the ballot array.
-        let name = ballot.shift(); 
+        let name = ballot.shift();
 
         // if it's the first round, everyone gets through.
         // otherwise, we check to see if name is in name2totals
@@ -68,13 +73,21 @@ function stv(winners, ballots) {
       elected.push(elim);
       factor = (mx-threshold)/mx;
     } else {
+
       // @ts-ignore
       let mn = Math.min(...Object.values(name2totals));
-      let mn_keys = Object.entries(name2totals).filter(x=>x[1]===mn).map(x=>x[0]);
+      let mn_keys = Object.entries(name2totals).filter(x=> x[1]===mn).map(x=>x[0]);
       // @ts-ignore
       elim = mn_keys[parseInt((Math.random())*mn_keys.length)];
       eleminated.push({"round": (rounds.length-1), "name": elim, "from": mn_keys.length});
       factor = 1;
+
+      //remove zero vote candidates
+      let mn_zero_keys = Object.entries(name2totals).filter(x=> x[1]===0).map(x=>x[0]);
+      mn_zero_keys.forEach(key =>
+        eleminated.push({"round": (rounds.length-1), "name": key, "from": -1})
+      );
+      mn_zero_keys.forEach(key => delete name2totals[key]);
     }
 
     // console.log('prereference', name2ballots[elim], ballots);
@@ -91,15 +104,15 @@ function stv(winners, ballots) {
 
   if (winners !== 0) {
     Object.keys(name2totals).forEach(x=>elected.push(x));
-  }   
+  }
   return {"elected": elected, "rounds": rounds, "threshold": threshold, "eleminated": eleminated};
-} 
+}
 
 
-function calculateResults(winners, ballots) {
-  console.log('calculate results with...', winners, ballots);
+function calculateResults(winners, ballots, choices) {
+  console.log('calculate results with...', winners, ballots, choices);
 
-  return stv(winners, ballots);
+  return stv(winners, ballots, choices);
 }
 
 
@@ -126,7 +139,7 @@ export const syncPoll = functions.firestore
           .then(function(querySnapshot) {
             const votes = [];
             let results = {};
-            
+
             // Iterate all Votes
             querySnapshot.forEach(function(doc){
               votes.push(doc.data().choices);
@@ -137,13 +150,13 @@ export const syncPoll = functions.firestore
             // update data
             return pollRef
                 .update({'results': results, 'vote_count': admin.firestore.FieldValue.increment(1)})
-                .then(() => console.log('results', results, 'updated poll!', pollID));  
+                .then(() => console.log('results', results, 'updated poll!', pollID));
           });
 
         // -----
 
       })
       .catch(err => console.log(err));
-    
+
 
   });
