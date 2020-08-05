@@ -23,12 +23,12 @@ import { environment } from '../../../../environments/environment';
     
       <div *ngIf="poll$ | async as poll; else loading;">
       <div *ngIf="poll.is_published">
-      <header class="poll-header" [ngStyle]="{'background': poll.customizations?.barColor != '' ? poll.customizations?.barColor : '#EAEDF0', 'color': poll.customizations?.color != '' ? poll.customizations?.color : '#69757C'}">
-        <h1 [ngStyle]="{'color': poll.customizations?.color != '' ? poll.customizations?.color : '#283136;'}" class="">{{poll.title}}</h1>
-          <p class="mb-1" *ngIf="poll.results_public">
+      <header style="border-bottom-left-radius:20px;border-bottom-right-radius:20px;" class="poll-header" [ngStyle]="{'background': poll.customizations?.barColor != '' ? poll.customizations?.barColor : '#EAEDF0', 'color': poll.customizations?.color != '' ? poll.customizations?.color : '#69757C'}">
+        <p [ngStyle]="{'color': poll.customizations?.color != '' ? poll.customizations?.color : '#283136;'}" class="">{{poll.title}}</p>
+          <h1 class="mb-1" *ngIf="poll.results_public">
             {{pollSummaryStatement(poll.results, poll.winner_count, poll.vote_count) }}
-          </p>
-          <share-poll [poll]="poll"></share-poll>
+          </h1>
+          <share-poll *ngIf="summary" [poll]="poll"></share-poll>
       </header>
 
       <ng-container *ngIf="poll.results_public else noResultsYet">
@@ -43,11 +43,11 @@ import { environment } from '../../../../environments/environment';
 
             <hr class="mt-4 mb-4" />
           </div>
-          <h2 class="mt-3 mb-1">
+          <h1 class="mt-3 mb-1">
             {{ (summary) ? 'Final Result' : 'Round ' + round }} 
             <span *ngIf="round === getTotalRounds(results) && !summary">(Final Result)</span>
             <a (click)="toggleDisplayStyle()" class="count-link">Show {{(LOCAL_DISPLAY_COUNT) ? 'Vote Percentage' : 'Vote Count' }}</a>
-          </h2>
+          </h1>
           <p class="mb-1"></p>
           <!--<p class="mb-1">{{poll.vote_count}} votes in {{poll.results.rounds.length}} rounds to elect {{poll.winner_count}} {{poll.label}}s.</p>-->
          
@@ -114,15 +114,22 @@ import { environment } from '../../../../environments/environment';
         </div>
         <div class="half">
           <button
-            *ngIf="round < poll.results.rounds.length" 
+            *ngIf="summary == false && round < poll.results.rounds.length" 
             (click)="toRound(nextRound, poll)" [ngStyle]="{'background': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#673ab7'}"
             mat-button mat-raised-button [color]="'primary'" 
             class="d-block button-large p-1">See Round {{ nextRound }}</button>
           <button
+            *ngIf="summary" 
+            (click)="toRound(nextRound, poll)" [ngStyle]="{'background': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#673ab7'}"
+            mat-button mat-raised-button [color]="'primary'" 
+            class="d-block button-large p-1">See Results by Round</button>
+          
+          
+          <button
             mat-button mat-raised-button [color]="'primary'" [ngStyle]="{'background': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#673ab7'}"
             (click)="toAfterResults(poll)"
             class="d-block button-large p-1"
-            *ngIf="round ===poll.results.rounds.length" >
+            *ngIf="!summary && round ===poll.results.rounds.length" >
             Finish
           </button>
         </div>

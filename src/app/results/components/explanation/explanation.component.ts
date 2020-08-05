@@ -74,14 +74,17 @@ export class ExplanationComponent implements OnInit {
   }
 
   elemination(round) {
-    for (let el of this.results.eleminated) {
-      if (el.round == (round+1) && el.from > 1) {
-        return true;
-      }
-      if (el.round == (round) && el.from > 1) {
-        return true;
+    if (this.results.eleminated) {
+      for (let el of this.results.eleminated) {
+        if (el.round == (round+1) && el.from > 1) {
+          return true;
+        }
+        if (el.round == (round) && el.from > 1) {
+          return true;
+        }
       }
     }
+    
     return false;
   }
 

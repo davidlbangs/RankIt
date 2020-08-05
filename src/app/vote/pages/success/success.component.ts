@@ -49,6 +49,10 @@ export class SuccessComponent implements OnInit {
           this.poll$ = this.voteService.getPoll(id);
           this.poll$.subscribe(res => {
             this.poll = res;
+            if (this.voteService.hasVoted(this.poll)==false) {
+              
+              this.router.navigate(['/vote/', id]);
+            }
           });
 
           if(user) {

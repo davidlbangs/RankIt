@@ -117,8 +117,11 @@ export class DetailComponent implements OnInit {
 
   poll$: Observable<any>; // should be poll
   subscription: Subscription;
+  subscription2: Subscription;
   currentPoll: Poll;
   showDelete:boolean = false;
+  isAdmin = false;
+  loaded = false;
 
   constructor(
               private auth: AuthService,
@@ -132,24 +135,26 @@ export class DetailComponent implements OnInit {
 
   ngOnInit() {
     this.store.set('backButton', 'polls');
-    this.store.select<User>("user").subscribe(user => {
+    console.log("we are getting the user now");
+    this.subscription2 = this.store.select<User>("user").subscribe(user => {
+      if (user && user.roles && this.loaded == false) {
+        this.loaded = true;
+      console.log("have the user, checking for roles for admin: ", user);
       if (user.roles.admin) {
-        this.subscription = this.pollService.getAdminPolls().subscribe();
-        this.poll$ = this.route.params
-        .pipe(
-              switchMap(param => {
-                const poll = this.pollService.getAdminPoll(param.id);
-                return poll;
-              }),
-              tap(next => {
-                if (next) {
-                this.meta.setTitle(next.title);
-                this.currentPoll = next;
-                }
-              })
-              );
+        console.log("we are admin1");
+        this.loadForAdmin();
+        
       }
       else {
+            this.loadForUser();
+          }
+      
+    }
+    });
+    
+    
+  }
+  loadForUser() {
         this.subscription = this.pollService.getUserPolls().subscribe();
         this.poll$ = this.route.params
       .pipe(
@@ -164,13 +169,27 @@ export class DetailComponent implements OnInit {
               }
             })
             );
-      }
-    });
-    
-    
+  }
+  loadForAdmin() {
+
+    this.poll$ = this.route.params
+    .pipe(
+          switchMap(param => {
+            this.subscription = this.pollService.getAdminPollsById(param.id).subscribe();
+            const poll = this.pollService.getAdminPoll(param.id);
+            return poll;
+          }),
+          tap(next => {
+            if (next) {
+            this.meta.setTitle(next.title);
+            this.currentPoll = next;
+            }
+          })
+          );
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.subscription2.unsubscribe();
   }
 
   editPoll(poll: Poll) {
@@ -199,6 +218,16 @@ export class DetailComponent implements OnInit {
   togglePublished(poll:Poll) {
     if (confirm('Are you sure? Once you publish a poll others will be able to see it and vote on it until you close the poll.')) {
       this.pollService.togglePollPublished(poll.id, poll.is_published);
+      if (confirm('Do you want to show your results immediately after each vote, or hide them from voters until you close the poll?')) {
+        poll.results_public = true;
+        this.pollService.togglePollResultsPublic(poll.id, poll.results_public);
+        alert('Your results are visible. Voters in your poll will see the current results immediately after they cast their vote.');
+      }
+      else {
+        poll.results_public = false;
+        this.pollService.togglePollResultsPublic(poll.id, poll.results_public);
+        alert('Your results are hidden. To show this poll\'s results later, click the toggle beside "Do not show votes publicly');
+      }
     }
   }
 

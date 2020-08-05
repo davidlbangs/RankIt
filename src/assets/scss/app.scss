@@ -202,9 +202,12 @@ footer.actions {
   padding-top:30px;
   padding-bottom:5px;
   button {
-    max-width:300px;
+    /*max-width:300px;
     margin-left:auto;
-    margin-right:auto;
+    margin-right:auto;*/
+    margin-left:2rem;
+    margin-right:2rem;
+    width:calc(100% - 4rem);
   }
 }
 .clear {

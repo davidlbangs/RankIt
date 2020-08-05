@@ -29,13 +29,13 @@ export class AuthService {
       .pipe(
               switchMap( user => {
                  if(user) {
+                //   console.log("user: ", user);
                    // temporarily set the user from the auth state.
                    const tempUser = {
                      uid: user.uid,
-                     email: user.email,
-                     roles: {user: true}
+                     email: user.email
                    }
-                   this.store.set('user', tempUser);
+                   this.store.set('user', user);
 
                    // get the actual user.
                    return this.afs.doc<User>(`users/${user.uid}`).valueChanges();

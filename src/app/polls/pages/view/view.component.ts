@@ -19,7 +19,7 @@ import { Store } from 'store';
 
    <h1 class="mb-2 mt-2">My Polls</h1>
       <hr class="mb-2" />
-    <div *ngIf="polls$ | async as polls; else loading;" class="pb-5">
+    <div *ngIf="polls" class="pb-5">
 
         <mat-card *ngFor="let poll of polls" [routerLink]="[poll.id]" class="mb-1 linked-card">
           <mat-card-title>{{poll.title}}</mat-card-title>
@@ -32,18 +32,17 @@ import { Store } from 'store';
         
     </div>
 
-    <ng-template #loading>
-      <div class="message">
+      <div class="message" *ngIf="!polls">
         <img src="/assets/images/loading.svg" alt="" />
         Fetching polls...
       </div>
-    </ng-template>
     </main>
 
   `
 })
 export class ViewComponent implements OnInit {
-  polls$: Observable<Poll[]>;
+  polls$: Subscription;
+  polls;
   subscription: Subscription;
   constructor(
               private store: Store, 
@@ -52,13 +51,20 @@ export class ViewComponent implements OnInit {
 
   ngOnInit() {
     this.store.set('backButton', 'home');
-    this.polls$ = this.store.select<Poll[]>('userPolls'+this.pollService.uid);
+    //console.log("D:", 'userPolls'+this.pollService.uid);
+    this.polls$ = this.store.select<Poll[]>('userPolls'+this.pollService.uid).subscribe(polls => {
+      if (polls) {
+      this.polls = polls;
+      this.polls.sort((a, b) => a.date_created < b.date_created ? 1 : a.date_created > b.date_created ? -1 : 0);
+      }
+    })
     // this.subscription = this.pollService.polls$.subscribe(); // returns subscription
     this.subscription = this.pollService.getUserPolls().subscribe();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.polls$.unsubscribe();
   }
 
 }

@@ -54,12 +54,17 @@ export class VoteService {
           );
   }
 
+  hasVoted(poll:Poll) {
+    return this.cookie.get("rankit-" + poll.id) == 'voted';
+  }
+
   submitVote(poll:Poll, vote:Vote) {
     // console.log('submit', poll, vote);
 
     if(poll.limit_votes) {
       this.cookie.set('rankit-' + poll.id, 'voted',365);
     }
+    this.cookie.set('rankit1-' + poll.id, 'voted',365);
 
     vote.id = this.db.createId();
     vote.date_created = Date.now();

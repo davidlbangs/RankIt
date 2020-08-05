@@ -10,14 +10,14 @@ import { Poll } from '../../../shared/models/poll.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex-grid mb-1 sharePoll">
-          <button 
+          <button style="max-width:150px;"
               mat-stroked-button color="primary" class="has-icon bg-white"
               (click)="copyVoteLink(voteLink)"><i class="fa fa-link"></i>Copy Link</button>
-          <a
+          <a style="max-width:150px;"
             target="_BLANK"
             href="{{ buildTweetLink(voteLink, poll.title)}}" 
             mat-stroked-button color="primary" class="has-icon bg-white"><i class="fa fa-twitter"></i>Tweet</a>
-          <a 
+          <a style="max-width:150px;"
             mat-stroked-button color="primary" class="has-icon bg-white"
             target="_BLANK"
             href="{{ buildFacebookLink(voteLink)}}" ><i class="fa fa-facebook-f"></i>Post</a>

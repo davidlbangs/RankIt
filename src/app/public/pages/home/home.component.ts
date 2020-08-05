@@ -11,11 +11,13 @@ import { Store } from 'store';
   styleUrls: ['./home.component.scss'],
   template: `
   <div class="subHeader">
-  <button
-    *ngIf="user$ | async"
+  
+    <button *ngIf="user$ | async"
     [routerLink]="['/polls/create']"
     mat-button mat-raised-button [color]="'primary'" 
-    class="d-block has-icon dark-icon button-large mb-3">Create Poll</button>
+    class="d-block has-icon dark-icon button-large mb-3"><i class="fa fa-plus-square"></i>Create Poll</button>
+
+
     <button
     *ngIf="!(user$ | async)"
     [routerLink]="['/auth/login']"

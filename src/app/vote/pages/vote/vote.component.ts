@@ -57,14 +57,10 @@ public ngAfterViewInit(): void
   if (this.server) {
     return;
   }
-  console.log("after init");
   this.recaptchaElements.changes.subscribe((comps: QueryList<ElementRef>) =>
   {
-    console.log("check to make captcha work1");
-    console.log("we have: ", this.id);
     if (this.is_open) {
 
-      console.log("we are open");
       this.addRecaptchaScript(comps.first);
     }
   });
@@ -242,7 +238,6 @@ ngOnDestroy() {
     if (this.is_open == false && this.isPollOwner(user?.uid, poll.owner_uid)) {
       this.is_open = true;
     }
-    console.log("open2: ", this.is_open);
 
     // decide if they've voted already
     if(

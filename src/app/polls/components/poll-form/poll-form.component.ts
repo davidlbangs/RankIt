@@ -298,7 +298,9 @@ import { publish } from 'rxjs/operators';
             Save Poll & Publish
           </button>
             <!-- ../ takes back to previously came from -->
+            <button (click)="toggle()" mat-stroked-button color="red" class="has-icon"><i class="fa fa-times"></i>Delete Poll</button>
             <a mat-button [routerLink]="['../']" class="button button--cancel">Cancel</a>
+            
           </div>
 
           <div *ngIf="form.invalid && (form.dirty || form.touched)" class="alert">
@@ -315,9 +317,7 @@ import { publish } from 'rxjs/operators';
               <button class="cancel" type="button" (click)="toggle()">No</button>
             </div>
 
-            <button class="button button--delete" type="button" (click)="toggle()">
-              Delete
-            </button>
+            
           </div>
         </div>
       </form>
@@ -377,7 +377,8 @@ export class PollFormComponent implements OnChanges {
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,
-    public http: HttpClient
+    public http: HttpClient,
+    public pollService: PollService
     ) {}
 
   validateUniqueChoices(choices: FormArray) {
@@ -485,6 +486,7 @@ export class PollFormComponent implements OnChanges {
       if (published) {
         if (confirm('Are you sure? Once you publish a poll others will be able to see it and vote on it until you close the poll.')) {
           this.createPublish.emit(this.form.value);
+          
         }
       }
       else {
