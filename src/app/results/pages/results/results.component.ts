@@ -46,7 +46,7 @@ import { environment } from '../../../../environments/environment';
           <h1 class="mt-3 mb-1">
             {{ (summary) ? 'Final Result' : 'Round ' + round }} 
             <span *ngIf="round === getTotalRounds(results) && !summary">(Final Result)</span>
-            <a (click)="toggleDisplayStyle()" class="count-link">Show {{(LOCAL_DISPLAY_COUNT) ? 'Vote Percentage' : 'Vote Count' }}</a>
+            <a (click)="toggleDisplayStyle()" *ngIf="poll.vote_count > (poll.choices.length * 2 + 1)" class="count-link">Show {{(LOCAL_DISPLAY_COUNT) ? 'Vote Percentage' : 'Vote Count' }}</a>
           </h1>
           <p class="mb-1"></p>
           <!--<p class="mb-1">{{poll.vote_count}} votes in {{poll.results.rounds.length}} rounds to elect {{poll.winner_count}} {{poll.label}}s.</p>-->

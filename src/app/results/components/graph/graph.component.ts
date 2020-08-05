@@ -106,7 +106,7 @@ export class GraphComponent implements OnInit {
     let isWinner = this.declareWinner(round, choice);
 
     // don't show in first round or if it's a winner
-    if(round == 1 || isWinner) {
+    if(round == 1) {
       return false;
     }
       console.log(currentPercentage, previousPercentage);
