@@ -70,7 +70,7 @@ function stv(winners, ballots, choices) {
     if (threshold <= mx) {
       winners--;
       elim = Object.entries(name2totals).filter(x=>x[1]===mx)[0][0];
-      elected.push(elim);
+      elected.push({"name": elim, "votes": name2totals[elim], "round": (rounds.length-1)});
       factor = (mx-threshold)/mx;
     } else {
 
@@ -80,13 +80,13 @@ function stv(winners, ballots, choices) {
       let mn_keys = Object.entries(name2totals).filter(x=> x[1]===mn).map(x=>x[0]);
       // @ts-ignore
       elim = mn_keys[parseInt((Math.random())*mn_keys.length)];
-      eleminated.push({"round": (rounds.length-1), "name": elim, "from": mn_keys.length});
+      eleminated.push({"round": (rounds.length-1), "name": elim, "from": mn_keys.length, "votes": name2totals[elim]});
       factor = 1;
 
       //remove zero vote candidates
       let mn_zero_keys = Object.entries(name2totals).filter(x=> x[1]===0 && !eleminated.map(x=>x['name']).includes(x[0])).map(x=>x[0]);
       mn_zero_keys.forEach(key =>
-          eleminated.push({"round": (rounds.length-1), "name": key, "from": -1})
+          eleminated.push({"round": (rounds.length-1), "name": key, "from": -1, "votes": name2totals[key]})
       );
       mn_zero_keys.forEach(key => delete name2totals[key]);
     }
