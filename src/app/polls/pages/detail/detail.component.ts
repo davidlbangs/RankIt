@@ -40,9 +40,11 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
         </div>
 
         <mat-card class="mb-2">
-          <mat-slide-toggle [checked]="poll.is_open" (click)="toggleOpen(poll)">
+          <mat-slide-toggle [checked]="poll.is_open" (click)="toggleOpen(poll)" [disabled]="!poll.is_published">
             {{poll.is_open ? 'Open, Accepting Votes' : 'Closed, Not Accepting Votes'}}
           </mat-slide-toggle>
+
+          <p *ngIf="!poll.is_published" class="explainer mt-1">To open voting, publish the poll first.</p>
 
           <p *ngIf="poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until you close it.</p>
           <p *ngIf="!poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until {{poll.length.end_time | date : 'long'}}</p>
@@ -81,12 +83,10 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
         <button (click)="csv()"
           [disabled]="poll.is_open || poll.vote_count == 0"
         mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-table"></i>Download Results (CSV)</button>
-        <button (click)="json()"
+        <button (click)="jsonUpload()"
         [disabled]="poll.is_open || poll.vote_count == 0"
-      mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-table"></i>Download Results (JSON)</button>
-      <button (click)="jsonUpload()"
-      [disabled]="poll.is_open || poll.vote_count == 0"
-    mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-table"></i>Download Results (JSON)</button>
+      mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-share-alt"></i>Export Results to RCVIS</button>
+     
     
         <hr class="mt-3 mb-4" />
         <h1 class="mb-1">Promote Poll</h1>
@@ -209,6 +209,9 @@ export class DetailComponent implements OnInit {
   }
 
   toggleOpen(poll: Poll) {
+    if (poll.is_published == false) {
+      return;
+    }
     this.pollService.togglePollOpen(poll.id, poll.is_open);
   }
 
@@ -231,7 +234,7 @@ export class DetailComponent implements OnInit {
       else {
         poll.results_public = false;
         this.pollService.togglePollResultsPublic(poll.id, poll.results_public);
-        alert('Your results are hidden. To show this poll\'s results later, click the toggle beside "Do not show votes publicly');
+        alert('Your results are hidden. Click "OK" to show your results immediately after each vote. Click "Cancel" to hide them from voters until you close the poll.');
       }
     }
   }
@@ -309,19 +312,20 @@ export class DetailComponent implements OnInit {
         "results": rounds
       };
       console.log("ret: ", ret);
-      let formData: FormData = new FormData();
-      const blob = new Blob([JSON.stringify(ret)], {type : 'application/json'})
-      formData.append('jsonFile', blob, "file.json");
+     // let formData: FormData = new FormData();
+     // const blob = new Blob([JSON.stringify(ret)], {type : 'application/json'})
+     //  formData.append('jsonFile', blob, "file.json");
       let headers = new HttpHeaders();
       /** In Angular 5, including the header Content-Type can invalidate your request */
-      headers.append('Content-Type', 'multipart/form-data');
-      headers.append('Accept', 'application/json');
-      headers.append('Authorization', 'Token 1abcc2baa9cc264aaf5ba56d109e91a96e08ac14');
-      this.http.post(`https://www.rcvis.com/api/visualizations/`, formData, { headers: headers })
+      this.http.post<any>(`https://us-central1-rankit-vote.cloudfunctions.net/visualizeF`, ret)
       .pipe(
         map(res => res)
       ).subscribe(
-          data => console.log('success', data),
+          data => {
+            console.log('success', data);
+            var win = window.open(data.visualizeUrl, '_blank');
+            win.focus();
+          },
           error => console.log(error)
         )
     });

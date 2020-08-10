@@ -122,6 +122,12 @@ export class ExplanationComponent implements OnInit {
   winnerSummaryStatement(round) {
     const winners = this.getWinners(round);
     const winnerArray = Object.keys(winners);
+    var totalWinnersThusFar = 0;
+    for (var i = 0; i < round; i++) {
+
+      const winnersT = this.getWinners(round);
+      totalWinnersThusFar += Object.keys(winnersT).length;
+    }
     const pctNumArray:number[] = Object.values(winners);
     const pctStrArray:string[] = pctNumArray.map((x:number) => this.percentToString(x));
 
@@ -131,8 +137,18 @@ export class ExplanationComponent implements OnInit {
     const wins = (winnerArray.length > 1) ? 'win' : 'wins';
     const pctString = this.resultsService.candidateListString(pctStrArray);
     const respectively = (winnerArray.length > 1) ? ', respectively' : '';
+    var extra = '';
+    if (totalWinnersThusFar < this.winner_count) {
+      let more = this.winner_count - totalWinnersThusFar;
+      if (more == 1) {
+        extra = ' One more winner will be chosen.'
+      }
+      else {
+        extra = more + ' more winners be chosen.';
+      }
+    }
 
-    return `We have ${aWinner}! ${winnerString} ${wins} with ${pctString} of the vote${respectively}.`;
+    return `We have ${aWinner}! ${winnerString} ${wins} with ${pctString} of the vote${respectively}.`+extra;
   }
 
   noWinnerSummaryStatement(round) {

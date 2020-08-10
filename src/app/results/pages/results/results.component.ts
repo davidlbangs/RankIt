@@ -33,7 +33,7 @@ import { environment } from '../../../../environments/environment';
 
       <ng-container *ngIf="poll.results_public else noResultsYet">
       <main class="clear-footer" *ngIf="poll.results as results; else noResults">
-          <div *ngIf="poll.vote_count < (poll.choices.length * 2 + 1)">
+          <div *ngIf="poll.vote_count < (poll.winner_count * 2 + 1)">
             <div class="alert mt-3">
               <div [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
                 <h3 class="mb-2 color-white">Heads Up</h3>
@@ -46,7 +46,7 @@ import { environment } from '../../../../environments/environment';
           <h1 class="mt-3 mb-1">
             {{ (summary) ? 'Final Result' : 'Round ' + round }} 
             <span *ngIf="round === getTotalRounds(results) && !summary">(Final Result)</span>
-            <a (click)="toggleDisplayStyle()" *ngIf="poll.vote_count > (poll.choices.length * 2 + 1)" class="count-link">Show {{(LOCAL_DISPLAY_COUNT) ? 'Vote Percentage' : 'Vote Count' }}</a>
+            <a (click)="toggleDisplayStyle()" *ngIf="poll.vote_count > (poll.winner_count * 2 + 1)" class="count-link">Show {{(LOCAL_DISPLAY_COUNT) ? 'Vote Percentage' : 'Vote Count' }}</a>
           </h1>
           <p class="mb-1"></p>
           <!--<p class="mb-1">{{poll.vote_count}} votes in {{poll.results.rounds.length}} rounds to elect {{poll.winner_count}} {{poll.label}}s.</p>-->
@@ -83,7 +83,7 @@ import { environment } from '../../../../environments/environment';
           <h2 class="mt-3 mb-1">{{ summary ? 'Poll' : 'Round'}} Summary</h2>
 
           <results-explanation
-              *ngIf="poll.vote_count > (poll.choices.length * 2 + 1)" 
+              *ngIf="poll.vote_count > (poll.winner_count * 2 + 1)" 
               [results]="poll.results" 
               [all_choices]="poll.choices"
               [round]="round-1"
@@ -94,7 +94,7 @@ import { environment } from '../../../../environments/environment';
               [label]="poll.label"></results-explanation> 
 
 
-          <p *ngIf="poll.vote_count < (poll.choices.length * 2 + 1)">There are not yet enough votes to show a meaningful summary.</p>
+          <p *ngIf="poll.vote_count < (poll.winner_count * 2 + 1)">There are not yet enough votes to show a meaningful summary.</p>
 
           </div>
           <div class="clear"></div>
@@ -103,6 +103,16 @@ import { environment } from '../../../../environments/environment';
       <p class="mb-2 subtle-text small-text">A vote becomes "inactive" when all their choices are eliminated.</p>
       </main>
 <div style="footerWrapper">
+<ng-container *ngIf="summary">
+      <footer class="actions" *ngIf="poll.results as results">
+      <button
+      (click)="toRound(nextRound, poll)" [ngStyle]="{'background': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#673ab7'}"
+      mat-button mat-raised-button [color]="'primary'" 
+      class="d-block button-large p-1">See Results by Round</button>
+
+      </footer>
+      </ng-container>
+      <ng-container *ngIf="summary==false">
       <footer class="actions" *ngIf="poll.results as results;">
         <div class="half first">
           <button
@@ -118,11 +128,7 @@ import { environment } from '../../../../environments/environment';
             (click)="toRound(nextRound, poll)" [ngStyle]="{'background': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#673ab7'}"
             mat-button mat-raised-button [color]="'primary'" 
             class="d-block button-large p-1">See Round {{ nextRound }}</button>
-          <button
-            *ngIf="summary" 
-            (click)="toRound(nextRound, poll)" [ngStyle]="{'background': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#673ab7'}"
-            mat-button mat-raised-button [color]="'primary'" 
-            class="d-block button-large p-1">See Results by Round</button>
+         
           
           
           <button
@@ -134,6 +140,7 @@ import { environment } from '../../../../environments/environment';
           </button>
         </div>
     </footer>
+    </ng-container>
     </div>
     </ng-container>
 
@@ -238,6 +245,7 @@ export class ResultsComponent implements OnInit {
         if (this.summary) {
           this.round = 1;
         }
+        console.log("summary: ", this.summary);
 
 
         if(id) {

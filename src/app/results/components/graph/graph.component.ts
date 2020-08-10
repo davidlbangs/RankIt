@@ -47,13 +47,13 @@ export class GraphComponent implements OnInit {
     
 
     // move items that got zero votes to the bottom
-    /*for(let x of sorted) {
+    for(let x of sorted) {
       if(!(x in choicesWithVotes)){
         sorted.push(sorted.splice(sorted.indexOf(x), 1)[0]);
       }
-    }*/
+    }
     
-    //sorted = this.all_choices.sort((a, b) => (choicesWithVotes[a] > choicesWithVotes[b]) ? -1 : 1);
+    sorted = this.all_choices.sort((a, b) => (choicesWithVotes[a] > choicesWithVotes[b]) ? -1 : 1);
 
     // console.log('running sort', sorted, this.results.rounds[1], this.all_choices);
     return sorted;
@@ -91,7 +91,7 @@ export class GraphComponent implements OnInit {
                                              this.total_votes);
   }
   getThreshold() {
-    return (Math.round(this.threshold/this.total_votes*10000)/100)+"%";
+    return (this.winning_percentage*100).toFixed(0)+"%";
   }
   getCount(round: number, choice:Choice) {
     return this.resultsService.getCount(round, 

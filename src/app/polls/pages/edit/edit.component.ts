@@ -97,7 +97,7 @@ export class EditComponent implements OnInit, OnDestroy {
       else {
         event.results_public = true;
         this.pollService.togglePollResultsPublic(event.id, event.results_public);
-        alert('Your results are hidden. To show this poll\'s results later, click the toggle beside "Do not show votes publicly');
+        alert('Your results are hidden. Click "OK" to show your results immediately after each vote. Click "Cancel" to hide them from voters until you close the poll.');
       }
     }
 
