@@ -44,17 +44,48 @@ export class ResultsService {
 
   /* NEW from Stephen, 7/20*/
 
-  getCount(round:number, choice:string, results: Results) {
-    return results.rounds[round][choice];
+  getCount(round:number, choice:string, results: Results, rounds:any, winner_count, threshold) {
+
+    if(winner_count === 1) {
+      return results.rounds[round][choice];
+    }
+
+    // if the choice is elected in a previous round
+    // that choice gets the threshold.
+    if(
+       results.elected.includes(choice) && 
+       !rounds[round][choice]
+       ) {
+          return threshold;
+    } else {
+      return results.rounds[round][choice];
+    }
   }
 
-  getExhaustedVoteCount(round:number, results:Results, total_votes) {
+  getExhaustedVoteCount(round:number, results:Results, total_votes, winner_count, threshold, electedList, rounds) {
+    let voteAdjustment = 0;
     let current_votes:number = this.countVotes(results.rounds[round]);
-    return (total_votes - current_votes);
+
+    if(winner_count > 1) {
+      let pastWinners:number = 0;
+
+      // For all elected
+      // if they're in the round still, don't adjust for their votes
+      // if they're not in the round, adjust for their votes.
+      for(let elected of electedList){
+        if(!rounds[round][elected]) {
+          pastWinners++;
+        }
+      }
+      voteAdjustment = pastWinners * threshold;
+    }
+
+    return total_votes - (current_votes+voteAdjustment);
   }
-  getExhaustedVotePercentage(round:number, results:Results, total_votes) {
-    let current_votes:number = this.countVotes(results.rounds[round]);
-    return (1-current_votes/total_votes);
+  getExhaustedVotePercentage(round:number, results:Results, total_votes, winner_count, threshold, electedList, rounds) {
+    let exhaustedVoteCount = this.getExhaustedVoteCount(round, results, total_votes, winner_count, threshold, electedList, rounds);
+
+    return (exhaustedVoteCount/total_votes);
   }
 
   countVotes(roundObj: {[key:string]:number}){

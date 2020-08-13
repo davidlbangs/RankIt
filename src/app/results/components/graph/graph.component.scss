@@ -32,6 +32,7 @@
     top: 15px;
     left: 5px;
     align-items: center;
+    max-width: 100%;
   }
   .percentage, .count {
     width: 50px;
@@ -42,6 +43,10 @@
   }
   .label {
     margin-right: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
   .difference {
     font-size: 0.8rem;

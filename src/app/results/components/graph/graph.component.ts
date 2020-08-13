@@ -73,11 +73,11 @@ export class GraphComponent implements OnInit {
   }
 
   getExhaustedVoteCount(round:number){
-    return this.resultsService.getExhaustedVoteCount(round, this.results, this.total_votes);
+    return this.resultsService.getExhaustedVoteCount(round, this.results, this.total_votes, this.winner_count, this.threshold, this.elected, this.rounds);
   }
 
   getExhaustedVotePercentage(round:number){
-    return this.resultsService.getExhaustedVotePercentage(round, this.results, this.total_votes);
+    return this.resultsService.getExhaustedVotePercentage(round, this.results, this.total_votes, this.winner_count, this.threshold, this.elected, this.rounds);
   }
 
   getPercentage(round: number, choice:Choice) {
@@ -93,8 +93,11 @@ export class GraphComponent implements OnInit {
 
   getCount(round: number, choice:Choice) {
     return this.resultsService.getCount(round, 
-                                             choice, 
-                                             this.results);
+                                        choice, 
+                                        this.results,
+                                        this.rounds,
+                                        this.winner_count,
+                                        this.threshold);
   }
 
   showChange(round:number, choice:Choice) {
