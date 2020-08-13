@@ -107,11 +107,58 @@ export class GraphComponent implements OnInit {
     if(round == 1) {
       return false;
     }
-      console.log(currentPercentage, previousPercentage);
 
     // if different, calculate percentage difference.
     if(previousPercentage && (currentPercentage != previousPercentage)){
-      return currentPercentage - previousPercentage;
+
+      let delta = currentPercentage - previousPercentage;
+      console.log(currentPercentage, previousPercentage, delta);
+
+      // if percentage change is positive...
+      if(delta > 0) {
+
+        // and delta would go flying off the screen.
+        if ((delta + previousPercentage) > this.winning_percentage) {
+          // return this.winning_percentage - previousPercentage;
+        }
+
+      }
+      return delta;
+    }
+
+    // Otherwise return false
+    return false;
+  }
+
+  // There's a logical issue
+  // with winning situations because of the cut off on the graph.
+  getDeltaGrowthWidth(round: number, choice:Choice) {
+    let previousRound = round - 1;
+    let currentPercentage = this.getPercentage(round, choice);
+    let previousPercentage = this.getPercentage(previousRound, choice);
+    let isWinner = this.declareWinner(round, choice);
+
+    if(round == 1) {
+      return false;
+    }
+
+    // if different, calculate percentage difference.
+    if(previousPercentage && (currentPercentage != previousPercentage)){
+
+      let delta = currentPercentage - previousPercentage;
+
+      // if percentage change is positive...
+      // and delta would go flying off the screen.
+      if( delta > 0 &&
+         (delta + previousPercentage) > this.winning_percentage
+         ) {
+  
+          // reset delta to cap at 1.03
+          delta = this.winning_percentage - previousPercentage + .03;
+      }
+
+      // Make percentage
+      return this.getWidth(delta);
     }
 
     // Otherwise return false

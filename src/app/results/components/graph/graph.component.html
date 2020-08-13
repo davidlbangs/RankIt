@@ -32,7 +32,7 @@
         [class.is-winner]="declareWinner(round,choice)"
         [class.at-threshold]="getWidth(getPercentage(round, choice)-showChange(round,choice)) >= 100"
         [style.left.%]="getWidth(getPercentage(round, choice)-showChange(round,choice))"
-        [style.width.%]="getWidth(showChange(round, choice))"></div>
+        [style.width.%]="getDeltaGrowthWidth(round, choice)"></div>
       <div
         *ngIf="showChange(round, choice) < 0" 
         class="bar decrease"
