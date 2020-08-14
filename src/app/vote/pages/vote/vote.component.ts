@@ -173,7 +173,7 @@ ngOnDestroy() {
   async submitVote(poll:Poll, vote:Vote) {
     await this.voteService.submitVote(poll, vote);
 
-    this.analytics.logEvent('vote', {pollId: poll.id})
+    this.analytics.logEvent('vote', {pollId: poll.id, poll: poll, vote: vote})
     .then((res: any) => console.log(res))
     .catch((error: any) => console.error(error));
 

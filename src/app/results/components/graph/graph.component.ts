@@ -68,7 +68,8 @@ export class GraphComponent implements OnInit {
     if(round == this.total_rounds || round == 0) {
       return this.results.elected.includes(choice);
     } else {
-      return this.getPercentage(round, choice) >= this.winning_percentage;
+      //console.log("our percentage: ", this.getPercentage(round, choice), Math.round(this.winning_percentage*100)/100)
+      return this.getPercentage(round, choice) >= Math.round(this.winning_percentage*100)/100;
     }
   }
 

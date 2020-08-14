@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { User } from '../../../../shared/models/user.interface';
 
 import { Store } from 'store';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 
 @Injectable()
@@ -22,6 +23,7 @@ export class AuthService {
     private store:Store,
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
+    private analytics: AngularFireAnalytics,
     private router: Router
     ) {
 
@@ -35,7 +37,12 @@ export class AuthService {
                      uid: user.uid,
                      email: user.email
                    }
+                   console.log('setting the user:', user);
                    this.store.set('user', user);
+                   let ua = user as any;
+                   if (ua.emailVerified && user.emailVerified == false ) {
+                    this.analytics.logEvent('new_account', ua.email);
+                   }
 
                    // get the actual user.
                    return this.afs.doc<User>(`users/${user.uid}`).valueChanges();

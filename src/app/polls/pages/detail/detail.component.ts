@@ -13,6 +13,7 @@ import { query } from '@angular/animations';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from '@shared/models/user.interface';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 @Component({
   selector: 'app-detail',
@@ -86,7 +87,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
         <button (click)="jsonUpload()"
         [disabled]="poll.is_open || poll.vote_count == 0"
       mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-share-alt"></i>Export Results to RCVIS</button>
-     
+      
     
         <hr class="mt-3 mb-4" />
         <h1 class="mb-1">Promote Poll</h1>
@@ -133,6 +134,7 @@ export class DetailComponent implements OnInit {
     private pollService: PollService,
     private router: Router,
     private store: Store,
+    private analytics: AngularFireAnalytics,
     private db: AngularFirestore,
     private http: HttpClient,
     private route: ActivatedRoute) { }
@@ -225,16 +227,17 @@ export class DetailComponent implements OnInit {
 
   togglePublished(poll: Poll) {
     if (confirm('Are you sure? Once you publish a poll others will be able to see it and vote on it until you close the poll.')) {
+      this.analytics.logEvent('published_poll', {poll: poll});
       this.pollService.togglePollPublished(poll.id, poll.is_published);
-      if (confirm('Do you want to show your results immediately after each vote, or hide them from voters until you close the poll?')) {
+      if (confirm('Click "OK" to show your results immediately after each vote. Click "Cancel" to hide them from voters until you close the poll.')) {
         poll.results_public = true;
         this.pollService.togglePollResultsPublic(poll.id, poll.results_public);
-        alert('Your results are visible. Voters in your poll will see the current results immediately after they cast their vote.');
+        alert('Your poll is published and ready to share. Voters will see results after they submit their vote.');
       }
       else {
         poll.results_public = false;
         this.pollService.togglePollResultsPublic(poll.id, poll.results_public);
-        alert('Your results are hidden. Click "OK" to show your results immediately after each vote. Click "Cancel" to hide them from voters until you close the poll.');
+        alert('Your poll is published and ready to share. Voters will not see results until/unless you choose to display them in your settings.');
       }
     }
   }
@@ -263,9 +266,11 @@ export class DetailComponent implements OnInit {
 
   jsonUpload() {
     let pollID = this.currentPoll.id;
-    const votesRef = this.db.collection(`polls/${pollID}/votes`).valueChanges();
+    const votesRef = this.db.collection(`polls/${pollID}/votes`).get().subscribe(data2 => {
+
+   console.log("data: ", data2);
     let l = this.currentPoll.choices.length;
-    votesRef.subscribe((data2: Vote[]) => {
+    //votesRef.subscribe((data2: Vote[]) => {
       var date = new Date(this.currentPoll.date_created);
       console.log("date: ", date);
       var year = date.getFullYear();
@@ -278,13 +283,14 @@ export class DetailComponent implements OnInit {
         day = "0" + day;
       }
       console.log("dmy: ", day, month, year);
+      console.log("rounds: ", this.currentPoll.results.rounds);
       let rounds = [];
-      for (var i = 0; i < this.currentPoll.results.elected.length; i++) {
+      for (var i = 0; i < this.currentPoll.results.rounds.length; i++) {
         let roundData = this.currentPoll.results.rounds[i];
+        if (roundData) {
         let roundData2 = {};
         //console.log("rd: ", Object.keys(roundData));
         for (const r of Object.keys(roundData)) {
-
           roundData2["" + r] = "" + Math.round(1 * roundData[r]);
         }
         let tallyResults = {};
@@ -300,6 +306,7 @@ export class DetailComponent implements OnInit {
           "tallyResults": [tallyResults]
         };
         rounds.push(round);
+      }
       }
       let ret = {
         "config": {
@@ -329,6 +336,7 @@ export class DetailComponent implements OnInit {
           error => console.log(error)
         )
     });
+  
   }
 
   json() {
@@ -349,7 +357,7 @@ export class DetailComponent implements OnInit {
       }
       console.log("dmy: ", day, month, year);
       let rounds = [];
-      for (var i = 0; i < this.currentPoll.results.elected.length; i++) {
+      for (var i = 0; i < Object.keys(this.currentPoll.results).length; i++) {
         let roundData = this.currentPoll.results.rounds[i];
         let roundData2 = {};
         //console.log("rd: ", Object.keys(roundData));

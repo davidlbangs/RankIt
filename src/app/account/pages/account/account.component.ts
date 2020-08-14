@@ -25,7 +25,7 @@ import { AuthService } from '../../../auth/shared/services/auth/auth.service';
             <input matInput placeholder="" [value]="user.email" disabled>
           </mat-form-field>
 
-          <div class="admin mb-3" *ngIf="user.roles.admin">
+          <div class="admin mb-3" *ngIf="user.roles?.admin">
             <h3 class="mt-2 mb-1">Admin</h3>
             <button (click)="toAdmin('manage-polls')" mat-stroked-button [color]="'accent'" class="has-icon mr-1"><i class="fa fa-rocket"></i>Manage Polls</button>
             <button (click)="toAdmin('manage-users')" mat-stroked-button [color]="'accent'" class="has-icon"><i class="fa fa-rocket"></i>Manage Users</button>

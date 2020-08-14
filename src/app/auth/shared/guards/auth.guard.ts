@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
           map(user => {
               if (!user) {
                 
-                
+                console.log("login redirect 1");
                 this.router.navigate(['/auth/login']);
                 /*
                 this.router.navigate(['/auth/login']);

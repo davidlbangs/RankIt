@@ -24,8 +24,8 @@ import { environment } from '../../../../environments/environment';
       <div *ngIf="poll$ | async as poll; else loading;">
       <div *ngIf="poll.is_published">
       <header style="border-bottom-left-radius:20px;border-bottom-right-radius:20px;" class="poll-header" [ngStyle]="{'background': poll.customizations?.barColor != '' ? poll.customizations?.barColor : '#EAEDF0', 'color': poll.customizations?.color != '' ? poll.customizations?.color : '#69757C'}">
-        <p [ngStyle]="{'color': poll.customizations?.color != '' ? poll.customizations?.color : '#283136;'}" class="">{{poll.title}}</p>
-          <h1 class="mb-1" *ngIf="poll.results_public">
+        <p [ngStyle]="{'color': poll.customizations?.color != '' ? poll.customizations?.color : '#283136;'}" class="">{{poll.title}} ({{poll.winner_count}} winners, {{percentage}}% to win)</p>
+          <h1 [ngStyle]="{'color': poll.customizations?.color != '' ? poll.customizations?.color : '#283136;'}" class="mb-1" *ngIf="poll.results_public">
             {{pollSummaryStatement(poll.results, poll.winner_count, poll.vote_count) }}
           </h1>
           <share-poll *ngIf="summary" [poll]="poll"></share-poll>
@@ -203,7 +203,7 @@ export class ResultsComponent implements OnInit {
     LOCAL_OVERLAY = (environment.production == false) ? true : false;
     poll$: Observable<Poll> = this.store.select('poll');
 
-
+  percentage = 0;
     shiftedResults$:Observable<Results> = this.store.select('poll')
     .pipe(
           distinct(),
@@ -254,6 +254,7 @@ export class ResultsComponent implements OnInit {
                 tap(next => this.meta.setTitle('Results - ' + next.title)),
                 tap(next => this.checkRound(next, params.get('round'))),
                 tap(next => {
+                  this.percentage = Math.round(1 / (next.winner_count + 1)*100)
                   if (next.owner_uid == user?.uid && next.is_published == false) {
                     next.is_published = true;
                     next.results_public = true;

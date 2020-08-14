@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from 'store';
 // import { PlatformService } from '@trilon/ng-universal';
 import {AuthProvider} from 'ngx-auth-firebaseui';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 @Component({
   selector: 'register',
@@ -47,6 +48,7 @@ export class RegisterComponent implements OnInit {
               private store:Store,
               private authService: AuthService,
               private router: Router,
+              private analytics: AngularFireAnalytics,
              // private platformService:PlatformService
     ) {
     this.isBrowser = true; // platformService.isBrowser;
@@ -55,11 +57,16 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.user$ = this.store.select('user');
+    this.store.select('user').subscribe(res => {
+      console.log("result: ", res);
+    });
   }
 
   successCallback(signInSuccessData: any) {
     // console.log('signed in', signInSuccessData);
     //this.router.navigate(['/polls']);
+    console.log("data: ", signInSuccessData);
+    //this.analytics.logEvent('vote', {pollId: poll.id})
   }
 
   errorCallback(errorData: any) {

@@ -145,7 +145,7 @@ export const syncPoll = functions.firestore
               votes.push(doc.data().choices);
             });
 
-            results = calculateResults(poll.winner_count, votes);
+            results = calculateResults(poll.winner_count, votes, poll.choices);
 
             // update data
             return pollRef

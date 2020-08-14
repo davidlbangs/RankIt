@@ -89,15 +89,15 @@ export class EditComponent implements OnInit, OnDestroy {
 
     console.log('poll added', newPollID);
     if (publish) {
-      if (confirm('Do you want to show your results immediately after each vote, or hide them from voters until you close the poll?')) {
+      if (confirm('Click "OK" to show your results immediately after each vote. Click "Cancel" to hide them from voters until you close the poll.')) {
         event.results_public = false;
         this.pollService.togglePollResultsPublic(event.id, event.results_public);
-        alert('Your results are visible. Voters in your poll will see the current results immediately after they cast their vote.');
+        alert('Your poll is published and ready to share. Voters will see results after they submit their vote.');
       }
       else {
         event.results_public = true;
         this.pollService.togglePollResultsPublic(event.id, event.results_public);
-        alert('Your results are hidden. Click "OK" to show your results immediately after each vote. Click "Cancel" to hide them from voters until you close the poll.');
+        alert('Your poll is published and ready to share. Voters will not see results until/unless you choose to display them in your settings.');
       }
     }
 

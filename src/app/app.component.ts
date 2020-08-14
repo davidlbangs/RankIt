@@ -76,7 +76,7 @@ export class AppComponent implements OnInit {
 
   async onLogout() {
       await this.authService.signOut();
-
+    console.log("login redirect 2");
       //redirect to login
       this.router.navigate(['/auth/login']);
   }

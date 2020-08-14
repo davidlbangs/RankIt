@@ -27,7 +27,11 @@ export class ResultsService {
     if(hasTie > 0) {
       return this.tieSummaryStatement(hasTie, results);
     }
-    return `After ${total_rounds} ${rounds} and ${total_votes} votes, ${electedString} ${wins}.`;
+    let vString = "votes";
+    if (total_votes==1) {
+      vString = "vote";
+    }
+    return `After ${total_rounds} ${rounds} and ${total_votes} ${vString}, ${electedString} ${wins}.`;
   }
 
   tieSummaryStatement(winnerVoteCount:number, results:Results) {
