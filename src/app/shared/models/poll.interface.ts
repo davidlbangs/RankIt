@@ -15,6 +15,7 @@ export interface Poll {
   results?: Results;
   votes?: Vote[];
   vote_count: number;
+  resync?: boolean;
 
   // options
   keep_open: boolean;

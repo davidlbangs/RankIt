@@ -282,8 +282,6 @@ export class DetailComponent implements OnInit {
       if (Number(day) < 10) {
         day = "0" + day;
       }
-      console.log("dmy: ", day, month, year);
-      console.log("rounds: ", this.currentPoll.results.rounds);
       let rounds = [];
       
       for (var i = 0; i < this.currentPoll.results.rounds.length; i++) {

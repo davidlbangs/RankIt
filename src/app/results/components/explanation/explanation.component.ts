@@ -65,7 +65,6 @@ export class ExplanationComponent implements OnInit {
   
 
   roundHasWinner(round) {
-    console.log("rounds: ", this.rounds, round);
     const values = Object.values(this.rounds[round]);
     const largest = Math.max(...values);
     // console.log(round, largest, this.results.threshold);

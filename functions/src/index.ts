@@ -22,6 +22,7 @@ import * as vote from './vote/vote';
 import * as users from './user/user';
 import * as captcha from './captcha/captcha';
 import * as visualize from './visualize/visualize';
+import * as resyncA from './resync/resync';
 
 export const importUser = users.importUser;
 export const syncPoll = vote.syncPoll;
@@ -29,6 +30,7 @@ export const syncPoll = vote.syncPoll;
 export const closePoll = poll.closePolls;
 export const checkRecaptcha = captcha.checkRecaptcha;
 export const visualizeF = visualize.visualize;
+export const resync = resyncA.resync
 
 
 export const helloWorld = functions.https.onRequest((request, response) => {

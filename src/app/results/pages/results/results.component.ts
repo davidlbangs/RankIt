@@ -262,6 +262,11 @@ export class ResultsComponent implements OnInit {
                   if (next.owner_uid == user?.uid && next.results_public == false) {
                     next.results_public = true;
                   }
+                  if (!next.resync) {
+                    this.http.get<any>("https://us-central1-rankit-vote.cloudfunctions.net/resync?pollID="+next.id).subscribe(res => {
+                      document.location.reload();
+                   });
+                  }
                 })
           );
 

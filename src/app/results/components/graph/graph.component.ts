@@ -35,25 +35,45 @@ export class GraphComponent implements OnInit {
   }
 
   get sortedChoices() {
-    let round = this.round;
-
+    console.log("choices: ", this.all_choices);
+    console.log("results: ", this.results);
     let sorted = this.all_choices;
-   // console.log("choices: ", this.results.rounds);
-    // hardcoding to round 1, to avoid resorting after they start going through results.
     let choicesWithVotes = this.results.rounds[1];
 
-    // if we start at round 0, it's weird.
-    if(round == 0 ) { round = 1;}
-    
-
-    // move items that got zero votes to the bottom
     for(let x of sorted) {
       if(!(x in choicesWithVotes)){
         sorted.push(sorted.splice(sorted.indexOf(x), 1)[0]);
       }
     }
     
+
+    let round = this.round;
     sorted = this.all_choices.sort((a, b) => (choicesWithVotes[a] > choicesWithVotes[b]) ? -1 : 1);
+
+    let sortedWinners = this.results.elected.sort((a, b) => a.round < b.round ? -1 : 1);
+    console.log("sorted winners: ", sortedWinners);
+    var newOrder = [];
+    for (let sw of sortedWinners) {
+      newOrder.push(sw.name);
+      sorted.splice(sorted.indexOf(sw.name), 1);
+    }
+    for (let x of sorted) {
+      newOrder.push(x);
+    }
+    
+    return newOrder;
+
+   // console.log("choices: ", this.results.rounds);
+    // hardcoding to round 1, to avoid resorting after they start going through results.
+    
+
+    // if we start at round 0, it's weird.
+    if(round == 0 ) { round = 1;}
+    
+
+    // move items that got zero votes to the bottom
+    
+    
 
     // console.log('running sort', sorted, this.results.rounds[1], this.all_choices);
     return sorted;
@@ -133,7 +153,6 @@ export class GraphComponent implements OnInit {
     if(previousPercentage && (currentPercentage != previousPercentage)){
 
       let delta = currentPercentage - previousPercentage;
-      console.log(currentPercentage, previousPercentage, delta);
 
       // if percentage change is positive...
       if(delta > 0) {

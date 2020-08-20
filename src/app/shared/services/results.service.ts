@@ -64,7 +64,6 @@ export class ResultsService {
     const rounds = (total_rounds > 1) ? 'rounds' : 'round';
 
     let tieParticipants = this.getChoicesByVoteCount((total_rounds-1), results, winnerVoteCount);
-    console.log("tie parti: ", results, tieParticipants);
     let tieString = this.candidateListString(tieParticipants);
 
     let statement = `After ${total_rounds} ${rounds}, the poll resulted in a tie between ${tieString}.`;
@@ -76,7 +75,6 @@ export class ResultsService {
     const rounds = (total_rounds > 1) ? 'rounds' : 'round';
 
     let tieParticipants = this.getChoicesByVoteCount((total_rounds-1), results, winnerVoteCount);
-    console.log("tie parti: ", results, tieParticipants);
     let tieString = this.candidateListString(tieParticipants);
 
     let statement = `After ${total_rounds} ${rounds} ${winner} won and there was a tie between ${tieString}.`;
