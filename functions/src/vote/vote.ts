@@ -84,7 +84,7 @@ function stv(winners, ballots, choices) {
       factor = 1;
 
       //remove zero vote candidates
-      let mn_zero_keys = Object.entries(name2totals).filter(x=> x[1]===0 && !eleminated.map(x=>x['name']).includes(x[0])).map(x=>x[0]);
+      let mn_zero_keys = Object.entries(name2totals).filter(x=> x[1]===0 && !eleminated.map(x2=>x2['name']).includes(x[0])).map(x3=>x3[0]);
       mn_zero_keys.forEach(key =>
           eleminated.push({"round": (rounds.length-1), "name": key, "from": -1, "votes": name2totals[key]})
       );
@@ -104,7 +104,7 @@ function stv(winners, ballots, choices) {
   } while (winners < cans && winners > 0);
 
   if (winners !== 0) {
-    Object.keys(name2totals).forEach(x=>elected.push(x));
+    Object.keys(name2totals).forEach(x=>elected.push({"name": x, "votes": name2totals[x], "round": (rounds.length-1)}));
   }
   return {"elected": elected, "rounds": rounds, "threshold": threshold, "eleminated": eleminated};
 }

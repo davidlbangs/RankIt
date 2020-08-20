@@ -17,7 +17,7 @@
     >
       <div class="meta">
         <div class="count" *ngIf="display_count">{{getCount(round,choice) | number: '1.0-0' }}</div>
-        <div class="percentage" *ngIf="!display_count">{{getPercentage(round, choice) | percent:'1.0-1' }}</div>
+        <div class="percentage" *ngIf="!display_count">{{getPercentage2(round, choice) | percent:'1.0-1' }}</div>
         <div class="label">{{choice}}</div>
         
       </div>

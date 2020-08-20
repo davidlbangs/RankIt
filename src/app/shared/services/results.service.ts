@@ -21,9 +21,34 @@ export class ResultsService {
     // hasTie checks to see if there is a tie in the final round.
     // it returns the round 
     const hasTie = this.hasTie(last_round, results);
-
-    let electedString:string = this.candidateListString(results.elected);
-
+    let ar:any[] = results.elected;
+    if (results.elected.length > 0 && results.elected[0].name) {
+      ar = results.elected.map(x=>x.name);
+    }
+    
+    let electedString:string = this.candidateListString(ar);
+    if(hasTie > 0 && winner_count > 0) {
+      let ar2:any[] = [];
+      for (const r of Object.keys(results.rounds[last_round])) {
+        if (results.rounds[last_round][r] == hasTie) {
+          ar2.push(r);
+        }
+      }
+      var winners = [];
+      for (const f of ar) {
+        var found = false;
+        for (const d of ar2) {
+          if (d == f) {
+            found = true;
+          }
+        }
+        if (found == false) {
+          winners.push(f);
+        }
+      }
+      let electedString2:string = this.candidateListString(winners);
+      return this.tieSummaryStatementWithWinners(hasTie, results, `${electedString2}`);
+    }
     if(hasTie > 0) {
       return this.tieSummaryStatement(hasTie, results);
     }
@@ -39,9 +64,22 @@ export class ResultsService {
     const rounds = (total_rounds > 1) ? 'rounds' : 'round';
 
     let tieParticipants = this.getChoicesByVoteCount((total_rounds-1), results, winnerVoteCount);
-    let tieString = this.candidateListString(tieParticipants); 
+    console.log("tie parti: ", results, tieParticipants);
+    let tieString = this.candidateListString(tieParticipants);
 
     let statement = `After ${total_rounds} ${rounds}, the poll resulted in a tie between ${tieString}.`;
+    // console.log('CLS', tieString, statement/  );
+    return statement;
+  }
+  tieSummaryStatementWithWinners(winnerVoteCount:number, results:Results, winner) {
+    const total_rounds = results.rounds.length;
+    const rounds = (total_rounds > 1) ? 'rounds' : 'round';
+
+    let tieParticipants = this.getChoicesByVoteCount((total_rounds-1), results, winnerVoteCount);
+    console.log("tie parti: ", results, tieParticipants);
+    let tieString = this.candidateListString(tieParticipants);
+
+    let statement = `After ${total_rounds} ${rounds} ${winner} won and there was a tie between ${tieString}.`;
     // console.log('CLS', tieString, statement/  );
     return statement;
   }
@@ -54,10 +92,14 @@ export class ResultsService {
       return results.rounds[round][choice];
     }
 
+    let ar:any[] = results.elected;
+    if (results.elected.length > 0 && results.elected[0].round) {
+      ar = results.elected.map(x=>x.name);
+    }
     // if the choice is elected in a previous round
     // that choice gets the threshold.
     if(
-       results.elected.includes(choice) && 
+       ar.includes(choice) && 
        !rounds[round][choice]
        ) {
           return threshold;
@@ -108,10 +150,16 @@ export class ResultsService {
       return this.calculatePercentage(round, choice, results, total_votes, winner_count, rounds, threshold);
     }
 
+
+    let ar:any[] = results.elected;
+    if (results.elected.length > 0 && results.elected[0].round) {
+      ar = results.elected.map(x=>x.name);
+    }
+
     // if the choice is elected in a previous round
     // that choice gets the threshold.
     if(
-       results.elected.includes(choice) && 
+       ar.includes(choice) && 
        !rounds[round][choice]
        ) {
           // console.log('elected prev round', choice, round);

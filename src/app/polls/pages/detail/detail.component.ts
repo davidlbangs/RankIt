@@ -285,6 +285,7 @@ export class DetailComponent implements OnInit {
       console.log("dmy: ", day, month, year);
       console.log("rounds: ", this.currentPoll.results.rounds);
       let rounds = [];
+      
       for (var i = 0; i < this.currentPoll.results.rounds.length; i++) {
         let roundData = this.currentPoll.results.rounds[i];
         if (roundData) {
@@ -293,11 +294,33 @@ export class DetailComponent implements OnInit {
         for (const r of Object.keys(roundData)) {
           roundData2["" + r] = "" + Math.round(1 * roundData[r]);
         }
+        var transfers = {};
+        if (i <= (this.currentPoll.results.rounds.length -2 )) {
+          let currentTally = this.currentPoll.results.rounds[i+1];
+          for (const r of Object.keys(roundData)) {
+            if (currentTally[r] !== this.currentPoll.results.rounds[i][r]) {
+              //console.log("change: ", r, Math.round(1 * roundData[r]), currentTally[""+r]);
+              if (1*currentTally[""+r] > 0) {
+              transfers[""+r] = ""+(1*currentTally[""+r]-Math.round(1 * roundData[r]));
+              }
+            }
+          }
+        }
+        console.log("transfer: ", transfers);
         let tallyResults = {};
-        tallyResults["elected"] = this.currentPoll.results.elected[i];
+        for (const el of this.currentPoll.results.elected) {
+          if (el.round && el.round == i) {
+            tallyResults["elected"] = el.name;
+            
+          }
+        }
+        
         for (let elim of this.currentPoll.results.eleminated) {
-          if (elim.round == (i + 1)) {
+          if (elim.round == i) {
             tallyResults["eliminated"] = elim.name;
+            if (Object.keys(transfers).length > 0) {
+              tallyResults["transfers"] = transfers;
+            }
           }
         }
         let round = {
@@ -319,6 +342,7 @@ export class DetailComponent implements OnInit {
         "results": rounds
       };
       console.log("ret: ", ret);
+     
      // let formData: FormData = new FormData();
      // const blob = new Blob([JSON.stringify(ret)], {type : 'application/json'})
      //  formData.append('jsonFile', blob, "file.json");

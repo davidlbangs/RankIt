@@ -65,8 +65,12 @@ export class GraphComponent implements OnInit {
   // So we skip doing the math.
   // However, if it's not the last round, we'll do the math.
   declareWinner(round:number, choice:string) {
+    let ar:any[] = this.elected;
+    if (this.elected.length > 0 && this.elected[0].round) {
+      ar = this.elected.map(x=>x.name);
+    }
     if(round == this.total_rounds || round == 0) {
-      return this.results.elected.includes(choice);
+      return ar.includes(choice);
     } else {
       //console.log("our percentage: ", this.getPercentage(round, choice), Math.round(this.winning_percentage*100)/100)
       return this.getPercentage(round, choice) >= Math.round(this.winning_percentage*100)/100;
@@ -74,11 +78,19 @@ export class GraphComponent implements OnInit {
   }
 
   getExhaustedVoteCount(round:number){
-    return this.resultsService.getExhaustedVoteCount(round, this.results, this.total_votes, this.winner_count, this.threshold, this.elected, this.rounds);
+    let ar:any[] = this.elected;
+    if (this.elected.length > 0 && this.elected[0].round) {
+      ar = this.elected.map(x=>x.name);
+    }
+    return this.resultsService.getExhaustedVoteCount(round, this.results, this.total_votes, this.winner_count, this.threshold, ar, this.rounds);
   }
 
   getExhaustedVotePercentage(round:number){
-    return this.resultsService.getExhaustedVotePercentage(round, this.results, this.total_votes, this.winner_count, this.threshold, this.elected, this.rounds);
+    let ar:any[] = this.elected;
+    if (this.elected.length > 0 && this.elected[0].round) {
+      ar = this.elected.map(x=>x.name);
+    }
+    return this.resultsService.getExhaustedVotePercentage(round, this.results, this.total_votes, this.winner_count, this.threshold, ar, this.rounds);
   }
 
   getPercentage(round: number, choice:Choice) {
@@ -90,6 +102,9 @@ export class GraphComponent implements OnInit {
                                              this.winning_percentage, 
                                              this.threshold,
                                              this.total_votes);
+  }
+  getPercentage2(round: number, choice:Choice) {
+    return Math.round(this.getPercentage(round, choice)*100)/100;
   }
   getThreshold() {
     return (this.winning_percentage*100).toFixed(0)+"%";

@@ -68,8 +68,13 @@ export interface EleminatedElement {
   round: number;
   from: number;
 }
+export interface ElectionElement {
+  name: string;
+  round: number;
+  votes: number;
+}
 export interface Results {
-  elected: string[];
+  elected: ElectionElement[];
   rounds: {
     [key: string]: number;
   }[];

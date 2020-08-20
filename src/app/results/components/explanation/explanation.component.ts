@@ -50,7 +50,6 @@ export class ExplanationComponent implements OnInit {
   @Input() label:string = 'choice';
 
   get rounds() { return this.results.rounds; }
-  get elected() { return this.results.elected; }
   get winning_percentage() { return 1 / (this.winner_count + 1); }
   get threshold() { return this.results.threshold; }
   get isMultiWinner() { return (this.winner_count > 1) ? true : false; }
@@ -87,7 +86,14 @@ export class ExplanationComponent implements OnInit {
     
     return false;
   }
+  getEleminatedForRound(round) {
+    for (let el of this.results.eleminated) {
 
+      if (el.round == (round)) {
+        return el.name;
+      }
+    }
+  }
   eleminationStatement(round) {
     return "";
     for (let el of this.results.eleminated) {
@@ -116,7 +122,7 @@ export class ExplanationComponent implements OnInit {
         winners[choice] = pct;
       }
     }
-    // console.log(winners);
+    console.log(winners);
     return winners;
   }
 
@@ -159,6 +165,7 @@ export class ExplanationComponent implements OnInit {
     const leaders = this.getLeaders(round);
     const losers = this.getLosers(round);
 
+    const eleminatedNextRound = this.getEleminatedForRound(round);
     
 
     // language
@@ -167,7 +174,7 @@ export class ExplanationComponent implements OnInit {
     const oneAtaTime = (losers.count > 1) ? ' one at a time' : '';
     const remaining = (this.winner_count > 1) ? 'remaining ' : '';
     if (losers.count > 1) {
-      return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. Because there is a tie for last place, one of the losing ${losingCandidate} will be randomly eliminated: ${losers.string}. Their votes will be redistributed to the voters' next-favorite ${this.label}.`;
+      return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. Because there is a tie for last place, one of the losing ${losingCandidate} will be randomly eliminated: ${eleminatedNextRound}. Their votes will be redistributed to the voters' next-favorite ${this.label}.`;
      // return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. Because there is a tie for last place, one of the losing ${losingCandidate} will be randomly eliminated. Their votes will be redistributed to the voters' next-favorite ${this.label}.`;
     }
     else {
