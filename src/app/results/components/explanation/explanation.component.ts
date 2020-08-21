@@ -121,7 +121,6 @@ export class ExplanationComponent implements OnInit {
         winners[choice] = pct;
       }
     }
-    console.log(winners);
     return winners;
   }
 
@@ -139,6 +138,7 @@ export class ExplanationComponent implements OnInit {
 
     // language
     const aWinner = (winnerArray.length > 1) ? 'multiple winners this round' : 'a winner';
+    console.log("F:", winnerArray);
     const winnerString = this.resultsService.candidateListString(winnerArray);
     const wins = (winnerArray.length > 1) ? 'win' : 'wins';
     const pctString = this.resultsService.candidateListString(pctStrArray);

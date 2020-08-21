@@ -123,8 +123,12 @@ export class ResultsService {
       }
       voteAdjustment = pastWinners * threshold;
     }
-
-    return total_votes - (current_votes+voteAdjustment);
+    let r = total_votes - (current_votes+voteAdjustment);
+//    console.log("votal votes: ", total_votes, current_votes, voteAdjustment);
+    if (r < 0) {
+      r = 0;
+    }
+    return r;
   }
   getExhaustedVotePercentage(round:number, results:Results, total_votes, winner_count, threshold, electedList, rounds) {
     let exhaustedVoteCount = this.getExhaustedVoteCount(round, results, total_votes, winner_count, threshold, electedList, rounds);
@@ -170,9 +174,8 @@ export class ResultsService {
 
   private calculatePercentage(round:number, choice:string, results:Results, total_votes:number, winner_count, rounds, threshold) {
     let numerator = results.rounds[round][choice];
-    let denominator = this.getTotalVotes(round, winner_count, results.elected, rounds, threshold);
+    let denominator = this.getTotalVotes(round, winner_count, results.elected.map(a => a.name), rounds, threshold);
     // let denominator = total_votes;
-
     return (numerator / denominator) || 0;
   }
 

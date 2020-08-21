@@ -35,9 +35,10 @@ export class GraphComponent implements OnInit {
   }
 
   get sortedChoices() {
+//    return this.all_choices;
     console.log("choices: ", this.all_choices);
     console.log("results: ", this.results);
-    let sorted = this.all_choices;
+    let sorted = this.all_choices.slice();
     let choicesWithVotes = this.results.rounds[1];
 
     for(let x of sorted) {
@@ -48,7 +49,7 @@ export class GraphComponent implements OnInit {
     
 
     let round = this.round;
-    sorted = this.all_choices.sort((a, b) => (choicesWithVotes[a] > choicesWithVotes[b]) ? -1 : 1);
+    sorted = this.all_choices.slice().sort((a, b) => (choicesWithVotes[a] > choicesWithVotes[b]) ? -1 : 1);
 
     let sortedWinners = this.results.elected.sort((a, b) => a.round < b.round ? -1 : 1);
     console.log("sorted winners: ", sortedWinners);

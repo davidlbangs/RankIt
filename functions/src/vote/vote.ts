@@ -149,7 +149,7 @@ export const syncPoll = functions.firestore
 
             // update data
             return pollRef
-                .update({'results': results, 'vote_count': admin.firestore.FieldValue.increment(1)})
+                .update({'results': results, 'vote_count': votes.length})
                 .then(() => console.log('results', results, 'updated poll!', pollID));
           });
 

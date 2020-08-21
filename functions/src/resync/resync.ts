@@ -154,13 +154,13 @@ return pollRef.get()
         });
 
         results = calculateResults(poll.winner_count, votes, poll.choices);
-
+        poll.vote_count = votes.length;
         // update data
         return pollRef
-            .update({'results': results, 'resync': true})
+            .update({'results': results, 'resync': true, 'vote_count': votes.length})
             .then(() => {
                 console.log('results', results, 'updated poll!', pollID)
-                res.send("{\"status\":true,\"results\":"+JSON.stringify(results)+"}")
+                res.send("{\"status\":true,\"poll\":"+JSON.stringify(poll)+"}")
             });
       });
 
