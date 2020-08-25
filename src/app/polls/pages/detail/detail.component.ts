@@ -142,13 +142,10 @@ export class DetailComponent implements OnInit {
 
   ngOnInit() {
     this.store.set('backButton', 'polls');
-    console.log("we are getting the user now");
     this.subscription2 = this.store.select<User>("user").subscribe(user => {
       if (user && user.roles && this.loaded == false) {
         this.loaded = true;
-        console.log("have the user, checking for roles for admin: ", user);
         if (user.roles.admin) {
-          console.log("we are admin1");
           this.loadForAdmin();
 
         }
@@ -183,7 +180,7 @@ export class DetailComponent implements OnInit {
       .pipe(
         switchMap(param => {
           this.subscription = this.pollService.getAdminPollsById(param.id).subscribe();
-          const poll = this.pollService.getAdminPoll(param.id);
+          let poll = this.pollService.getAdminPoll(param.id);
           return poll;
         }),
         tap(next => {

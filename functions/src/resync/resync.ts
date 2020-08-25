@@ -25,6 +25,10 @@ function stv(winners, ballots, choices) {
   // In a 2 winner race with 327 ballots, a candidate with 110 votes is guaranteed victory.
   const threshold = Math.floor(ballots.length/(winners+1))+1;
 
+  if (winners>ballots.length) {
+    winners = ballots.length;
+  }
+
   //
   choices.forEach(choice => name2totals[choice] = 0);
   choices.forEach(choice => name2ballots[choice] = []);

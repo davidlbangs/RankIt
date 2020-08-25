@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store } from 'store';
 import { Observable, Subscription } from 'rxjs';
-import { map, distinct, tap  } from 'rxjs/operators';
+import { map, distinct, tap } from 'rxjs/operators';
 
 import { ResultsService } from '../../../shared/services/results.service';
 
@@ -14,6 +14,7 @@ import { Poll, Vote, Choice, Results } from '../../../shared/models/poll.interfa
 import { VoteService } from '../../../shared/services/vote.service';
 import { MetaService } from 'meta';
 import { environment } from '../../../../environments/environment';
+import { User } from '@shared/models/user.interface';
 
 
 @Component({
@@ -25,7 +26,7 @@ import { environment } from '../../../../environments/environment';
       <div *ngIf="poll.is_published">
       <header style="border-bottom-left-radius:20px;border-bottom-right-radius:20px;" class="poll-header" [ngStyle]="{'background': poll.customizations?.barColor != '' ? poll.customizations?.barColor : '#EAEDF0', 'color': poll.customizations?.color != '' ? poll.customizations?.color : '#69757C'}">
         <p [ngStyle]="{'color': poll.customizations?.color != '' ? poll.customizations?.color : '#283136;'}" class="">{{poll.title}} ({{poll.winner_count}} winners, {{percentage}}% to win)</p>
-          <h1 [ngStyle]="{'color': poll.customizations?.color != '' ? poll.customizations?.color : '#283136;'}" class="mb-1" *ngIf="poll.results_public">
+          <h1 [ngStyle]="{'color': poll.customizations?.color != '' ? poll.customizations?.color : '#283136;'}" class="mb-1" *ngIf="poll.results_public && poll.results">
             {{pollSummaryStatement(poll.results, poll.winner_count, poll.vote_count) }}
           </h1>
           <share-poll *ngIf="summary" [poll]="poll"></share-poll>
@@ -43,7 +44,7 @@ import { environment } from '../../../../environments/environment';
 
             <hr class="mt-4 mb-4" />
           </div>
-          <h1 class="mt-3 mb-1">
+          <h1 class="mt-3 mb-1" *ngIf="results">
             {{ (summary) ? 'Final Result' : 'Round ' + round }} 
             <span *ngIf="round === getTotalRounds(results) && !summary">(Final Result)</span>
             <a (click)="toggleDisplayStyle()" *ngIf="poll.vote_count > (poll.winner_count * 2 + 1)" class="count-link">Show {{(LOCAL_DISPLAY_COUNT) ? 'Vote Percentage' : 'Vote Count' }}</a>
@@ -199,87 +200,141 @@ import { environment } from '../../../../environments/environment';
   `
 })
 export class ResultsComponent implements OnInit {
-    LOCAL_DISPLAY_COUNT:boolean = false;
-    LOCAL_OVERLAY = (environment.production == false) ? true : false;
-    poll$: Observable<Poll> = this.store.select('poll');
+  LOCAL_DISPLAY_COUNT: boolean = false;
+  LOCAL_OVERLAY = (environment.production == false) ? true : false;
+  poll$: Observable<Poll> = this.store.select('poll');
+  public subscription2;
+  public loaded = false;
 
   percentage = 0;
-    shiftedResults$:Observable<Results> = this.store.select('poll')
+  shiftedResults$: Observable<Results> = this.store.select('poll')
     .pipe(
-          distinct(),
-          map((poll:Poll) => this.getShiftedRounds(poll.results)));
+      distinct(),
+      map((poll: Poll) => this.getShiftedRounds(poll.results)));
 
-    // Local state :)
-    round: number;
-    summary: boolean = false;
+  // Local state :)
+  round: number;
+  summary: boolean = false;
 
-    shiftedResults: Results;
+  shiftedResults: Results;
 
 
-    // subscription: Subscription;
+  // subscription: Subscription;
 
 
   constructor(
-              private resultsService: ResultsService,
-              private readonly meta: MetaService,
-              private location:Location,
-              private http:HttpClient,
-              private router:Router,
-              private voteService:VoteService,
-              private route:ActivatedRoute,
-              private store:Store) { 
+    private resultsService: ResultsService,
+    private readonly meta: MetaService,
+    private location: Location,
+    private http: HttpClient,
+    private router: Router,
+    private voteService: VoteService,
+    private route: ActivatedRoute,
+    private store: Store) {
   }
-
   ngOnInit() {
 
     let user = this.route.snapshot.data.resolverUser;
 
     this.route.paramMap
-      .subscribe((params:ParamMap) => {
+      .subscribe((params: ParamMap) => {
         let id = params.get('id');
 
         this.round = parseInt(params.get('round'));
-        
+
 
         this.summary = params.get('round') === 'summary';
         if (this.summary) {
           this.round = 1;
         }
-        console.log("summary: ", this.summary);
 
 
-        if(id) {
-          this.poll$ = this.voteService.getPoll(id)
-          .pipe(
-                tap(next => this.meta.setTitle('Results - ' + next.title)),
-                tap(next => this.checkRound(next, params.get('round'))),
-                tap(next => {
-                  this.percentage = Math.round(1 / (next.winner_count + 1)*100)
-                  if (next.owner_uid == user?.uid && next.is_published == false) {
-                    next.is_published = true;
-                    next.results_public = true;
-                  }
-                  if (next.owner_uid == user?.uid && next.results_public == false) {
-                    next.results_public = true;
-                  }
-                  if (!next.resync) {
-                    this.http.get<any>("https://us-central1-rankit-vote.cloudfunctions.net/resync?pollID="+next.id).subscribe(res => {
-                      document.location.reload();
-                   });
-                  }
-                })
-          );
 
-          if(user) {
+
+        if (id) {
+          this.subscription2 = this.store.select<User>("user").subscribe(user => {
+            if (user && user.roles && this.loaded == false) {
+              this.loaded = true;
+              if (user.roles.admin) {
+                this.poll$ = this.voteService.getPoll(id)
+                  .pipe(
+                    tap(next => this.meta.setTitle('Results - ' + next.title)),
+                    tap(next => this.checkRound(next, params.get('round'))),
+                    tap(next => {
+                      this.percentage = Math.round(1 / (next.winner_count + 1) * 100)
+                      next.is_published = true;
+                      next.results_public = true;
+                      if (!next.resync) {
+                        this.http.get<any>("https://us-central1-rankit-vote.cloudfunctions.net/resync?pollID=" + next.id).subscribe(res => {
+                          document.location.reload();
+                        });
+                        if (next.customizations?.color?.includes("#") === false) {
+                          next.customizations.color = "#" + next.customizations.color;
+                        }
+                        if (next.customizations?.buttonColor1?.includes("#") === false) {
+                          next.customizations.buttonColor1 = "#" + next.customizations.buttonColor1;
+                        }
+                        if (next.customizations?.barColor?.includes("#") === false) {
+                          next.customizations.barColor = "#" + next.customizations.barColor;
+                        }
+                        if (next.customizations?.buttonColor2?.includes("#") === false) {
+                          next.customizations.buttonColor2 = "#" + next.customizations.buttonColor2;
+                        }
+                      }
+                    })
+                  );
+              }
+              else {
+                this.poll$ = this.voteService.getPoll(id)
+                  .pipe(
+                    tap(next => this.meta.setTitle('Results - ' + next.title)),
+                    tap(next => this.checkRound(next, params.get('round'))),
+                    tap(next => {
+                      this.percentage = Math.round(1 / (next.winner_count + 1) * 100)
+                      if (next.owner_uid == user?.uid && next.is_published == false) {
+                        next.is_published = true;
+                        next.results_public = true;
+                      }
+                      if (next.owner_uid == user?.uid && next.results_public == false) {
+                        next.results_public = true;
+                      }
+                      if (!next.resync) {
+                        this.http.get<any>("https://us-central1-rankit-vote.cloudfunctions.net/resync?pollID=" + next.id).subscribe(res => {
+                          document.location.reload();
+                        });
+                        if (next.customizations?.color?.includes("#") === false) {
+                          next.customizations.color = "#" + next.customizations.color;
+                        }
+                        if (next.customizations?.buttonColor1?.includes("#") === false) {
+                          next.customizations.buttonColor1 = "#" + next.customizations.buttonColor1;
+                        }
+                        if (next.customizations?.barColor?.includes("#") === false) {
+                          next.customizations.barColor = "#" + next.customizations.barColor;
+                        }
+                        if (next.customizations?.buttonColor2?.includes("#") === false) {
+                          next.customizations.buttonColor2 = "#" + next.customizations.buttonColor2;
+                        }
+                      }
+                    })
+                  );
+
+              }
+
+            }
+          });
+
+
+
+          if (user) {
             this.store.set('backButton', ['/polls/', id]);
           } else {
             this.store.set('backButton', `/`);
           }
         } else {
           this.router.navigate(['/vote/not-found']);
-         
+
         }
-       
+
       });
   }
 
@@ -301,30 +356,34 @@ export class ResultsComponent implements OnInit {
     *   Since we want to display the final round up front, 
     *   and each round is numbered starting from 1, it simplifies.
     */
-  getShiftedRounds(results:Results) {
-    const lastRound = results.rounds.slice(-1)[0];    
-    const shiftedResults = {...results, rounds: [...results.rounds]};
+  getShiftedRounds(results: Results) {
+    const lastRound = results.rounds.slice(-1)[0];
+    const shiftedResults = { ...results, rounds: [...results.rounds] };
 
     shiftedResults.rounds.unshift(lastRound);
     return shiftedResults;
   }
 
-  checkRound(poll:Poll, currentRound) {
+  checkRound(poll: Poll, currentRound) {
 
-    if(poll.results && poll.results.rounds.length < currentRound) {
+    if (poll.results && poll.results.rounds.length < currentRound) {
       this.router.navigate(['/results/' + poll.id]);
     }
   }
 
-  getLastRound(results:Results) {
+  getLastRound(results: Results) {
     return results.rounds.length;
   }
 
-  getTotalRounds(results:Results) {
+  getTotalRounds(results: Results) {
     return results.rounds.length;
   }
 
-  toRound(destination:number, poll:Poll) {
+  ngOnDestroy() {
+    this.subscription2.unsubcribe();
+  }
+
+  toRound(destination: number, poll: Poll) {
     if (destination <= 0) {
       destination = 1;
       this.summary = true;
@@ -336,7 +395,7 @@ export class ResultsComponent implements OnInit {
     // update local state
     this.round = destination;
 
-    
+
     if (this.summary) {
       this.updateLocation('summary', poll.id);
     }
@@ -345,11 +404,11 @@ export class ResultsComponent implements OnInit {
     }
   }
 
-  toAfterResults(poll:Poll){
+  toAfterResults(poll: Poll) {
     this.router.navigate(['results', 'share', poll.id]);
   }
 
-  updateLocation(currentRound:number | 'summary', id:string) {
+  updateLocation(currentRound: number | 'summary', id: string) {
     const destination = (currentRound > 0) ? currentRound : 'summary';
     return window.history.pushState({}, '', `/results/${id}/${destination}`);
   }
@@ -362,9 +421,6 @@ export class ResultsComponent implements OnInit {
   }
   get lastRound() {
     return this.round - 1;
-  }
-
-  ngOnDestroy() {
   }
 
 }

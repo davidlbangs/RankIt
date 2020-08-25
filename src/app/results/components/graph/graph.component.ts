@@ -51,7 +51,30 @@ export class GraphComponent implements OnInit {
     let round = this.round;
     sorted = this.all_choices.slice().sort((a, b) => (choicesWithVotes[a] > choicesWithVotes[b]) ? -1 : 1);
 
-    let sortedWinners = this.results.elected.sort((a, b) => a.round < b.round ? -1 : 1);
+    let sortedWinners = this.results.elected.sort((a, b) => {
+      if (a.round == b.round) {
+        if (a.votes == b.votes) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          else {
+            return 1;
+          }
+        }
+        else {
+          if (a.votes < b.votes) {
+            return -1;
+          } else {
+            return 1;
+          }
+        }
+      }
+      if (a.round < b.round) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
     console.log("sorted winners: ", sortedWinners);
     var newOrder = [];
     for (let sw of sortedWinners) {
@@ -197,9 +220,16 @@ export class GraphComponent implements OnInit {
           // reset delta to cap at 1.03
           delta = this.winning_percentage - previousPercentage + .03;
       }
+      let f:any = this.showChange(round,choice);
+      var total =  this.getWidth(this.getPercentage(round, choice)-f)+this.getWidth(delta);
 
+      var c = 0;
+      // if this is too high the bar will go over the text
+      if (total>110) {
+        c = total-110;
+      }
       // Make percentage
-      return this.getWidth(delta);
+      return this.getWidth(delta)-c;
     }
 
     // Otherwise return false

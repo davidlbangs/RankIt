@@ -29,6 +29,10 @@ function stv(winners, ballots, choices) {
   choices.forEach(choice => name2ballots[choice] = []);
   choices.forEach(choice => name2weights[choice] = []);
 
+  if (winners>ballots.length) {
+    winners = ballots.length;
+  }
+  
   // Factor
   //
   let factor = 1;

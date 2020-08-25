@@ -104,6 +104,19 @@ ngOnDestroy() {
                   if (next.owner_uid == user?.uid && next.is_published == false) {
                       next.is_published = true;
                     }
+
+                    if (next.customizations?.color?.includes("#") === false) {
+                      next.customizations.color = "#" + next.customizations.color;
+                    }
+                    if (next.customizations?.buttonColor1?.includes("#") === false) {
+                      next.customizations.buttonColor1 = "#" + next.customizations.buttonColor1;
+                    }
+                    if (next.customizations?.barColor?.includes("#") === false) {
+                      next.customizations.barColor = "#" + next.customizations.barColor;
+                    }
+                    if (next.customizations?.buttonColor2?.includes("#") === false) {
+                      next.customizations.buttonColor2 = "#" + next.customizations.buttonColor2;
+                    }
                 })
                 );
               

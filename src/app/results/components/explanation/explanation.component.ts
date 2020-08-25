@@ -163,7 +163,7 @@ export class ExplanationComponent implements OnInit {
 
     const leaders = this.getLeaders(round);
     const losers = this.getLosers(round);
-
+    //console.log("loosers:", losers);
     const eleminatedNextRound = this.getEleminatedForRound(round);
     
 
