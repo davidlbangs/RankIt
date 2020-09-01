@@ -155,9 +155,22 @@ import { User } from '@shared/models/user.interface';
               </p>
             </div>
 
+
             <div class="alert" *ngIf="!poll.is_open" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
               <p class="mb-2">Hmm...There are no results to display, but this poll is closed. Sorry!</p>
               <p>
+              <button
+              *ngIf="!poll.is_published || showpreviewButtons" 
+              [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}"
+              mat-button mat-raised-button [color]="'primary'" 
+              class="d-block button-large p-1">Button Color 1 Preview</button>
+
+              <button
+              *ngIf="!poll.is_published || showpreviewButtons" 
+              [ngStyle]="{'background': poll.customizations?.buttonColor2 != '' ? poll.customizations?.buttonColor2 : '#673ab7'}"
+              mat-button mat-raised-button [color]="'primary'" 
+              class="d-block button-large p-1">Button Color 2 Preview</button>
+
                 <button [routerLink]="['/']"
                 mat-raised-button color="" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-chevron-left"></i>Back to Home Page</button>
               </p>
@@ -215,6 +228,7 @@ export class ResultsComponent implements OnInit {
   // Local state :)
   round: number;
   summary: boolean = false;
+  showpreviewButtons: boolean = false;
 
   shiftedResults: Results;
 
@@ -248,20 +262,29 @@ export class ResultsComponent implements OnInit {
           this.round = 1;
         }
 
-
-
+        let admin = false;
 
         if (id) {
           this.subscription2 = this.store.select<User>("user").subscribe(user => {
-            if (user && user.roles && this.loaded == false) {
+            console.log("user: ", user);
+            if (this.loaded && admin == false) {
+              if (user && user.roles && user.roles.admin) {
+                this.loaded = false;
+                admin = true;
+              }
+            }
+            if (this.loaded == false) {
               this.loaded = true;
-              if (user.roles.admin) {
+              if (user && user.roles && user.roles.admin) {
                 this.poll$ = this.voteService.getPoll(id)
                   .pipe(
                     tap(next => this.meta.setTitle('Results - ' + next.title)),
                     tap(next => this.checkRound(next, params.get('round'))),
                     tap(next => {
                       this.percentage = Math.round(1 / (next.winner_count + 1) * 100)
+                      if (next.is_published==false) {
+                        this.showpreviewButtons = true;
+                      }
                       next.is_published = true;
                       next.results_public = true;
                       if (!next.resync) {
@@ -292,6 +315,8 @@ export class ResultsComponent implements OnInit {
                     tap(next => {
                       this.percentage = Math.round(1 / (next.winner_count + 1) * 100)
                       if (next.owner_uid == user?.uid && next.is_published == false) {
+                        this.showpreviewButtons = true;
+                        
                         next.is_published = true;
                         next.results_public = true;
                       }
@@ -380,7 +405,9 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.subscription2.unsubcribe();
+    if (this.subscription2) {
+      this.subscription2.unsubcribe();
+    }
   }
 
   toRound(destination: number, poll: Poll) {

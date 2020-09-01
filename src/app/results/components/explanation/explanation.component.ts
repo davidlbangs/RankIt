@@ -74,12 +74,12 @@ export class ExplanationComponent implements OnInit {
   elemination(round) {
     if (this.results.eleminated) {
       for (let el of this.results.eleminated) {
-        if (el.round == (round+1) && el.from > 1) {
+        if (el.round == (round+1) && el.from >= 1) {
           return true;
-        }
+        }/*
         if (el.round == (round) && el.from > 1) {
           return true;
-        }
+        }*/
       }
     }
     
@@ -94,13 +94,14 @@ export class ExplanationComponent implements OnInit {
     }
   }
   eleminationStatement(round) {
-    return "";
     for (let el of this.results.eleminated) {
       /*if (el.round == (round+1) && el.from > 1) {
         return "We have a tie between results, a random choice will be removed in the next round.";
       }*/
-      if (el.round == (round) && el.from > 1) {
-        return ""+el.name+` has been eliminated and their votes redistributed to the remaining ${this.label}s.`;
+      console.log("res: ", el, round);
+      if (el.round == (round-1) && el.from >= 1) {
+        return ""+el.name+` has been eliminated.`;
+//        return ""+el.name+` has been eliminated and their votes redistributed to the remaining ${this.label}s.`;
       }
     }
     return "";
@@ -177,7 +178,7 @@ export class ExplanationComponent implements OnInit {
      // return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. Because there is a tie for last place, one of the losing ${losingCandidate} will be randomly eliminated. Their votes will be redistributed to the voters' next-favorite ${this.label}.`;
     }
     else {
-      return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. So, the ${losingCandidate} with the fewest votes, ${losers.string}, will be eliminated${oneAtaTime}. Voters who chose ${losers.string} will have their votes redistributed to the remaining ${this.label}s based on their next preferences.`;
+      return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. So, the ${losingCandidate} with the fewest votes, ${losers.string}, will be eliminated${oneAtaTime}. All choices with 0 votes will also be eliminated. Voters who chose ${losers.string} will have their votes redistributed to the remaining ${this.label}s based on their next preferences.`;
     }
     //return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. So, the ${losingCandidate} with the fewest votes, ${losers.string}, will be eliminated${oneAtaTime}. Voters who chose ${losers.string} will have their votes redistributed to the remaining ${this.label}s based on their next preferences.`;
   }

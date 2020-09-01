@@ -67,6 +67,7 @@ export interface Vote {
 export interface EleminatedElement {
   name: string;
   round: number;
+  votes: number;
   from: number;
 }
 export interface ElectionElement {

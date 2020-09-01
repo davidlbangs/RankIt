@@ -265,7 +265,7 @@ export class DetailComponent implements OnInit {
     let pollID = this.currentPoll.id;
     const votesRef = this.db.collection(`polls/${pollID}/votes`).get().subscribe(data2 => {
 
-   console.log("data: ", data2);
+   console.log("data: ", this.currentPoll);
     let l = this.currentPoll.choices.length;
     //votesRef.subscribe((data2: Vote[]) => {
       var date = new Date(this.currentPoll.date_created);
@@ -301,15 +301,13 @@ export class DetailComponent implements OnInit {
             }
           }
         }
-        console.log("transfer: ", transfers);
         let tallyResults = {};
         for (const el of this.currentPoll.results.elected) {
-          if (el.round && el.round == i) {
+          if (el.round !== undefined && el.round == i) {
             tallyResults["elected"] = el.name;
             
           }
         }
-        
         for (let elim of this.currentPoll.results.eleminated) {
           if (elim.round == i) {
             tallyResults["eliminated"] = elim.name;
@@ -320,9 +318,14 @@ export class DetailComponent implements OnInit {
         }
         let round = {
           "round": (i + 1),
-          "tally": roundData2,
-          "tallyResults": [tallyResults]
+          "tally": roundData2
         };
+        if (Object.keys(tallyResults).length > 0) {
+          round["tallyResults"] = [tallyResults];
+        }
+        else {
+          round["tallyResults"] = [];
+        }
         rounds.push(round);
       }
       }
@@ -349,8 +352,32 @@ export class DetailComponent implements OnInit {
       ).subscribe(
           data => {
             console.log('success', data);
+            if (data.url) {
             var win = window.open(data.visualizeUrl, '_blank');
             win.focus();
+            }
+            else {
+              let filename = "results";
+      let blob = new Blob(['\ufeff' + JSON.stringify(ret)], {
+        type: 'application/json;charset=utf-8;'
+      });
+      let dwldLink = document.createElement("a");
+      let url = URL.createObjectURL(blob);
+      let isSafariBrowser = navigator.userAgent.indexOf(
+        'Safari') != -1 &&
+        navigator.userAgent.indexOf('Chrome') == -1;
+
+      //if Safari open in new window to save file with random filename. 
+      if (isSafariBrowser) {
+        dwldLink.setAttribute("target", "_blank");
+      }
+      dwldLink.setAttribute("href", url);
+      dwldLink.setAttribute("download", filename + ".json");
+      dwldLink.style.visibility = "hidden";
+      document.body.appendChild(dwldLink);
+      dwldLink.click();
+      document.body.removeChild(dwldLink);
+            }
           },
           error => console.log(error)
         )

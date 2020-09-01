@@ -13,7 +13,7 @@
     *ngFor="let choice of sortedChoices"
     class="result-row"
     [class.is-winner]="declareWinner(round, choice)"
-    [class.is-eliminated]="getPercentage(round, choice) === 0"
+    [class.is-eliminated]="afterLoosingRound(round) && noWinner(choice) && getPercentage(round, choice) === 0"
     >
       <div class="meta">
         <div class="count" *ngIf="display_count">{{getCount(round,choice) | number: '1.0-0' }}</div>
