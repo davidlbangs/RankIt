@@ -36,8 +36,6 @@ export class GraphComponent implements OnInit {
 
   get sortedChoices() {
     //    return this.all_choices;
-    console.log("choices: ", this.all_choices);
-    console.log("results: ", this.results);
     let sorted = this.all_choices.slice();
     let choicesWithVotes = this.results.rounds[1];
 
@@ -51,6 +49,7 @@ export class GraphComponent implements OnInit {
     let round = this.round;
     sorted = this.all_choices.slice().sort((a, b) => (choicesWithVotes[a] > choicesWithVotes[b]) ? -1 : 1);
 
+    console.log("sorted2: ", sorted);
     let sortedWinners = this.results.elected.sort((a, b) => {
       if (a.round == b.round) {
         if (a.votes == b.votes) {
@@ -75,7 +74,7 @@ export class GraphComponent implements OnInit {
         return 1;
       }
     });
-    console.log("sorted winners: ", sortedWinners);
+    console.log("sorted w: ", sortedWinners);
     let sortedLoosers = this.results.eleminated.sort((a, b) => {
       if (a.round == b.round) {
         if (a.votes == b.votes) {
@@ -115,13 +114,14 @@ export class GraphComponent implements OnInit {
       }
       if (found == false) {
         newOrder.push(x);
-        sorted.splice(sorted.indexOf(x), 1);
+        //sorted.splice(sorted.indexOf(x), 1);
       }
     }
     for (let sw of sortedLoosers) {
       newOrder.push(sw.name);
       sorted.splice(sorted.indexOf(sw.name), 1);
     }
+    console.log("new order:", newOrder);
     return newOrder;
   }
   winner(round, choice) {

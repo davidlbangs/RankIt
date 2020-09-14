@@ -87,7 +87,6 @@ export class EditComponent implements OnInit, OnDestroy {
   async addPoll(event: Poll, publish: boolean) {
     let newPollID = await this.pollService.addPoll(event, publish);
 
-    console.log('poll added', newPollID);
     if (publish) {
       if (confirm('Click "OK" to show your results immediately after each vote. Click "Cancel" to hide them from voters until you close the poll.')) {
         event.results_public = false;

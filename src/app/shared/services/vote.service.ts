@@ -28,14 +28,12 @@ export class VoteService {
 
 
   getPoll(id:string):Observable<Poll> {
-    console.log('we are asking for the poll now');
     this.db.firestore.enableNetwork();
     return this.db.doc<Poll>(`polls/${id}`).valueChanges()
     .pipe(
           first(),
           tap({
             next: val => { 
-              console.log('we have a poll now!!', val);
               // redirect out if we didn't find anything.
               if(val === undefined) {
                 this.router.navigate(['/home/not-found']);
@@ -44,7 +42,6 @@ export class VoteService {
               if (isPlatformBrowser(this.platformId)) {
               }
               else {
-                console.log("SERVER ONLY!! disable network on the server only");
                 this.db.firestore.disableNetwork();
               }
               

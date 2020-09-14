@@ -30,21 +30,18 @@ export class PollService {
 
     if (isPlatformBrowser(this.platformId)) {
     this.db.firestore.enableNetwork().then(res => {
-      console.log("network enabled");
     })
     }
     return this.db.collection<Poll>('polls', ref => ref.where('owner_uid', '==', uid)).valueChanges()
       .pipe(
             tap({
               next: val => {
-                console.log("we got polls! ", val.length);
                 this.store.set('userPolls'+uid, val);
 
                 if (isPlatformBrowser(this.platformId)) {
                   
                 }
                 else {
-                  console.log("server only!");
               this.db.firestore.disableNetwork().then (a2 => {
                
               });
@@ -73,12 +70,10 @@ export class PollService {
           );
   }
   getAdminPollsById(id) {
-    console.log("getting only poll (admin): ", id);
     return this.db.collection<Poll>('polls', ref => ref.where('id', '==', id)).valueChanges()
     .pipe(
           tap({
             next: val => {
-              console.log("have a result: ", val);
               this.store.set('adminPolls', val);
             }
           })

@@ -58,7 +58,6 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.user$ = this.store.select('user');
     this.store.select('user').subscribe(res => {
-      console.log("result: ", res);
     });
   }
 

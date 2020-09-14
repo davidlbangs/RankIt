@@ -73,10 +73,8 @@ ngOnDestroy() {
 
   ngOnInit() {
     //window['angularComponentReference'] = { component: this, zone: this.ngZone, addRecaptchaScript: (element) => this.addRecaptchaScript(element), };
-    console.log("on init!");
     this.stillHere = true;
     if (isPlatformBrowser(this.platformId)) {
-      console.log("starting the thread");
       this.thread();
     }
     else {
@@ -120,7 +118,6 @@ ngOnDestroy() {
                 })
                 );
               
-              console.log('subscription created');
         } else {
           this.router.navigate(['/vote/not-found']);
           
@@ -131,7 +128,6 @@ ngOnDestroy() {
 
 
   addRecaptchaScript(element) {
-    console.log("add google captcha!");
     if (window['grecaptcha']) {
       this.renderReCaptcha(element);
     }
@@ -241,7 +237,6 @@ ngOnDestroy() {
   }
 
   showVote() {
-    console.log('vote', this.vote);
   }
 
   limit_vote(poll:Poll, user:User) {

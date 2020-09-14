@@ -193,7 +193,9 @@ export class DetailComponent implements OnInit {
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.subscription2.unsubscribe();
+    if (this.subscription2) {
+      this.subscription2.unsubscribe();
+    }
   }
 
   editPoll(poll: Poll) {
@@ -265,11 +267,9 @@ export class DetailComponent implements OnInit {
     let pollID = this.currentPoll.id;
     const votesRef = this.db.collection(`polls/${pollID}/votes`).get().subscribe(data2 => {
 
-   console.log("data: ", this.currentPoll);
     let l = this.currentPoll.choices.length;
     //votesRef.subscribe((data2: Vote[]) => {
       var date = new Date(this.currentPoll.date_created);
-      console.log("date: ", date);
       var year = date.getFullYear();
       var month = "" + (date.getMonth() + 1);
       if (Number(month) < 10) {
@@ -339,7 +339,6 @@ export class DetailComponent implements OnInit {
         },
         "results": rounds
       };
-      console.log("ret: ", ret);
      
      // let formData: FormData = new FormData();
      // const blob = new Blob([JSON.stringify(ret)], {type : 'application/json'})
@@ -351,7 +350,6 @@ export class DetailComponent implements OnInit {
         map(res => res)
       ).subscribe(
           data => {
-            console.log('success', data);
             if (data.url) {
             var win = window.open(data.visualizeUrl, '_blank');
             win.focus();
@@ -435,7 +433,6 @@ export class DetailComponent implements OnInit {
         },
         "results": rounds
       };
-      console.log("ret: ", ret);
       let filename = "results";
       let blob = new Blob(['\ufeff' + JSON.stringify(ret)], {
         type: 'application/json;charset=utf-8;'
@@ -472,7 +469,6 @@ export class DetailComponent implements OnInit {
     votesRef.subscribe((data2: Vote[]) => {
       let data = [];
       for (let d of data2) {
-        console.log("this: ", d);
         var e = [];
         for (var i = 0; i < l; i++) {
           if (d.choices[i]) {
@@ -486,13 +482,10 @@ export class DetailComponent implements OnInit {
         data.push(e);
       }
 
-      console.log("data: ", data);
 
 
       let filename = "results";
-      console.log("csv: ", this.currentPoll.votes);
       let csvData = this.ConvertToCSV(data, headlines);
-      console.log(csvData)
       let blob = new Blob(['\ufeff' + csvData], {
         type: 'text/csv;charset=utf-8;'
       });
@@ -512,7 +505,6 @@ export class DetailComponent implements OnInit {
       document.body.appendChild(dwldLink);
       dwldLink.click();
       document.body.removeChild(dwldLink);
-      console.log("qu: ", data);
     });
   }
 

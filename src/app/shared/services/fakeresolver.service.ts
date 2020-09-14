@@ -8,7 +8,6 @@ export class FakeUserResolver implements Resolve<any> {
     ) { }
 
   resolve() {
-    console.log("checking for user3");
     return null;
   }
 }

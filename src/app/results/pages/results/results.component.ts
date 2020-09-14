@@ -266,7 +266,6 @@ export class ResultsComponent implements OnInit {
 
         if (id) {
           this.subscription2 = this.store.select<User>("user").subscribe(user => {
-            console.log("user: ", user);
             if (this.loaded && admin == false) {
               if (user && user.roles && user.roles.admin) {
                 this.loaded = false;
@@ -406,7 +405,7 @@ export class ResultsComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.subscription2) {
-      this.subscription2.unsubcribe();
+     // this.subscription2.unsubcribe();
     }
   }
 
@@ -418,7 +417,6 @@ export class ResultsComponent implements OnInit {
     else {
       this.summary = false;
     }
-    console.log("setting round: ", destination);
     // update local state
     this.round = destination;
 

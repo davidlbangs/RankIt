@@ -37,7 +37,6 @@ export class AuthService {
                      uid: user.uid,
                      email: user.email
                    }
-                   console.log('setting the user:', user);
                    this.store.set('user', user);
                    let ua = user as any;
                    if (ua.emailVerified && user.emailVerified == false ) {

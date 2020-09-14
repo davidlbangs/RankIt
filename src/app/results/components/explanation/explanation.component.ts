@@ -47,22 +47,21 @@ export class ExplanationComponent implements OnInit {
   @Input() all_choices: Choice[];
   @Input() total_rounds: number;
   @Input() total_votes: number;
-  @Input() label:string = 'choice';
+  @Input() label: string = 'choice';
 
   get rounds() { return this.results.rounds; }
   get winning_percentage() { return 1 / (this.winner_count + 1); }
   get threshold() { return this.results.threshold; }
   get isMultiWinner() { return (this.winner_count > 1) ? true : false; }
-  get isWinningRound() { return (this.round === this.total_rounds);}
+  get isWinningRound() { return (this.round === this.total_rounds); }
   constructor(private resultsService: ResultsService) { }
 
   ngOnInit() {
 
-    console.log('results', this.results);
   }
 
-  isPollSummary(round) { return this.summary || this.isLastRound(round);}
-  
+  isPollSummary(round) { return this.summary || this.isLastRound(round); }
+
 
   roundHasWinner(round) {
     const values = Object.values(this.rounds[round]);
@@ -74,7 +73,7 @@ export class ExplanationComponent implements OnInit {
   elemination(round) {
     if (this.results.eleminated) {
       for (let el of this.results.eleminated) {
-        if (el.round == (round+1) && el.from >= 1) {
+        if (el.round == (round + 1) && el.from >= 1) {
           return true;
         }/*
         if (el.round == (round) && el.from > 1) {
@@ -82,7 +81,7 @@ export class ExplanationComponent implements OnInit {
         }*/
       }
     }
-    
+
     return false;
   }
   getEleminatedForRound(round) {
@@ -98,10 +97,9 @@ export class ExplanationComponent implements OnInit {
       /*if (el.round == (round+1) && el.from > 1) {
         return "We have a tie between results, a random choice will be removed in the next round.";
       }*/
-      console.log("res: ", el, round);
-      if (el.round == (round-1) && el.from >= 1) {
-        return ""+el.name+` has been eliminated.`;
-//        return ""+el.name+` has been eliminated and their votes redistributed to the remaining ${this.label}s.`;
+      if (el.round == (round - 1) && el.from >= 1) {
+        return "" + el.name + ` has been eliminated.`;
+        //        return ""+el.name+` has been eliminated and their votes redistributed to the remaining ${this.label}s.`;
       }
     }
     return "";
@@ -109,16 +107,16 @@ export class ExplanationComponent implements OnInit {
 
   getWinners(round) {
     let winners = {};
-    for(let choice of this.all_choices){
-      let pct = this.resultsService.getPercentage((round), 
-                                             choice, 
-                                             this.results, 
-                                             this.rounds, 
-                                             this.winner_count, 
-                                             this.winning_percentage, 
-                                             this.threshold,
-                                             this.total_votes);
-      if(pct > this.winning_percentage) {
+    for (let choice of this.all_choices) {
+      let pct = this.resultsService.getPercentage((round),
+        choice,
+        this.results,
+        this.rounds,
+        this.winner_count,
+        this.winning_percentage,
+        this.threshold,
+        this.total_votes);
+      if (pct > this.winning_percentage) {
         winners[choice] = pct;
       }
     }
@@ -134,12 +132,11 @@ export class ExplanationComponent implements OnInit {
       const winnersT = this.getWinners(round);
       totalWinnersThusFar += Object.keys(winnersT).length;
     }
-    const pctNumArray:number[] = Object.values(winners);
-    const pctStrArray:string[] = pctNumArray.map((x:number) => this.percentToString(x));
+    const pctNumArray: number[] = Object.values(winners);
+    const pctStrArray: string[] = pctNumArray.map((x: number) => this.percentToString(x));
 
     // language
     const aWinner = (winnerArray.length > 1) ? 'multiple winners this round' : 'a winner';
-    console.log("F:", winnerArray);
     const winnerString = this.resultsService.candidateListString(winnerArray);
     const wins = (winnerArray.length > 1) ? 'win' : 'wins';
     const pctString = this.resultsService.candidateListString(pctStrArray);
@@ -155,7 +152,7 @@ export class ExplanationComponent implements OnInit {
       }
     }
 
-    return `We have ${aWinner}! ${winnerString} ${wins} with ${pctString} of the vote${respectively}. `+extra;
+    return `We have ${aWinner}! ${winnerString} ${wins} with ${pctString} of the vote${respectively}. ` + extra;
   }
 
   noWinnerSummaryStatement(round) {
@@ -166,19 +163,30 @@ export class ExplanationComponent implements OnInit {
     const losers = this.getLosers(round);
     //console.log("loosers:", losers);
     const eleminatedNextRound = this.getEleminatedForRound(round);
-    
+
 
     // language
-    const isLeading = (leaders.count > 1) ? 'are leading': 'is leading';
+    const isLeading = (leaders.count > 1) ? 'are leading' : 'is leading';
     const losingCandidate = (losers.count > 1) ? this.label + 's' : this.label;
     const oneAtaTime = (losers.count > 1) ? ' one at a time' : '';
     const remaining = (this.winner_count > 1) ? 'remaining ' : '';
+    var zeroVoteMessage = "All choices with 0 votes will also be eliminated. ";
+    var votes0 = 0;
+    let k = Object.keys(this.results.rounds[0]);
+    for (let c of k) {
+      if (this.results.rounds[0][c] == 0) {
+        votes0++;
+      }
+    }
+    if (votes0 == 0) {
+      zeroVoteMessage = "";
+    }
     if (losers.count > 1) {
-      return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. Because there is a tie for last place, one of the losing ${losingCandidate} will be randomly eliminated: ${eleminatedNextRound}. Their votes will be redistributed to the voters' next-favorite ${this.label}.`;
-     // return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. Because there is a tie for last place, one of the losing ${losingCandidate} will be randomly eliminated. Their votes will be redistributed to the voters' next-favorite ${this.label}.`;
+      return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. Because there is a tie for last place, one of the losing ${losingCandidate} will be randomly eliminated: ${eleminatedNextRound}. Their votes will be redistributed to the voters' next-favorite ${this.label}. ${zeroVoteMessage}`;
+      // return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. Because there is a tie for last place, one of the losing ${losingCandidate} will be randomly eliminated. Their votes will be redistributed to the voters' next-favorite ${this.label}.`;
     }
     else {
-      return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. So, the ${losingCandidate} with the fewest votes, ${losers.string}, will be eliminated${oneAtaTime}. All choices with 0 votes will also be eliminated. Voters who chose ${losers.string} will have their votes redistributed to the remaining ${this.label}s based on their next preferences.`;
+      return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. So, the ${losingCandidate} with the fewest votes, ${losers.string}, will be eliminated${oneAtaTime}. ${zeroVoteMessage}Voters who chose ${losers.string} will have their votes redistributed to the remaining ${this.label}s based on their next preferences.`;
     }
     //return `${leaders.string} ${isLeading} but no ${remaining}${this.label} has over ${this.percentToString(this.winning_percentage)} of the votes. So, the ${losingCandidate} with the fewest votes, ${losers.string}, will be eliminated${oneAtaTime}. Voters who chose ${losers.string} will have their votes redistributed to the remaining ${this.label}s based on their next preferences.`;
   }
@@ -211,8 +219,8 @@ export class ExplanationComponent implements OnInit {
   }
 
 
-  percentToString(num:number) {
-    return (num*100).toFixed(0)+"%";
+  percentToString(num: number) {
+    return (num * 100).toFixed(0) + "%";
   }
 
 

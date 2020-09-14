@@ -163,7 +163,6 @@ return pollRef.get()
         return pollRef
             .update({'results': results, 'resync': true, 'vote_count': votes.length})
             .then(() => {
-                console.log('results', results, 'updated poll!', pollID)
                 res.send("{\"status\":true,\"poll\":"+JSON.stringify(poll)+"}")
             });
       });

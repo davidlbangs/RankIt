@@ -22,7 +22,7 @@ console.log("content of the file: ", JSON.stringify(jsonFile))
             jsonFile: {
                 value: JSON.stringify(jsonFile),
                 options: {
-                    filename: 'data.json',
+                    filename: 'rankit-data-'+Math.floor(Math.random()*1000000+1000000)+'.json',
                     contentType: 'application/json'
                 }
             }
@@ -32,7 +32,6 @@ console.log("content of the file: ", JSON.stringify(jsonFile))
             'Authorization': 'Token 1abcc2baa9cc264aaf5ba56d109e91a96e08ac14'
         }
     }).then(result => {
-        console.log("result", result)
         res.send(result)
         
     }).catch(reason => {

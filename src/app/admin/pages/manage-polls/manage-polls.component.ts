@@ -88,26 +88,25 @@ export class ManagePollsComponent implements OnInit {
           this.db.doc(`polls/${poll.id}`).update({'results_public': true});
         }*
       }
-      console.log("res: ", b1,b2, up, polls.length);
     }
     })
     */
     this.subscription = this.pollService.getAdminPolls().subscribe(res => {
-      console.log("res: ", res.docs);
+      
     })// .subscribe();
   }
   moreResults() {
 
     this.subscription.unsubscribe();
     this.subscription = this.pollService.getAdminPolls().subscribe(res => {
-      console.log("res: ", res);
+      
     }); // .subscribe();
   }
   reset() {
 
     this.subscription.unsubscribe();
     this.subscription = this.pollService.getAdminPollsReset().subscribe(res => {
-      console.log("res: ", res);
+     
     })// .subscribe();
   }
   ngOnDestroy() {

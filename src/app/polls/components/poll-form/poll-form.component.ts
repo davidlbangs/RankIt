@@ -416,7 +416,6 @@ export class PollFormComponent implements OnChanges {
   }
 
   get showCustomCTA() {
-    console.log('va: ', this.form.get('cta').get('custom').value);
     return this.form.get('cta').get('custom').value == "link";
   }
 
@@ -437,7 +436,6 @@ export class PollFormComponent implements OnChanges {
 
   choicesArray(){
     let choices = this.form.get('choices');
-    console.log('hey!', choices);
   }
 
 
@@ -498,7 +496,9 @@ export class PollFormComponent implements OnChanges {
   updatePoll(pub) {
     if (this.form.valid) {
       if (pub) {
-        this.updatePublish.emit(this.form.value);
+        if (confirm('Are you sure? Once you publish a poll others will be able to see it and vote on it until you close the poll.')) {
+          this.updatePublish.emit(this.form.value);
+        }
       }
       else {
         this.update.emit(this.form.value);
