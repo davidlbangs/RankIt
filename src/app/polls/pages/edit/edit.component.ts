@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute} from '@angular/router';
-import { Observable, Subscription} from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Store } from 'store';
-
-import { PollService } from '../../../shared/services/poll.service';
 import { Poll } from '../../../shared/models/poll.interface';
+import { PollService } from '../../../shared/services/poll.service';
+
 
 @Component({
   selector: 'edit-poll',
@@ -49,16 +49,16 @@ import { Poll } from '../../../shared/models/poll.interface';
   `
 })
 export class EditComponent implements OnInit, OnDestroy {
-  
+
   poll$: Observable<Poll | {}>; // should be poll
   user$: Observable<any>;
   subscription: Subscription;
 
   constructor(
-              private store:Store,
+    private store: Store,
     private pollService: PollService,
-    private router:Router,
-    private route:ActivatedRoute) {}
+    private router: Router,
+    private route: ActivatedRoute) { }
 
 
   ngOnInit() {
@@ -67,33 +67,32 @@ export class EditComponent implements OnInit, OnDestroy {
     this.subscription = this.pollService.getUserPolls().subscribe();
 
     this.poll$ = this.route.params
-    .pipe(
-          switchMap(params => {
+      .pipe(
+        switchMap(params => {
 
-              let id = params.id;
-              if(id) {
-                return this.pollService.getPoll(id);
-              } else {
-                // ADD CREATE LOGIC
-                return this.pollService.initializePoll();
-              }
-            })
-          );
+          const id = params.id;
+          if (id) {
+            return this.pollService.getPoll(id);
+          } else {
+            // ADD CREATE LOGIC
+            return this.pollService.initializePoll();
+          }
+        })
+      );
   }
   ngOnDestroy() {
-     this.subscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   async addPoll(event: Poll, publish: boolean) {
-    let newPollID = await this.pollService.addPoll(event, publish);
+    const newPollID = await this.pollService.addPoll(event, publish);
 
     if (publish) {
       if (confirm('Click "OK" to show your results immediately after each vote. Click "Cancel" to hide them from voters until you close the poll.')) {
         event.results_public = false;
         this.pollService.togglePollResultsPublic(event.id, event.results_public);
         alert('Your poll is published and ready to share. Voters will see results after they submit their vote.');
-      }
-      else {
+      } else {
         event.results_public = true;
         this.pollService.togglePollResultsPublic(event.id, event.results_public);
         alert('Your poll is published and ready to share. Voters will not see results until/unless you choose to display them in your settings.');
@@ -109,13 +108,27 @@ export class EditComponent implements OnInit, OnDestroy {
     // id is used to get, above.
     // CANT use event.$key because it's the form value, and there's no key.
     const key = this.route.snapshot.params.id;
+
     await this.pollService.updatePoll(key, event, publish);
+
+    if (publish) {
+      if (confirm('Click "OK" to show your results immediately after each vote. Click "Cancel" to hide them from voters until you close the poll.')) {
+        event.results_public = false;
+        this.pollService.togglePollResultsPublic(key, event.results_public);
+        alert('Your poll is published and ready to share. Voters will see results after they submit their vote.');
+      } else {
+        event.results_public = true;
+        this.pollService.togglePollResultsPublic(key, event.results_public);
+        alert('Your poll is published and ready to share. Voters will not see results until/unless you choose to display them in your settings.');
+      }
+    }
+
     this.router.navigate(['polls', key]);
   }
 
   async removePoll(event: Poll) {
     const key = this.route.snapshot.params.id;
-     await this.pollService.deletePoll(key);
+    await this.pollService.deletePoll(key);
   }
 
   backToPolls() {

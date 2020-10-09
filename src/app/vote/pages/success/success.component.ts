@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-
-
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-
 import { Store } from 'store';
-import { Poll, Vote, Choice } from '../../../shared/models/poll.interface';
+import { Poll } from '../../../shared/models/poll.interface';
 import { VoteService } from '../../../shared/services/vote.service';
+
+
+
+
 
 @Component({
   selector: 'app-success',
@@ -28,43 +27,43 @@ import { VoteService } from '../../../shared/services/vote.service';
   `
 })
 export class SuccessComponent implements OnInit {
-  poll$:Observable<Poll> = this.store.select('poll');
+  poll$: Observable<Poll> = this.store.select('poll');
   poll: Poll = null;
 
   constructor(
-              private route:ActivatedRoute,
-              private router:Router,
-              private voteService:VoteService,
-              private store:Store) { }
+    private route: ActivatedRoute,
+    private router: Router,
+    private voteService: VoteService,
+    private store: Store) { }
 
   ngOnInit() {
-    let user = this.route.snapshot.data.resolverUser;
-    
+    const user = this.route.snapshot.data.resolverUser;
 
-    
+
+
     this.route.paramMap
-      .subscribe((params:ParamMap) => {
-        let id = params.get('id');
-        if(id) {
+      .subscribe((params: ParamMap) => {
+        const id = params.get('id');
+        if (id) {
           this.poll$ = this.voteService.getPoll(id);
           this.poll$.subscribe(res => {
             this.poll = res;
-            if (this.voteService.hasVoted(this.poll)==false) {
-              
+            if (this.voteService.hasVoted(this.poll) === false) {
+
               this.router.navigate(['/vote/', id]);
             }
           });
 
-          if(user) {
+          if (user) {
             this.store.set('backButton', ['/polls/', id]);
           } else {
             this.store.set('backButton', `/`);
           }
         } else {
           this.router.navigate(['/vote/not-found']);
-          
+
         }
-       
+
       });
   }
 
