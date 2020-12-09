@@ -10,7 +10,7 @@ import { Store } from 'store';
   selector: 'app-manage-polls',
   template: `
     <main>
-      <h1 class="mb-2 mt-2"><strong>Admin:</strong> Manage All Polls</h1>
+      <h1 class="mb-2 mt-2"><strong>Admin:</strong> Manage All Polls.</h1>
       <hr class="mb-2" />
     <div *ngIf="polls$ | async as polls; else loading;" class="pb-4">
 
