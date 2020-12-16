@@ -177,12 +177,16 @@ export class VoteComponent implements OnInit {
 
   async submitVote(poll: Poll, vote: Vote) {
     await this.voteService.submitVote(poll, vote);
+    const self = this;
+    setTimeout(function () {
+
+      self.router.navigate(['vote', poll.id, 'success']);
+    }, 200);
 
     this.analytics.logEvent('vote', { pollId: poll.id, poll: poll, vote: vote })
       .then((res: any) => console.log('voting logged: ', res))
       .catch((error: any) => console.error(error));
 
-    // this.router.navigate(['vote', poll.id, 'success']);
   }
 
   addToVote(choice: Choice) {

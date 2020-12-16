@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, Subscription } from 'rxjs';
-
-import { Poll, Description } from '../../../shared/models/poll.interface';
-import { PollService } from '../../../shared/services/poll.service';
 import { Store } from 'store';
+import { Description, Poll } from '../../../shared/models/poll.interface';
+import { PollService } from '../../../shared/services/poll.service';
+
+declare var firebase;
 
 @Component({
   selector: 'app-home',
@@ -85,9 +87,10 @@ export class HomeComponent implements OnInit {
   subscription: Subscription;
   subscription2: Subscription = null;
   constructor(
-              private store: Store, 
-              private db: AngularFirestore, 
-              private pollService:PollService) {
+    private store: Store,
+    private db: AngularFirestore,
+    private analytics: AngularFireAnalytics,
+    private pollService: PollService) {
     // this.polls = db.collection('items').valueChanges();
   }
 
@@ -107,6 +110,12 @@ export class HomeComponent implements OnInit {
     this.subscription = this.pollService.getPublicPolls().subscribe(); // returns subscription
 
     this.description$ = this.pollService.getDescription();
+
+
+
+    this.analytics.logEvent('test').then(r => {
+      console.log('R: ', r);
+    });
   }
 
   ngOnDestroy() {

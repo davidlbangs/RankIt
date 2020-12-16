@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, Subscription } from 'rxjs';
-
-import { User } from '../../../shared/models/user.interface';
-import { PollService } from '../../../shared/services/poll.service';
-import { AdminService } from '../../../shared/services/admin.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Store } from 'store';
-import { tap, map } from 'rxjs/operators';
+import { User } from '../../../shared/models/user.interface';
+import { AdminService } from '../../../shared/services/admin.service';
+import { PollService } from '../../../shared/services/poll.service';
+
 
 @Component({
   selector: 'app-manage-users',
@@ -52,22 +52,22 @@ import { tap, map } from 'rxjs/operators';
   styleUrls: ['./manage-users.component.scss']
 })
 export class ManageUsersComponent implements OnInit {
-  
+
   users$: Observable<User[]>;
   more = false;
   lastResponse;
   userList = [];
   // subscription: Subscription;
   constructor(
-              private store: Store, 
-              private db: AngularFirestore, 
-              private adminService: AdminService,
-              private pollService:PollService) {}
+    private store: Store,
+    private db: AngularFirestore,
+    private adminService: AdminService,
+    private pollService: PollService) { }
 
   ngOnInit() {
     this.store.set('backButton', 'account');
     this.load();
-    
+
     this.users$.subscribe(userList => {
       this.userList = userList;
     });
@@ -85,81 +85,89 @@ export class ManageUsersComponent implements OnInit {
       return r;
     }).get().pipe(map(
       val => {
-       
-       if (val.docs.length>0) {
-         this.lastResponse = val.docs[val.docs.length-1];
-       }
-       if (val.docs.length<50) {
 
-         this.more = false;
-       }
-       else {
-         this.more = true;
-       }
-       return val.docs.map(r => r.data()) as User[];
-     }
-   ));
+        if (val.docs.length > 0) {
+          this.lastResponse = val.docs[val.docs.length - 1];
+        }
+        if (val.docs.length < 50) {
+
+          this.more = false;
+        } else {
+          this.more = true;
+        }
+        return val.docs.map(r => r.data()) as User[];
+      }
+    ));
   }
 
-ConvertToCSV(objArray, headerList) { 
-  let array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray; 
-  let str = ''; 
-  let row = ''; 
-  for (let index in headerList) { 
-      row += headerList[index] + ','; 
-  } 
-  row = row.slice(0, -1); 
-  str += row + '\r\n'; 
-  for (let i = 0; i < array.length; i++) { 
-      let line = ""; 
-      for (let index in headerList) { 
-          //let head = headerList[index]; 
-          line += ", " + array[i][index]; 
-      } 
-      line = line.slice(2);
-      str += line + "\r\n"; 
-  } 
-  return str; 
-} 
-
-
-emails() {
-    let headlines = ["Email"];
-    let l = this.userList.length;
-    // 1. Get Poll
-    // 2. get All Votes
-    let data = [];
-    for (let d of this.userList) {
-      var e = [d.email];
-      
-      data.push(e);
+  ConvertToCSV(objArray, headerList) {
+    const array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    let str = '';
+    let row = '';
+    for (const index in headerList) {
+      row += headerList[index] + ',';
     }
-          
-  
+    row = row.slice(0, -1);
+    str += row + '\r\n';
+    for (let i = 0; i < array.length; i++) {
+      let line = '';
+      for (const index in headerList) {
+        // let head = headerList[index]; 
+        line += ', ' + array[i][index];
+      }
+      line = line.slice(2);
+      str += line + '\r\n';
+    }
+    return str;
+  }
 
-    let filename = "emails";
-    let csvData = this.ConvertToCSV(data, headlines); 
-    console.log(csvData) 
-    let blob = new Blob(['\ufeff' + csvData], { 
-        type: 'text/csv;charset=utf-8;'
-    }); 
-    let dwldLink = document.createElement("a"); 
-    let url = URL.createObjectURL(blob); 
-    let isSafariBrowser = navigator.userAgent.indexOf( 
-      'Safari') != -1 &&
-    navigator.userAgent.indexOf('Chrome') == -1; 
-    
-    //if Safari open in new window to save file with random filename. 
-    if (isSafariBrowser) {  
-        dwldLink.setAttribute("target", "_blank"); 
-    } 
-    dwldLink.setAttribute("href", url); 
-    dwldLink.setAttribute("download", filename + ".csv"); 
-    dwldLink.style.visibility = "hidden"; 
-    document.body.appendChild(dwldLink); 
-    dwldLink.click(); 
-    document.body.removeChild(dwldLink); 
-    console.log("qu: ", data);
+
+  emails() {
+    this.db.collection('users').get().subscribe(
+      val => {
+        console.log('got data: ', val);
+
+        const userList = val.docs.map(r => r.data()) as User[];
+        const headlines = ['Email'];
+        const l = userList.length;
+        // 1. Get Poll
+        // 2. get All Votes
+        const data = [];
+        for (const d of userList) {
+          const e = [d.email];
+
+          data.push(e);
+        }
+
+
+
+        const filename = 'emails';
+        const csvData = this.ConvertToCSV(data, headlines);
+        console.log(csvData);
+        const blob = new Blob(['\ufeff' + csvData], {
+          type: 'text/csv;charset=utf-8;'
+        });
+        const dwldLink = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        const isSafariBrowser = navigator.userAgent.indexOf(
+          'Safari') != -1 &&
+          navigator.userAgent.indexOf('Chrome') == -1;
+
+        // if Safari open in new window to save file with random filename. 
+        if (isSafariBrowser) {
+          dwldLink.setAttribute('target', '_blank');
+        }
+        dwldLink.setAttribute('href', url);
+        dwldLink.setAttribute('download', filename + '.csv');
+        dwldLink.style.visibility = 'hidden';
+        document.body.appendChild(dwldLink);
+        dwldLink.click();
+        document.body.removeChild(dwldLink);
+        console.log('qu: ', data);
+      }
+    );
+
+
 
   }
 
