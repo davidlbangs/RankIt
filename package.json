@@ -27,7 +27,9 @@
     "build:ssr": "ng build --prod && ng run rankit:server:production",
     "prerender": "ng run rankit:prerender",
     "postinstall1": "ngcc",
-    "deploy": "ng build --prod && npm run build:ssr && gcloud app deploy"
+    "deploy": "ng build --prod && npm run build:ssr && gcloud app deploy",
+    "staging:deploy": "ng build --prod && npm run build:ssr && gcloud app deploy --no-promote -q"
+
   },
   "private": true,
   "dependencies": {

@@ -25,16 +25,20 @@ import { Poll } from './shared/models/poll.interface';
     <div class="logo" *ngIf="customLogo" style="width:100px;float:left;padding:0;margin-right:15px;">
       <img style="max-width:150px;" src="/assets/images/rankit-color.svg" alt="RankIt" [routerLink]="['/']" />
 </div>
-      Powered by <a href="https://www.fairvote.org">FairVote</a>.<br />Problems with the app? Email <a href="mailto:rankit@fairvote.org">rankit@fairvote.org</a>.
+      Powered by <a href="https://www.fairvote.org" target="_blank">FairVote</a>.
+      <br />
+      Have a question? Check out our <a href="https://fairvote.box.com/s/8cc8f9y8ddvdbcxkqlzfxkq12cnaztsf" target="_blank">User Guide</a>.
+      <br />
+      Problems with the app? Email <a href="mailto:rankit@fairvote.org">rankit@fairvote.org</a>.
     </footer>
 
-    
+
   </div>
 
 
 
   <div id="sillyOverlay" style="z-index: 999999;bottom: 10px; left: 30px;position:fixed;" *ngIf="SILLY_OVERLAY" >
-    <button type="button" (click)="checkState()">Check State</button> 
+    <button type="button" (click)="checkState()">Check State</button>
 </div>
 
   `
@@ -46,7 +50,7 @@ export class AppComponent implements OnInit {
   customLogo: boolean = false;
   footerSpace = false;
 
-  
+
   items: Observable<any[]>;
   constructor(
               private db: AngularFirestore,
