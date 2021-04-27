@@ -18,7 +18,7 @@ import { AngularFireAnalytics } from '@angular/fire/analytics';
 @Component({
   selector: 'app-detail',
   styleUrls: ['./detail.component.scss'],
-  template: ` 
+  template: `
 
     <div class="detail" *ngIf="poll$ | async as poll">
       <header class="poll-header">
@@ -26,9 +26,9 @@ import { AngularFireAnalytics } from '@angular/fire/analytics';
         <p>
           <span *ngFor="let choice of poll.choices; let i = index">
             {{ (i + 1) < poll.choices.length ? choice + ', ' : choice }}
-            
+
           </span>
-        </p>  
+        </p>
         <p *ngIf="poll.winner_count > 1">
           ({{poll.winner_count}} Winners)
         </p>
@@ -73,10 +73,10 @@ import { AngularFireAnalytics } from '@angular/fire/analytics';
 
       <div class="mobileColumn right" style="padding-top:25px;">
         <button *ngIf="!poll.results_public"
-          [routerLink]="['/results', poll.id, 'summary']" 
+          [routerLink]="['/results', poll.id, 'summary']"
           mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large">View Results (only you can view)</button>
         <button *ngIf="poll.results_public"
-          [routerLink]="['/results', poll.id, 'summary']" 
+          [routerLink]="['/results', poll.id, 'summary']"
           mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-signal"></i>View Results</button>
         <button [routerLink]="['/vote', poll.id]"
           [disabled]="!poll.is_open"
@@ -87,14 +87,14 @@ import { AngularFireAnalytics } from '@angular/fire/analytics';
         <button (click)="jsonUpload()"
         [disabled]="poll.is_open || poll.vote_count == 0"
       mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-share-alt"></i>Export Results to RCVIS</button>
-      
-    
+
+
         <hr class="mt-3 mb-4" />
         <h1 class="mb-1">Promote Poll</h1>
         <p *ngIf="!poll.is_published">This poll cannot be shared until it is published.</p>
         <share-poll *ngIf="poll.is_published" [poll]="poll"></share-poll>
         <embed-poll *ngIf="poll.is_published" [poll]="poll"></embed-poll>
-        
+
         </div>
         <div class="clear"></div>
       </main>
@@ -105,7 +105,7 @@ import { AngularFireAnalytics } from '@angular/fire/analytics';
       <!-- <button *ngIf="poll.is_published" (click)="togglePublished(poll)" mat-stroked-button color="red" class="has-icon">Unpublish Poll</button> -->
       <button style="margin-right:15px;" *ngIf="!poll.is_published" (click)="togglePublished(poll)" mat-stroked-button color="red" class="has-icon">Publish Poll</button>
       <button style="margin-right:15px;" *ngIf="!poll.is_published" (click)="editPoll(poll)" mat-stroked-button color="red" class="has-icon">Edit Poll</button>
-     
+
       <button (click)="toggleDelete()" mat-stroked-button color="red" class="has-icon"><i class="fa fa-times"></i>Delete Poll</button>
       <div class="confirmDelete" *ngIf="showDelete">
         Are you sure? <button mat-raised-button color="warn" (click)="deletePoll(poll)">Delete</button> <button mat-button (click)="toggleDelete()">Cancel</button>
@@ -113,7 +113,7 @@ import { AngularFireAnalytics } from '@angular/fire/analytics';
       </main>
     </div>
 
-    
+
 
   `
 })
@@ -254,7 +254,7 @@ export class DetailComponent implements OnInit {
     for (let i = 0; i < array.length; i++) {
       let line = "";
       for (let index in headerList) {
-        //let head = headerList[index]; 
+        //let head = headerList[index];
         line += ", " + array[i][index];
       }
       line = line.slice(2);
@@ -280,7 +280,7 @@ export class DetailComponent implements OnInit {
         day = "0" + day;
       }
       let rounds = [];
-      
+
       for (var i = 0; i < this.currentPoll.results.rounds.length; i++) {
         let roundData = this.currentPoll.results.rounds[i];
         if (roundData) {
@@ -305,7 +305,7 @@ export class DetailComponent implements OnInit {
         for (const el of this.currentPoll.results.elected) {
           if (el.round !== undefined && el.round == i) {
             tallyResults["elected"] = el.name;
-            
+
           }
         }
         for (let elim of this.currentPoll.results.eleminated) {
@@ -339,7 +339,7 @@ export class DetailComponent implements OnInit {
         },
         "results": rounds
       };
-     
+
      // let formData: FormData = new FormData();
      // const blob = new Blob([JSON.stringify(ret)], {type : 'application/json'})
      //  formData.append('jsonFile', blob, "file.json");
@@ -350,7 +350,8 @@ export class DetailComponent implements OnInit {
         map(res => res)
       ).subscribe(
           data => {
-            if (data.url) {
+            console.log(data);
+            if (data.visualizeUrl) {
             var win = window.open(data.visualizeUrl, '_blank');
             win.focus();
             }
@@ -365,7 +366,7 @@ export class DetailComponent implements OnInit {
         'Safari') != -1 &&
         navigator.userAgent.indexOf('Chrome') == -1;
 
-      //if Safari open in new window to save file with random filename. 
+      //if Safari open in new window to save file with random filename.
       if (isSafariBrowser) {
         dwldLink.setAttribute("target", "_blank");
       }
@@ -380,7 +381,7 @@ export class DetailComponent implements OnInit {
           error => console.log(error)
         )
     });
-  
+
   }
 
   json() {
@@ -443,7 +444,7 @@ export class DetailComponent implements OnInit {
         'Safari') != -1 &&
         navigator.userAgent.indexOf('Chrome') == -1;
 
-      //if Safari open in new window to save file with random filename. 
+      //if Safari open in new window to save file with random filename.
       if (isSafariBrowser) {
         dwldLink.setAttribute("target", "_blank");
       }
@@ -495,7 +496,7 @@ export class DetailComponent implements OnInit {
         'Safari') != -1 &&
         navigator.userAgent.indexOf('Chrome') == -1;
 
-      //if Safari open in new window to save file with random filename. 
+      //if Safari open in new window to save file with random filename.
       if (isSafariBrowser) {
         dwldLink.setAttribute("target", "_blank");
       }

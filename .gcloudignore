@@ -16,3 +16,6 @@
 # Node.js dependencies:
 node_modules/
 debug_notes/
+
+# ignore conda env
+conda-env/

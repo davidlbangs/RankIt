@@ -29,7 +29,6 @@
     "postinstall1": "ngcc",
     "deploy": "ng build --prod && npm run build:ssr && gcloud app deploy",
     "staging:deploy": "ng build --prod && npm run build:ssr && gcloud app deploy --no-promote -q"
-
   },
   "private": true,
   "dependencies": {
@@ -61,7 +60,7 @@
     "firebaseui-angular": "^4.1.0",
     "ngx-auth-firebaseui": "^4.2.1",
     "ngx-cookie-service": "^3.0.4",
-    "ngx-meta": "github:proggeramlug/ngx-meta",
+    "ngx-meta": "^0.0.1",
     "node-cache": "5.1.0",
     "reflect-metadata": "0.1.13",
     "rxjs": "6.5.4",
