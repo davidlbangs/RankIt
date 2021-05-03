@@ -10,11 +10,11 @@ import { Store } from 'store';
   selector: 'app-view',
   styleUrls: ['./view.component.scss'],
   template: `
-    
+
     <main>
-    <button 
+    <button
       [routerLink]="['create']"
-      mat-button mat-raised-button [color]="'primary'" 
+      mat-button mat-raised-button [color]="'primary'"
       class="d-block newPoll has-icon dark-icon button-large mb-3"><i class="fa fa-plus-square"></i>Create Poll</button>
 
    <h1 class="mb-2 mt-2">My Polls</h1>
@@ -29,7 +29,7 @@ import { Store } from 'store';
         <mat-card *ngIf="!polls.length">
           <mat-card-title>No polls yet! How about <a [routerLink]="['create']">creating one</a>?</mat-card-title>
         </mat-card>
-        
+
     </div>
 
       <div class="message" *ngIf="!polls">
@@ -45,8 +45,8 @@ export class ViewComponent implements OnInit {
   polls;
   subscription: Subscription;
   constructor(
-              private store: Store, 
-              private db: AngularFirestore, 
+              private store: Store,
+              private db: AngularFirestore,
               private pollService:PollService) {}
 
   ngOnInit() {

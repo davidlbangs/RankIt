@@ -14,6 +14,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from '@shared/models/user.interface';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
+import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY } from '@angular/cdk/overlay/overlay-directives';
 
 @Component({
   selector: 'app-detail',
@@ -141,24 +142,29 @@ export class DetailComponent implements OnInit {
 
 
   ngOnInit() {
+    console.log('ngOnInit');
     this.store.set('backButton', 'polls');
     this.subscription2 = this.store.select<User>("user").subscribe(user => {
-      if (user && user.roles && this.loaded == false) {
+      if (user && this.loaded == false) {
         this.loaded = true;
-        if (user.roles.admin) {
+        if (user.roles && user.roles.admin) {
+          console.log('calling this.loadForAdmin()');
           this.loadForAdmin();
 
         }
         else {
+          console.log('calling this.loadForUser()');
           this.loadForUser();
         }
 
       }
+    console.log('finish init');
     });
 
 
   }
   loadForUser() {
+    console.log('loadForUser');
     this.subscription = this.pollService.getUserPolls().subscribe();
     this.poll$ = this.route.params
       .pipe(
@@ -175,7 +181,7 @@ export class DetailComponent implements OnInit {
       );
   }
   loadForAdmin() {
-
+    console.log('loadForAdmin');
     this.poll$ = this.route.params
       .pipe(
         switchMap(param => {

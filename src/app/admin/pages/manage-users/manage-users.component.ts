@@ -27,17 +27,17 @@ import { PollService } from '../../../shared/services/poll.service';
         <a (click)="toggleUserSuper(user.uid, false)" *ngIf="user.roles?.super">Remove Super User Rights</a>
         <a (click)="toggleUserSuper(user.uid, true)" *ngIf="!user.roles?.super">Give Super User Rights</a>
         </mat-card-subtitle>
-     
+
 
         <mat-card *ngIf="users.length == 0">
           <mat-card-title>No users yet! How about making one?</mat-card-title>
         </mat-card>
       </mat-card>
-      <button *ngIf="more"  
-      mat-button 
+      <button *ngIf="more"
+      mat-button
       class="d-block has-icon dark-icon button-large p-1" (click)="load()()">More Results</button>
-      <button *ngIf="more"  
-      mat-button 
+      <button *ngIf="more"
+      mat-button
       class="d-block has-icon dark-icon button-large p-1" (click)="reset()">Reset</button>
     </div>
 
@@ -112,7 +112,7 @@ export class ManageUsersComponent implements OnInit {
     for (let i = 0; i < array.length; i++) {
       let line = '';
       for (const index in headerList) {
-        // let head = headerList[index]; 
+        // let head = headerList[index];
         line += ', ' + array[i][index];
       }
       line = line.slice(2);
@@ -153,7 +153,7 @@ export class ManageUsersComponent implements OnInit {
           'Safari') != -1 &&
           navigator.userAgent.indexOf('Chrome') == -1;
 
-        // if Safari open in new window to save file with random filename. 
+        // if Safari open in new window to save file with random filename.
         if (isSafariBrowser) {
           dwldLink.setAttribute('target', '_blank');
         }

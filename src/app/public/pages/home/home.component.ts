@@ -13,17 +13,17 @@ declare var firebase;
   styleUrls: ['./home.component.scss'],
   template: `
   <div class="subHeader">
-  
+
     <button *ngIf="user$ | async"
     [routerLink]="['/polls/create']"
-    mat-button mat-raised-button [color]="'primary'" 
+    mat-button mat-raised-button [color]="'primary'"
     class="d-block has-icon dark-icon button-large mb-3"><i class="fa fa-plus-square"></i>Create Poll</button>
 
 
     <button
     *ngIf="!(user$ | async)"
     [routerLink]="['/auth/login']"
-    mat-button mat-raised-button [color]="'primary'" 
+    mat-button mat-raised-button [color]="'primary'"
     class="d-block has-icon dark-icon button-large mb-3"><i class="fa fa-user-plus"></i>Sign Up to Create a Poll</button>
 </div>
     <main>
@@ -36,12 +36,12 @@ declare var firebase;
         <mat-card *ngFor="let poll of polls" [routerLink]="['/vote', poll.id]" class="mb-1 linked-card">
         <mat-card-title>{{poll.title}}</mat-card-title>
         <mat-card-subtitle>{{poll.is_open ? 'Open' : 'Closed' }} – {{poll.vote_count ? poll.vote_count + ' votes' : 'No Votes'}}</mat-card-subtitle>
-     
+
         <mat-card *ngIf="polls.length > 10">
           <mat-card-title>No polls yet! How about making one?</mat-card-title>
         </mat-card>
       </mat-card>
-        
+
     </div>
     <div  *ngIf="loggedIn">
     <h1 class="mb-2 mt-2">My Recent Polls</h1>
@@ -51,19 +51,19 @@ declare var firebase;
       <mat-card *ngFor="let poll of polls" [routerLink]="['/vote', poll.id]" class="mb-1 linked-card">
       <mat-card-title>{{poll.title}}</mat-card-title>
       <mat-card-subtitle>{{poll.is_open ? 'Open' : 'Closed' }} – {{poll.vote_count ? poll.vote_count + ' votes' : 'No Votes'}}</mat-card-subtitle>
-   
+
       <mat-card *ngIf="polls.length > 10">
         <mat-card-title>No polls yet! How about making one?</mat-card-title>
       </mat-card>
     </mat-card>
-      
+
   </div>
   <a  [routerLink]="['/polls']">See all My Polls</a>
   </div>
     </div>
     <div class="mobileColumn right" *ngIf="description$ | async as description">
         <home-description [content]="description"></home-description>
-    
+
     </div>
     <div class="clear"></div>
     <ng-template #loading>

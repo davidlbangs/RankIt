@@ -14,7 +14,7 @@ import { PollService } from '../../../shared/services/poll.service';
     <main class="poll">
     <div class="poll__title">
       <h1 class="mb-2 mt-2">
-        
+
         <span *ngIf="poll$ | async as poll; else title;">
             {{ poll.title ? 'Edit' : 'Create' }} poll
           </span>
