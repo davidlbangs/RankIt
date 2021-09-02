@@ -16,6 +16,7 @@ import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 @Injectable()
 export class AuthService {
+  // handles user signup, authentication
   
   user$: Observable<User | void>;
 

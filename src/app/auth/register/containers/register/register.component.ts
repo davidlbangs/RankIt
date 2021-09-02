@@ -19,11 +19,11 @@ import { AngularFireAnalytics } from '@angular/fire/analytics';
             (onError)="errorCallback($event)"
             [tabindex]="'1'"
             [guestEnabled]="'false'"
-            [providers]="[providers.Google, providers.Facebook, providers.Twitter]">
+            [providers]="[providers.Google, providers.Twitter]">
             </ngx-auth-firebaseui>
        </div>
     </main>
-    
+
     <ng-template #signedIn>
     <main>
       <p class="mt-2 mb-1">You're already signed in.</p>
@@ -34,11 +34,11 @@ import { AngularFireAnalytics } from '@angular/fire/analytics';
     </main>
     </ng-template>
 
-    
+
   `
 })
 export class RegisterComponent implements OnInit {
-  
+
   error: string;
   providers = AuthProvider;
   isBrowser:boolean;
@@ -70,11 +70,11 @@ export class RegisterComponent implements OnInit {
 
   errorCallback(errorData: any) {
       console.error('something went wrong', errorData);
-  } 
+  }
 
   // async registerUser(event: FormGroup) {
   //     const { email, password } = event.value; // destructuring
-      
+
   //     try {
   //       await this.authService.createUser(email, password);
   //       // this is the "done" section of the promise.

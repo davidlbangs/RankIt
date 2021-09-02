@@ -19,11 +19,11 @@ import {AuthProvider} from 'ngx-auth-firebaseui';
             (onSuccess)="successCallback($event)"
             (onError)="errorCallback($event)"
             [guestEnabled]="false"
-            [providers]="[providers.Google, providers.Facebook, providers.Twitter]">
+            [providers]="[providers.Google, providers.Twitter]">
             </ngx-auth-firebaseui>
        </div>
     </main>
-    
+
     <ng-template #signedIn>
     <main>
       <p class="mt-2 mb-1">You're already signed in.</p>
@@ -34,7 +34,7 @@ import {AuthProvider} from 'ngx-auth-firebaseui';
     </main>
     </ng-template>
 
-     
+
   `
 })
 export class LoginComponent implements OnInit {
@@ -64,5 +64,5 @@ export class LoginComponent implements OnInit {
 
   errorCallback(errorData: any) {
       console.error('something went wrong', errorData);
-  }  
+  }
 }
