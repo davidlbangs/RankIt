@@ -101,6 +101,7 @@ export class ManageUsersComponent implements OnInit {
   }
 
   ConvertToCSV(objArray, headerList) {
+    console.log('in ConvertToCSV');
     const array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
     let str = '';
     let row = '';
@@ -110,11 +111,12 @@ export class ManageUsersComponent implements OnInit {
     row = row.slice(0, -1);
     str += row + '\r\n';
     for (let i = 0; i < array.length; i++) {
-      let line = '';
+      let line = '"';
       for (const index in headerList) {
         // let head = headerList[index];
-        line += ', ' + array[i][index];
+        line += '", "' + array[i][index];
       }
+      line += '"'
       line = line.slice(2);
       str += line + '\r\n';
     }

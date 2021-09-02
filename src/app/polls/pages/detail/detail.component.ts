@@ -252,22 +252,27 @@ export class DetailComponent implements OnInit {
 
   ConvertToCSV(objArray, headerList) {
     let array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-    let str = '';
+    console.log(array);
+    let str = '"';
     let row = '';
     for (let index in headerList) {
-      row += headerList[index] + ',';
+      row += headerList[index] + '","';
     }
+    console.log(row);
     row = row.slice(0, -1);
     str += row + '\r\n';
     for (let i = 0; i < array.length; i++) {
-      let line = "";
+      let line = '"';
       for (let index in headerList) {
         //let head = headerList[index];
-        line += ", " + array[i][index];
+        line += '","' + array[i][index];
       }
-      line = line.slice(2);
+      line += '"';
+      line = line.slice(3);
+      console.log(line);
       str += line + "\r\n";
     }
+    console.log(str);
     return str;
   }
 
