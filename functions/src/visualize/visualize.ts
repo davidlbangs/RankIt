@@ -29,7 +29,7 @@ console.log("content of the file: ", JSON.stringify(jsonFile))
         },
         headers: {
             'Content-Type': 'multipart/form-data',
-            'Authorization': 'Token 1abcc2baa9cc264aaf5ba56d109e91a96e08ac14'
+            'Authorization': 'Token ' + functions.config().rcvis.apikey
         }
     }).then(result => {
         res.send(result)
