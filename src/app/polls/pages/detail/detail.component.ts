@@ -85,9 +85,9 @@ import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY } from '@angular/cdk/over
         <button (click)="csv()"
           [disabled]="poll.is_open || poll.vote_count == 0"
         mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-table"></i>Download Results (CSV)</button>
-        <button (click)="jsonUpload()"
+        <button (click)="jsonUpload($event)"
         [disabled]="poll.is_open || poll.vote_count == 0"
-      mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-share-alt"></i>Export Results to RCVIS</button>
+      mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-share-alt"></i>Export Results to RCVis</button>
 
 
         <hr class="mt-3 mb-4" />
@@ -274,7 +274,10 @@ export class DetailComponent implements OnInit {
     return str;
   }
 
-  jsonUpload() {
+  jsonUpload($event: MouseEvent) {
+    ($event.target as HTMLButtonElement).disabled = true;
+    ($event.target as HTMLButtonElement).textContent = "Exporting to RCVis...";
+
     let pollID = this.currentPoll.id;
     const votesRef = this.db.collection(`polls/${pollID}/votes`).get().subscribe(data2 => {
 
