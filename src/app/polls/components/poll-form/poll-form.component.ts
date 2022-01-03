@@ -43,14 +43,14 @@ import { publish } from 'rxjs/operators';
             <mat-form-field appearance="outline" floatLabel="never">
                 <input matInput placeholder="" [formControlName]="i" (keydown)="onKeydown($event, i)">
 
-                <button 
+                <button
                   *ngIf="choices.controls.length > 2"
                   mat-button matSuffix mat-icon-button aria-label="Remove"
-                  tabindex="-1" 
+                  tabindex="-1"
                   (click)="removeChoice(i)">
                   <i class="fa fa-times"></i>
                 </button>
-              
+
             </mat-form-field>
             <div *ngIf="c.invalid && (c.dirty || c.touched)" class="alert alert-danger">
               <div *ngIf="c.errors.required">
@@ -64,7 +64,7 @@ import { publish } from 'rxjs/operators';
               </div>
             </div>
           </div>
-          
+
 
 
           <button mat-button color="accent" type="button" class="poll-form__add"
@@ -111,7 +111,7 @@ import { publish } from 'rxjs/operators';
             <input matInput placeholder="" formControlName="buttonColor1">
           </mat-form-field>
           </div>
-       
+
         <div class="option-row">
           <div class="option-row__label">
           <p>Button Color 2 (Hexcode)</p>
@@ -121,12 +121,12 @@ import { publish } from 'rxjs/operators';
           </mat-form-field>
           </div>
         </div>
-          
+
           <h2>Options</h2>
 
           <div class="option-row">
             <mat-checkbox formControlName="keep_open" [labelPosition]="'before'">Keep poll open until I close it</mat-checkbox>
-            
+
           </div>
           <div class="option-row" *ngIf="showLength">
             <div class="option-row__label">
@@ -148,12 +148,12 @@ import { publish } from 'rxjs/operators';
           </div>
           <div class="option-row">
             <mat-checkbox formControlName="randomize_order" name="randomize_order" [labelPosition]="'before'">Randomize Order</mat-checkbox>
-            
+
           </div>
 
           <div class="option-row">
             <mat-checkbox formControlName="limit_votes" name="limit_votes" [labelPosition]="'before'">Limit Repeat Voting</mat-checkbox>
-            
+
           </div>
           <div class="option-row">
             <div class="option-row__label">
@@ -168,7 +168,7 @@ import { publish } from 'rxjs/operators';
                     </mat-select>
                   </mat-form-field>
             </div>
-            
+
           </div>
           <div *ngIf="winner_count.invalid && (winner_count.dirty || winner_count.touched)" class="alert alert-danger">
             <div *ngIf="winner_count.errors.required">
@@ -209,7 +209,7 @@ import { publish } from 'rxjs/operators';
                 </mat-select>
               </mat-form-field>
                 </div>
-             
+
             </div>
           </div>
           <div class="cta-section__setup" *ngIf="showCustomCTA" formGroupName="cta">
@@ -226,7 +226,7 @@ import { publish } from 'rxjs/operators';
                       <input matInput formControlName="label" />
                     </mat-form-field>
               </div>
-            </div> 
+            </div>
              <div class="option-row mt-0 pt-0">
               <div class="option-row__label">
                 <strong>CTA Link</strong>
@@ -236,7 +236,7 @@ import { publish } from 'rxjs/operators';
                       <input matInput formControlName="url" />
                     </mat-form-field>
               </div>
-            </div> 
+            </div>
           </div>
 
           <div class="cta-section__setup" *ngIf="showCustomHTML" formGroupName="cta">
@@ -253,34 +253,34 @@ import { publish } from 'rxjs/operators';
                       <textarea matInput formControlName="html"></textarea>
                     </mat-form-field>
               </div>
-            </div> 
+            </div>
           </div>
 
         <hr class="mt-3 mb-3" />
 
         <div class="poll-form__submit mb-5">
           <div>
-            <button 
+            <button
               type="button"
               *ngIf="!exists"
               [disabled]="(form.invalid && (form.dirty || form.touched))"
               (click)="createPoll(false)"
-              mat-raised-button [color]="'primary'" 
+              mat-raised-button [color]="'primary'"
               class=" has-icon dark-icon mb-3 mr-1">
               Save Poll
             </button>
 
-            <button 
+            <button
               type="button"
               *ngIf="!exists"
               [disabled]="(form.invalid && (form.dirty || form.touched))"
               (click)="createPoll(true)"
-              mat-raised-button [color]="'primary'" 
+              mat-raised-button [color]="'primary'"
               class=" has-icon dark-icon mb-3 mr-1">
               Save Poll & Publish
             </button>
 
-            <button 
+            <button
               type="button"
               *ngIf="exists"
               mat-raised-button [color]="'primary'"
@@ -288,19 +288,19 @@ import { publish } from 'rxjs/operators';
               Save Poll
             </button>
 
-            <button 
+            <button
             type="button" style="margin-left:10px;"
             *ngIf="exists"
             [disabled]="(form.invalid && (form.dirty || form.touched))"
             (click)="updatePoll(true)"
-            mat-raised-button [color]="'primary'" 
+            mat-raised-button [color]="'primary'"
             class=" has-icon dark-icon mb-3 mr-1">
             Save Poll & Publish
           </button>
             <!-- ../ takes back to previously came from -->
             <button (click)="toggle()" mat-stroked-button color="red" class="has-icon"><i class="fa fa-times"></i>Delete Poll</button>
             <a mat-button [routerLink]="['../']" class="button button--cancel">Cancel</a>
-            
+
           </div>
 
           <div *ngIf="form.invalid && (form.dirty || form.touched)" class="alert">
@@ -317,7 +317,7 @@ import { publish } from 'rxjs/operators';
               <button class="cancel" type="button" (click)="toggle()">No</button>
             </div>
 
-            
+
           </div>
         </div>
       </form>
@@ -334,15 +334,15 @@ export class PollFormComponent implements OnChanges {
   @Input()
     user:User;
 
-  @Output() 
+  @Output()
     create = new EventEmitter<Poll>();
-  @Output() 
+  @Output()
     createPublish = new EventEmitter<Poll>();
-  @Output() 
+  @Output()
     updatePublish = new EventEmitter<Poll>();
-  @Output() 
+  @Output()
     update = new EventEmitter<Poll>();
-  @Output() 
+  @Output()
     remove = new EventEmitter<Poll>();
 
   form = this.fb.group({
@@ -405,7 +405,7 @@ export class PollFormComponent implements OnChanges {
       }
     };
   }
-  
+
 
   get title() { return this.form.get('title'); }
   get winner_count() { return this.form.get('winner_count'); }
@@ -456,14 +456,14 @@ export class PollFormComponent implements OnChanges {
      if(this.poll && this.poll.title) {
        this.exists = true;
      }
-       
+
        // remove choices that are on the form at the moment.
        // Angular won't remove / add items on a FormArray, we have to empty/refill ourselves.
-       this.emptyChoices(); 
+       this.emptyChoices();
 
        const value = this.poll;
        this.form.patchValue(value); // patch value updates portion of form.
-       
+
 
        if(value.choices) {
          for(const item of value.choices) {
@@ -484,7 +484,7 @@ export class PollFormComponent implements OnChanges {
       if (published) {
         if (confirm('Are you sure? Once you publish a poll others will be able to see it and vote on it until you close the poll.')) {
           this.createPublish.emit(this.form.value);
-          
+
         }
       }
       else {
@@ -518,7 +518,7 @@ export class PollFormComponent implements OnChanges {
 
     let winner_count = this.form.get('winner_count').value;
 
-    // If there are as many winners as choices, remove the winner count 
+    // If there are as many winners as choices, remove the winner count
     // this prevents allowing too many winners.
     if(winner_count >= this.choices.length) {
       this.form.get('winner_count').patchValue(null);

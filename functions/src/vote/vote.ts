@@ -32,7 +32,7 @@ function stv(winners, ballots, choices) {
   if (winners>ballots.length) {
     winners = ballots.length;
   }
-  
+
   // Factor
   //
   let factor = 1;

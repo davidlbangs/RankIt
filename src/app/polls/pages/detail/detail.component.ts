@@ -146,10 +146,8 @@ export class DetailComponent implements OnInit {
     this.store.set('backButton', 'polls');
     this.subscription2 = this.store.select<User>("user").subscribe(user => {
       if (user && this.loaded == false) {
-        console.log(user);
         this.loaded = true;
         console.log('roles' in user);
-        console.log(Boolean(user.roles.admin));
         if ('roles' in user && user.roles.admin) {
           console.log('calling this.loadForAdmin()');
           this.loadForAdmin();
