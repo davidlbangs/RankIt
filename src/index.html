@@ -84,11 +84,173 @@
         }
       }
     }
+
+/* Modals
+----------------------------------------------*/
+a.link {cursor:help;text-decoration:none;}
+a.link.btn {border-color #d900ae;}
+a.link:hover {background-color: #0085a6; color: #fff; text-decoration:none;}
+
+#deprecation-modal {
+	position:fixed;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	overflow-x:hidden;
+	overflow-y:auto;
+	-webkit-overflow-scrolling:touch;
+	z-index:999;
+	width:0;
+	height:0;
+	opacity:0;
+}
+#deprecation-modal.visible {
+	width:auto;
+	height:auto;
+	opacity:1;
+	-webkit-transition:  opacity 1s ease;
+	transition: opacity 1s ease;
+}
+#deprecation-modal.visible .modal-overlay {
+	position:fixed;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	cursor:pointer;
+	background-color:#000;
+	background-color:rgba(0, 0, 0, 0.7);
+	z-index:1;
+}
+#deprecation-modal .modal-dialog {
+	border-radius:6px;
+	box-shadow:0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
+	position:relative;
+	width: 90%;
+	max-width:660px;
+	max-height:70%;
+	margin:10% auto;
+	overflow-x:hidden;
+	overflow-y:auto;
+	z-index:2;
+}
+.modal-dialog-lg {max-width:820px !important;}
+
+#deprecation-modal  .modal-dialog > h3 {
+	background-color:#eee;
+	border-bottom:1px solid #b3b3b3;
+	font-size:24px;
+	font-weight: 400;
+	margin:0;
+	padding:0.8em 56px .8em 27px; 
+}
+#deprecation-modal .modal-content {background:#fff; padding:23px 27px;}
+#deprecation-modal .modal-close {
+  	position:absolute;
+	top:13px;
+	right:13px;
+	color:#0085a6;
+	background-color:#fff;
+	border-radius:50%;
+	height:40px;
+	width:40px;
+	font-size:30px;
+	line-height:37px;
+	text-align:center;
+	-webkit-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+}
+#deprecation-modal .modal-close:hover {background-color:#0085a6; color:#fff; cursor:pointer;}
+#deprecation-modal p:first-child, [data-ml-modal] p:last-child {margin:0;}
+@media (max-width:767px) {
+	#deprecation-modal .modal-dialog {margin:20% auto;}
+}
+/* End Modals ------------------------------*/
+
+/* General*/
+
+*, *:before, *:after {
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+			box-sizing: border-box;
+}
+body {
+	font-family: 'Roboto', sans-serif;
+	color: #333;
+  font-size:1.125em;
+	-webkit-font-smoothing: antialiased;
+	line-height: 1.42857143;
+  padding:20px;
+}
+a {
+  color:#0085a6;
+  text-decoration: none;
+  outline: 0;
+  -webkit-transition  all .3s ease-in-out;
+  -moz-transition  all .3s ease-in-out;
+  -o-transition  all .3s ease-in-out;
+  transition all .3s ease-in-out;
+}
+a:hover {
+  color:#0085a6;
+  text-decoration: none;
+}
+.center {text-align:center !important;}
+.btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 2px solid transparent;
+    white-space: normal;
+    padding: 3px 14px;
+    font-size: 18px;
+    border-radius: 3px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.btn-default {border-color: #0085a6;}
+a.btn-default:hover {background-color:#0085a6; color:#fff;}
+pre {overflow:auto;font-size:1em;}
+
+
   </style>
-  <!--
-  <div onclick="this.style.display='none';" style="z-index:9999;text-align:center;padding-top:5px;position:absolute;top:0;left:0;height:40px;right:0;background:white;cursor: pointer;">
-    <i class="fa fa-exclamation-triangle"></i>  Some users are experiencing periodic difficulties voting and viewing results. We apologize for the inconvenience and will be releasing a fix shortly. X
-  </div>-->
+
+	<div id="deprecation-modal" class="visible">
+		<div id="deprecation-closer" class="modal-overlay" onclick="hideDeprecation()"></div>
+		<div class="modal-dialog">
+			<div class="modal-content">
+        <p>Thank you for using RankIt.vote. This app will be discontinued after April 17. No new polls can be created after April 17, but your existing polls can continue to accept votes until May 31.</p>
+
+        <p style="margin-top: 20px">We recommend using RankedVote for your future RCV polls. RankedVote can run RCV elections with an unlimited number of candidates, simulates realistic ranked ballots, includes security measures to prevent duplicate votes, and has ballots available in over 20 languages. Sign up for RankedVote for free using the link below.</p>
+        <p class="mt-3 center">
+          <a href="https://app.rankedvote.co/signup-rv/?source=fvrankit&program=fairvote"><button class="mat-focus-indicator btn btn-primary mat-button mat-raised-button mat-button-base mat-accent">
+              Take me to RankedVote
+          </button></a>
+        </p>
+        <p class="mt-1 center small">
+          <button style="font-size: .6em;" class="mat-focus-indicator btn btn-primary mat-button mat-button-base mat-primary"
+            onclick="hideDeprecation()">
+            Stay on RankIt.Vote for now
+          </button>
+        </p>
+			</div>
+		</div>
+	</div>
+  <script>
+    function hideDeprecation()
+    {
+      document.getElementById("deprecation-modal").classList.remove("visible");
+    }
+  </script>
+
   <app-root></app-root>
 
 </body>
