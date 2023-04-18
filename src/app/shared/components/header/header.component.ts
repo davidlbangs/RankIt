@@ -39,7 +39,6 @@ import { Poll } from '../../models/poll.interface';
           <li><a [routerLink]="['/polls']" *ngIf="user">My Polls</a></li>
           <li><a [routerLink]="['/account']" *ngIf="user">My Account</a></li>
           <li><a [routerLink]="['/auth/login']" *ngIf="!user">Login</a></li>
-          <li><a class="highlight" [routerLink]="['/polls/create']" *ngIf="user">Create Poll</a></li>
 
         </ul>
       </div>
@@ -58,9 +57,6 @@ import { Poll } from '../../models/poll.interface';
   </button>
   <button mat-menu-item *ngIf="!user" [routerLink]="['/auth/login']">
     <span>Login</span>
-  </button>
-  <button mat-menu-item *ngIf="user" [routerLink]="['/polls/create']">
-    <span>Create Poll</span>
   </button>
   
 </mat-menu>
