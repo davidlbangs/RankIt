@@ -42,14 +42,15 @@ import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY } from '@angular/cdk/over
         </div>
 
         <mat-card class="mb-2">
-          <mat-slide-toggle [checked]="poll.is_open" (click)="toggleOpen(poll)" [disabled]="!poll.is_published">
-            {{poll.is_open ? 'Open, Accepting Votes' : 'Closed, Not Accepting Votes'}}
+          <mat-slide-toggle [checked]="false" (click)="toggleOpen(poll)" disabled>
+            {{false ? 'Open, Accepting Votes' : 'Closed, Not Accepting Votes'}}
           </mat-slide-toggle>
 
           <p *ngIf="!poll.is_published" class="explainer mt-1">To open voting, publish the poll first.</p>
 
-          <p *ngIf="poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until you close it.</p>
-          <p *ngIf="!poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until {{poll.length.end_time | date : 'long'}}</p>
+          <p *ngIf="poll.keep_open && false" class="explainer mt-1">Poll will stay open until you close it.</p>
+          <p *ngIf="!poll.keep_open && false" class="explainer mt-1">Poll will stay open until {{poll.length.end_time | date : 'long'}}</p>
+          <p class="explainer mt-1">RankIt no longer accepts votes.</p>
         </mat-card>
 
         <mat-card class="mb-2">
@@ -57,8 +58,8 @@ import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY } from '@angular/cdk/over
             {{poll.results_public ? 'Show results publicly' : 'Do not show results publicly'}}
           </mat-slide-toggle>
 
-          <!-- p *ngIf="poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until you close it.</p>
-          <p *ngIf="!poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until {{poll.length.end_time | date : 'long'}}</p-->
+          <!-- p *ngIf="poll.keep_open && false" class="explainer mt-1">Poll will stay open until you close it.</p>
+          <p *ngIf="!poll.keep_open && false" class="explainer mt-1">Poll will stay open until {{poll.length.end_time | date : 'long'}}</p-->
         </mat-card>
 
         <mat-card class="mb-2" *ngIf="canPromotePoll()">
@@ -66,8 +67,8 @@ import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY } from '@angular/cdk/over
             {{poll.is_promoted ? 'Promoted' : 'Not Promoted'}}
           </mat-slide-toggle>
 
-          <p *ngIf="poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until you close it.</p>
-          <p *ngIf="!poll.keep_open && poll.is_open" class="explainer mt-1">Poll will stay open until {{poll.length.end_time | date : 'long'}}</p>
+          <p *ngIf="poll.keep_open && false" class="explainer mt-1">Poll will stay open until you close it.</p>
+          <p *ngIf="!poll.keep_open && false" class="explainer mt-1">Poll will stay open until {{poll.length.end_time | date : 'long'}}</p>
         </mat-card>
 
         </div>
@@ -80,13 +81,13 @@ import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY } from '@angular/cdk/over
           [routerLink]="['/results', poll.id, 'summary']"
           mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-signal"></i>View Results</button>
         <button [routerLink]="['/vote', poll.id]"
-          [disabled]="!poll.is_open"
+          [disabled]="!false"
         mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-pencil"></i>Vote on this Poll</button>
         <button (click)="csv()"
-          [disabled]="poll.is_open || poll.vote_count == 0"
+          [disabled]="false || poll.vote_count == 0"
         mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-table"></i>Download Results (CSV)</button>
         <button (click)="jsonUpload($event)"
-        [disabled]="poll.is_open || poll.vote_count == 0"
+        [disabled]="false || poll.vote_count == 0"
       mat-raised-button color="primary" class="d-block mb-2 has-icon dark-icon button-large"><i class="fa fa-share-alt"></i>Export Results to RCVis</button>
 
 
@@ -219,7 +220,7 @@ export class DetailComponent implements OnInit {
     if (poll.is_published == false) {
       return;
     }
-    this.pollService.togglePollOpen(poll.id, poll.is_open);
+    this.pollService.togglePollOpen(poll.id, false);
   }
 
   toggleResultsPublic(poll: Poll) {

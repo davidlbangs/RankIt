@@ -147,7 +147,7 @@ import { User } from '@shared/models/user.interface';
 
         <ng-template #noResults>
            <main>
-            <div class="alert" *ngIf="poll.is_open" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
+            <div class="alert" *ngIf="false" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
               <p class="mb-2">There are no results yet. How about voting?</p>
               <p>
                 <button [routerLink]="['/vote', poll.id]"
@@ -156,7 +156,7 @@ import { User } from '@shared/models/user.interface';
             </div>
 
 
-            <div class="alert" *ngIf="!poll.is_open" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
+            <div class="alert" *ngIf="!false" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
               <p class="mb-2">Hmm...There are no results to display, but this poll is closed. Sorry!</p>
               <p>
               <button
@@ -180,13 +180,13 @@ import { User } from '@shared/models/user.interface';
 
         <ng-template #noResultsYet>
            <main>
-            <div class="alert" *ngIf="poll.is_open" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
+            <div class="alert" *ngIf="false" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
               <p class="mb-2">The creator of this poll is currently holding the results. Please check back later.</p>
               
                 <share-poll [poll]="poll"></share-poll>
             </div>
 
-            <div class="alert" *ngIf="!poll.is_open" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
+            <div class="alert" *ngIf="!false" class="mt-3 mb-3" [ngStyle]="{'background': poll.customizations?.buttonColor1 != '' ? poll.customizations?.buttonColor1 : '#C9519B'}">
               <p class="mb-2">The creator of this poll is currently holding the results. Please check back later.</p>
               <p>
                 <button [routerLink]="['/']"

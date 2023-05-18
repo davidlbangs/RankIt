@@ -28,7 +28,7 @@ declare var firebase;
 
         <mat-card *ngFor="let poll of polls" [routerLink]="['/vote', poll.id]" class="mb-1 linked-card">
         <mat-card-title>{{poll.title}}</mat-card-title>
-        <mat-card-subtitle>{{poll.is_open ? 'Open' : 'Closed' }} – {{poll.vote_count ? poll.vote_count + ' votes' : 'No Votes'}}</mat-card-subtitle>
+        <mat-card-subtitle>{{false ? 'Open' : 'Closed' }} – {{poll.vote_count ? poll.vote_count + ' votes' : 'No Votes'}}</mat-card-subtitle>
 
         <mat-card *ngIf="polls.length > 10">
           <mat-card-title>No polls yet! How about making one?</mat-card-title>
@@ -43,7 +43,7 @@ declare var firebase;
 
       <mat-card *ngFor="let poll of polls" [routerLink]="['/vote', poll.id]" class="mb-1 linked-card">
       <mat-card-title>{{poll.title}}</mat-card-title>
-      <mat-card-subtitle>{{poll.is_open ? 'Open' : 'Closed' }} – {{poll.vote_count ? poll.vote_count + ' votes' : 'No Votes'}}</mat-card-subtitle>
+      <mat-card-subtitle>{{false ? 'Open' : 'Closed' }} – {{poll.vote_count ? poll.vote_count + ' votes' : 'No Votes'}}</mat-card-subtitle>
 
       <mat-card *ngIf="polls.length > 10">
         <mat-card-title>No polls yet! How about making one?</mat-card-title>
