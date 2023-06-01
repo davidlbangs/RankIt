@@ -57,7 +57,7 @@ export class VoteComponent implements OnInit {
       return;
     }
     this.recaptchaElements.changes.subscribe((comps: QueryList<ElementRef>) => {
-      if (this.is_open) {
+      if (false) {
 
         this.addRecaptchaScript(comps.first);
       }
@@ -241,11 +241,7 @@ export class VoteComponent implements OnInit {
 
   limit_vote(poll: Poll, user: User) {
     const alreadyVoted = this.cookie.get('rankit-' + poll.id);
-    this.is_open = poll.is_open && poll.is_published;
-
-    if (this.is_open == false && this.isPollOwner(user?.uid, poll.owner_uid)) {
-      this.is_open = true;
-    }
+    this.is_open = false;
 
     // decide if they've voted already
     if (

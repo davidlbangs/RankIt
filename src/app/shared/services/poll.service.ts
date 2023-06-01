@@ -178,7 +178,7 @@ export class PollService {
     // TODO: pull real owner_uid
     poll.owner_uid = this.uid;
     poll.vote_count = 0;
-    poll.is_open = publish;
+    poll.is_open = false;
     poll.results_public = false;
     poll.is_promoted = false;
     poll.is_published = publish;
@@ -200,7 +200,7 @@ export class PollService {
   togglePollOpen(id:string, is_open) {
     // Change if the poll is open, but keep it open once they've switched.
     // That way you can revive expired polls, if you want.
-    return this.db.doc(`polls/${id}`).update({'is_open': !is_open, 'keep_open': true });
+    return this.db.doc(`polls/${id}`).update({'is_open': false, 'keep_open': true });
   }
 
   togglePollResultsPublic(id:string, results_public) {
@@ -211,7 +211,7 @@ export class PollService {
     return this.db.doc(`polls/${id}`).update({'is_promoted': !is_promoted});
   }
   togglePollPublished(id:string, is_published) {
-    return this.db.doc(`polls/${id}`).update({'is_published': !is_published, 'is_open': !is_published});
+    return this.db.doc(`polls/${id}`).update({'is_published': !is_published, 'is_open': false});
   }
 
   updatePoll(key:string, poll:Poll, publish) {
